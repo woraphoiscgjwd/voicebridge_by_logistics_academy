@@ -32,7 +32,6 @@
     .container { max-width:860px; width:100%; }
 
     header { text-align:center; margin-bottom:24px; padding:20px 0; }
-    .logo { height:48px; margin-bottom:12px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
     header h1 { font-size:2.2rem; font-weight:700; color: var(--empowered-blue); }
     header h1 span { color: var(--bright-orange); }
     .subtitle { font-size:0.9rem; font-weight:300; color: var(--glaucous-blue); margin-top:4px; }
@@ -75,15 +74,7 @@
     }
     .mode-description strong { color: var(--empowered-blue); }
 
-    .speed-mode { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:16px; }
-    .speed-mode button {
-      background: var(--cool-white); border:2px solid var(--border-light); color: var(--empowered-blue);
-      padding:8px 16px; border-radius:24px; cursor:pointer; font-size:0.85rem; font-family:'Prompt', sans-serif;
-      transition:all 0.2s;
-    }
-    .speed-mode button.active { background: var(--empowered-blue); border-color: var(--empowered-blue); color:#fff; }
-
-    .result-section { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .result-section { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
     .result-box {
       background: var(--card-white); border:2px solid var(--border-light);
       border-radius:14px; padding:18px; min-height:130px; position:relative;
@@ -127,6 +118,20 @@
     .status-text { margin-top:12px; font-size:0.85rem; color: var(--glaucous-blue); text-align:center; }
     @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
 
+    .send-btn {
+      margin-top:12px; background: var(--electric-blue); border:none; color:#fff;
+      padding:12px 28px; border-radius:12px; cursor:pointer; font-size:0.95rem;
+      font-family:'Prompt', sans-serif; font-weight:600; box-shadow: 0 4px 12px rgba(0,85,255,0.25);
+      transition:all 0.2s;
+    }
+    .send-btn:hover { transform:scale(1.05); background: var(--empowered-blue); }
+    .send-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+
+    .buffer-info {
+      margin-top:8px; font-size:0.75rem; color: var(--glaucous-blue);
+      padding:6px 12px; border-radius:8px; background: rgba(0,85,255,0.04);
+    }
+
     .panel {
       background: var(--card-white); border:1px solid var(--border-light);
       border-radius:14px; padding:18px; margin-bottom:14px; box-shadow: var(--shadow-sm);
@@ -159,33 +164,6 @@
       background: rgba(0,85,255,0.03); border-radius:8px; line-height:1.6;
     }
 
-    .api-monitor { display:flex; flex-direction:column; gap:10px; margin-top:14px; }
-    .api-usage-item {
-      background: var(--cool-white); border-radius:12px; padding:12px 16px;
-      border-left:3px solid var(--electric-blue);
-    }
-    .api-usage-item.ai-item { border-left-color: var(--bright-orange); }
-    .api-usage-header {
-      display:flex; justify-content:space-between; align-items:center;
-      font-size:0.82rem; font-weight:600; margin-bottom:6px;
-    }
-    .api-usage-header span:last-child { font-weight:400; color: var(--glaucous-blue); font-size:0.78rem; }
-    .usage-bar { background: rgba(10,35,128,0.06); border-radius:6px; height:8px; overflow:hidden; margin-bottom:4px; }
-    .usage-fill { height:100%; border-radius:6px; transition:width 0.4s; background: linear-gradient(90deg, #69f0ae, var(--electric-blue)); }
-    .usage-fill.warning { background: linear-gradient(90deg, var(--bright-yellow), var(--matt-yellow)); }
-    .usage-fill.danger { background: linear-gradient(90deg, var(--bright-orange), var(--matt-orange)); }
-    .api-status-text { font-size:0.7rem; color: var(--glaucous-blue); }
-    .api-usage-summary {
-      display:flex; align-items:center; gap:12px; font-size:0.85rem;
-      padding-top:12px; border-top:1px solid var(--border-light);
-    }
-
-    .rate-limit-info {
-      font-size:0.75rem; padding:8px 12px; border-radius:8px;
-      background: rgba(250,90,10,0.05); border:1px solid rgba(250,90,10,0.15);
-      color: var(--matt-orange); line-height:1.5;
-    }
-
     .history-list { margin:12px 0; max-height:220px; overflow-y:auto; }
     .history-item {
       background: var(--cool-white); border-radius:10px; padding:10px 12px;
@@ -205,12 +183,6 @@
       cursor:pointer; font-size:0.85rem; font-family:'Prompt', sans-serif; transition:all 0.2s;
     }
     .btn-secondary:hover { border-color: var(--electric-blue); color: var(--electric-blue); }
-    .btn-test {
-      background: rgba(0,200,83,0.1); color: #00c853; border:1.5px solid rgba(0,200,83,0.3);
-      padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.78rem;
-      font-family:'Prompt', sans-serif; font-weight:600; transition:all 0.2s;
-    }
-    .btn-test:hover { background: #00c853; color:#fff; }
 
     footer {
       text-align:center; margin-top:32px; padding:20px 0;
@@ -233,9 +205,8 @@
 <div class="container">
 
   <header>
-    <img src="https://www.scgjwdacademy.com/assets/img/logo_scgschool.svg" alt="SCG JWD Academy" class="logo">
     <h1>🎤 Voice<span>Bridge</span></h1>
-    <p class="subtitle">โปรแกรมแปลภาษาด้วยเสียง — รองรับ 30+ ภาษา | AI + Free APIs</p>
+    <p class="subtitle">โปรแกรมแปลภาษาด้วยเสียง — รองรับ 30+ ภาษา | รวมคำให้เสร็จก่อนค่อยแปล</p>
   </header>
 
   <!-- Translation Mode -->
@@ -246,7 +217,7 @@
       <button class="mode-tab" id="tabAutoMode" onclick="setTranslationMode('auto')">🔄 อัตโนมัติ</button>
     </div>
     <div id="modeDescription" class="mode-description">
-      <strong>🆓 โหมดฟรี:</strong> ใช้ Google Translate → MyMemory → LibreTranslate → Lingva — ไม่ต้องกรอก Key ใดๆ
+      <strong>🆓 โหมดฟรี:</strong> ใช้ Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key ใดๆ
     </div>
   </div>
 
@@ -271,7 +242,7 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทมิฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
           <option value="si">🇱🇰 සිංහල (สิงหล)</option>
@@ -349,17 +320,10 @@
     </section>
   </div>
 
-  <!-- Speed Mode -->
-  <div class="speed-mode">
-    <button id="modeInstant" onclick="setSpeed('instant')">⚡ ทันที</button>
-    <button id="modeFast" class="active" onclick="setSpeed('fast')">🚀 เร็ว</button>
-    <button id="modeSentence" onclick="setSpeed('sentence')">📝 ทีละประโยค</button>
-  </div>
-
   <!-- Results -->
   <section class="result-section">
     <div class="result-box source-box">
-      <div class="result-label">🎤 ต้นฉบับ</div>
+      <div class="result-label">🎤 ต้นฉบับ (กำลังรวมคำ...)</div>
       <div id="sourceText" class="result-text waiting">รอรับเสียง...</div>
     </div>
     <div class="result-box target-box">
@@ -374,47 +338,45 @@
     </div>
   </section>
 
-  <!-- Mic -->
+  <!-- Mic + Send Button -->
   <section class="mic-section">
     <button id="micButton" class="mic-btn" onclick="toggleListening()">
       <span class="mic-icon">🎤</span>
-      <span id="micLabel">กดเพื่อเริ่มแปลสด</span>
+      <span id="micLabel">กดเพื่อเริ่มพูด</span>
     </button>
     <div id="status" class="status-text">กำลังโหลด...</div>
+    <button id="sendBtn" class="send-btn" onclick="forceTranslateNow()" disabled>
+      📤 ส่งแปลเลย
+    </button>
+    <div id="bufferInfo" class="buffer-info">💡 พูดให้เสร็จ → ระบบรอ 3 วินาที แล้วแปลอัตโนมัติ หรือกด "ส่งแปลเลย"</div>
   </section>
 
   <!-- API Keys -->
   <section class="panel">
     <details>
-      <summary>🔑 ตั้งค่า API Keys (สมัครฟรี — ไม่บังคับ)</summary>
+      <summary>🔑 ตั้งค่า API Keys (สำหรับโหมด AI — ไม่บังคับ)</summary>
       <div class="panel-content">
         <div class="key-info">
-          💡 <strong>ไม่จำเป็นต้องกรอก!</strong> โหมดฟรีใช้งานได้เลย<br>
-          ถ้ากรอก Key → เลือกโหมด AI หรือ อัตโนมัติ จะแปลแม่นยำกว่า<br>
+          💡 <strong>โหมดฟรีไม่ต้องกรอก Key!</strong><br>
+          ถ้าต้องการ AI แม่นยำกว่า → กรอก Key แล้วเลือกโหมด AI<br>
           🔒 Key เก็บในเครื่องคุณเท่านั้น (localStorage)
-        </div>
-        <div class="rate-limit-info">
-          ⚠️ <strong>Rate Limit:</strong> Gemini = 15 ครั้ง/นาที | Groq = 30 ครั้ง/นาที<br>
-          ระบบจะควบคุมอัตโนมัติไม่ให้เกิน — ถ้าเกินจะ fallback ไป API ถัดไป
         </div>
         <div class="api-key-section">
           <div class="api-key-row">
             <label>🤖 Gemini:</label>
-            <input type="text" id="keyGemini" placeholder="AIzaSy... (ฟรี 1,500 ครั้ง/วัน)">
+            <input type="text" id="keyGemini" placeholder="AIzaSy... (ฟรี 15 ครั้ง/นาที)">
             <span class="key-status" id="keyStatusGemini">❌</span>
             <a class="key-link" href="https://aistudio.google.com/apikey" target="_blank">สมัครฟรี →</a>
           </div>
           <div class="api-key-row">
             <label>⚡ Groq:</label>
-            <input type="text" id="keyGroq" placeholder="gsk_... (ฟรี 14,400 ครั้ง/วัน)">
+            <input type="text" id="keyGroq" placeholder="gsk_... (ฟรี 30 ครั้ง/นาที)">
             <span class="key-status" id="keyStatusGroq">❌</span>
             <a class="key-link" href="https://console.groq.com/keys" target="_blank">สมัครฟรี →</a>
           </div>
         </div>
         <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
           <button onclick="saveApiKeys()" class="btn-primary">💾 บันทึก Keys</button>
-          <button onclick="testApiKey('gemini')" class="btn-test">🧪 ทดสอบ Gemini</button>
-          <button onclick="testApiKey('groq')" class="btn-test">🧪 ทดสอบ Groq</button>
           <button onclick="clearApiKeys()" class="btn-secondary">🗑️ ลบ Keys</button>
         </div>
         <div id="keySaveStatus" style="font-size:0.78rem;color:var(--electric-blue);min-height:20px;"></div>
@@ -435,24 +397,10 @@
         <label>📢 ระดับเสียง: <strong id="volVal">100%</strong>
           <input type="range" id="speechVolume" min="0" max="1" step="0.1" value="1">
         </label>
+        <label>⏱️ เวลารอ (วินาที): <strong id="delayVal">3s</strong>
+          <input type="range" id="waitDelay" min="1" max="10" step="0.5" value="3">
+        </label>
         <div id="apiStatusMsg"></div>
-      </div>
-    </details>
-  </section>
-
-  <!-- API Usage Monitor -->
-  <section class="panel">
-    <details>
-      <summary>📊 สถานะ API — Usage / Limit</summary>
-      <div class="panel-content">
-        <div id="currentModeDisplay" style="font-size:0.8rem;padding:8px 12px;background:rgba(0,85,255,0.04);border-radius:8px;">
-          โหมดปัจจุบัน: <strong>🆓 ฟรี</strong>
-        </div>
-        <div class="api-monitor" id="apiMonitor"></div>
-        <div class="api-usage-summary">
-          <span>📈 รวมวันนี้: <strong id="totalUsage">0</strong> ครั้ง</span>
-          <button onclick="resetUsage()" class="btn-secondary" style="margin-left:auto;">🔄 รีเซ็ต</button>
-        </div>
       </div>
     </details>
   </section>
@@ -479,28 +427,18 @@
 
 <script>
 /**
- * VoiceBridge v4.0 — Fixed Rate Limiting + Mode Selection
- * สิ่งที่แก้ไข:
- * 1. เพิ่ม Rate Limiter (ป้องกัน 429)
- * 2. Debounce ที่เหมาะสมสำหรับ AI vs Free
- * 3. ดัก 429 error → ข้ามไปตัวถัดไปทันที + หยุดเรียกชั่วคราว
- * 4. ปุ่มทดสอบ API Key
- * 5. แสดง error ที่ชัดเจน
+ * VoiceBridge v5.0 — "รวมคำให้เสร็จก่อน ค่อยแปล"
+ * 
+ * แก้ปัญหา 429 Rate Limit ทั้งหมด:
+ * 1. ไม่แปล interim (คำที่ยังพูดไม่จบ)
+ * 2. สะสม final text ไว้ใน buffer
+ * 3. รอ 3 วินาทีหลังหยุดพูด แล้วค่อยส่งแปลทีเดียว
+ * 4. มีปุ่ม "ส่งแปลเลย" สำหรับกดส่งเอง
+ * 5. Rate Limiter + Cooldown หลังโดน 429
+ * 6. ป้องกันข้อความซ้ำ + concurrent requests
  */
 
-// ===== Configuration =====
-var AI_APIS = [
-  { id:'gemini', label:'🤖 Google Gemini', limit:1500, ratePerMin:14, isAi:true },
-  { id:'groq',   label:'⚡ Groq (Llama 3)', limit:14400, ratePerMin:28, isAi:true }
-];
-var FREE_APIS = [
-  { id:'google',  label:'🌐 Google Translate', limit:5000, ratePerMin:60, isAi:false },
-  { id:'mymemory',label:'📝 MyMemory',         limit:1000, ratePerMin:30, isAi:false },
-  { id:'libre',   label:'🔓 LibreTranslate',   limit:500,  ratePerMin:20, isAi:false },
-  { id:'lingva',  label:'🌍 Lingva',           limit:1000, ratePerMin:30, isAi:false }
-];
-var ALL_APIS = AI_APIS.concat(FREE_APIS);
-
+// ===== Config =====
 var SPEECH_LANG_MAP = {
   'th':'th-TH','en':'en-US','my':'my-MM','vi':'vi-VN','ms':'ms-MY',
   'id':'id-ID','tl':'fil-PH','km':'km-KH','lo':'lo-LA','zh':'zh-CN',
@@ -526,89 +464,65 @@ var LANG_NAMES = {
 // ===== State =====
 var recognition = null;
 var isListening = false;
+var translationMode = 'free';
 var translationCache = {};
 var historyList = [];
-var debounceTimer = null;
-var currentSpeed = 'fast';
-var translationMode = 'free';
-var isTranslating = false; // ป้องกัน concurrent requests
+var isTranslating = false;
 
-// ===== Rate Limiter (แก้ปัญหา 429!) =====
-var rateLimiter = {};
-ALL_APIS.forEach(function(cfg) {
-  rateLimiter[cfg.id] = { requests: [], maxPerMinute: cfg.ratePerMin, cooldownUntil: 0 };
-});
+// ✅ Buffer — รวมคำไว้ก่อน ค่อยแปลทีเดียว
+var finalBuffer = '';
+var finalTimer = null;
+var lastTranslatedText = '';
+
+// ===== Rate Limiter =====
+var rateLimiter = {
+  gemini:  { requests:[], maxPerMinute:14, cooldownUntil:0 },
+  groq:    { requests:[], maxPerMinute:28, cooldownUntil:0 },
+  google:  { requests:[], maxPerMinute:30, cooldownUntil:0 },
+  mymemory:{ requests:[], maxPerMinute:20, cooldownUntil:0 },
+  lingva:  { requests:[], maxPerMinute:20, cooldownUntil:0 }
+};
 
 function canMakeRequest(apiId) {
   var limiter = rateLimiter[apiId];
   if (!limiter) return true;
-
-  // ตรวจ cooldown (หลังโดน 429)
   if (Date.now() < limiter.cooldownUntil) return false;
-
   var now = Date.now();
-  // ลบ request เก่ากว่า 60 วินาที
   limiter.requests = limiter.requests.filter(function(t) { return now - t < 60000; });
   return limiter.requests.length < limiter.maxPerMinute;
 }
 
 function recordRequest(apiId) {
-  if (rateLimiter[apiId]) {
-    rateLimiter[apiId].requests.push(Date.now());
-  }
+  if (rateLimiter[apiId]) rateLimiter[apiId].requests.push(Date.now());
 }
 
 function setCooldown(apiId, seconds) {
-  // หลังโดน 429 → หยุดเรียก API นั้น x วินาที
-  if (rateLimiter[apiId]) {
-    rateLimiter[apiId].cooldownUntil = Date.now() + (seconds * 1000);
-  }
+  if (rateLimiter[apiId]) rateLimiter[apiId].cooldownUntil = Date.now() + (seconds * 1000);
 }
 
-function getCooldownRemaining(apiId) {
-  if (rateLimiter[apiId] && rateLimiter[apiId].cooldownUntil > Date.now()) {
-    return Math.ceil((rateLimiter[apiId].cooldownUntil - Date.now()) / 1000);
-  }
-  return 0;
-}
-
-// ===== LocalStorage =====
-function loadUsage() {
-  try { var d = JSON.parse(localStorage.getItem('vb4_usage') || '{}'); if (d.date === new Date().toDateString()) return d.counts; } catch(e) {}
-  return {};
-}
-function saveUsageToDisk(counts) {
-  try { localStorage.setItem('vb4_usage', JSON.stringify({ date: new Date().toDateString(), counts: counts })); } catch(e) {}
-}
-var apiUsage = loadUsage();
-function getUsage(id) { return apiUsage[id] || 0; }
-function incrementUsage(id) { apiUsage[id] = (apiUsage[id] || 0) + 1; saveUsageToDisk(apiUsage); renderUsageMonitor(); }
-function resetUsage() { if (confirm('รีเซ็ตตัวนับ?')) { apiUsage = {}; saveUsageToDisk(apiUsage); renderUsageMonitor(); } }
-
-function getKey(id) { try { return localStorage.getItem('vb4_key_' + id) || ''; } catch(e) { return ''; } }
+// ===== LocalStorage (Keys) =====
+function getKey(id) { try { return localStorage.getItem('vb5_key_' + id) || ''; } catch(e) { return ''; } }
 function hasKey(id) { return getKey(id).length > 5; }
 
 function saveApiKeys() {
   var g = document.getElementById('keyGemini').value.trim();
   var q = document.getElementById('keyGroq').value.trim();
   try {
-    if (g) localStorage.setItem('vb4_key_gemini', g); else localStorage.removeItem('vb4_key_gemini');
-    if (q) localStorage.setItem('vb4_key_groq', q); else localStorage.removeItem('vb4_key_groq');
+    if (g) localStorage.setItem('vb5_key_gemini', g); else localStorage.removeItem('vb5_key_gemini');
+    if (q) localStorage.setItem('vb5_key_groq', q); else localStorage.removeItem('vb5_key_groq');
   } catch(e) {}
   updateKeyStatus();
-  renderUsageMonitor();
-  showKeyMsg('✅ บันทึกแล้ว! กรุณาเลือกโหมด AI หรือ อัตโนมัติ เพื่อใช้งาน');
+  showKeyMsg('✅ บันทึกแล้ว!');
 }
 function clearApiKeys() {
   if (confirm('ลบ API Keys ทั้งหมด?')) {
-    localStorage.removeItem('vb4_key_gemini');
-    localStorage.removeItem('vb4_key_groq');
+    localStorage.removeItem('vb5_key_gemini');
+    localStorage.removeItem('vb5_key_groq');
     document.getElementById('keyGemini').value = '';
     document.getElementById('keyGroq').value = '';
     updateKeyStatus();
-    renderUsageMonitor();
-    if (translationMode !== 'free') setTranslationMode('free');
-    showKeyMsg('🗑️ ลบ Keys แล้ว — เปลี่ยนเป็นโหมดฟรี');
+    setTranslationMode('free');
+    showKeyMsg('🗑️ ลบแล้ว — เปลี่ยนเป็นโหมดฟรี');
   }
 }
 function loadApiKeys() {
@@ -623,56 +537,7 @@ function updateKeyStatus() {
 }
 function showKeyMsg(msg) {
   document.getElementById('keySaveStatus').textContent = msg;
-  setTimeout(function() { document.getElementById('keySaveStatus').textContent = ''; }, 5000);
-}
-
-// ===== Test API Key =====
-function testApiKey(apiId) {
-  var key = '';
-  if (apiId === 'gemini') key = document.getElementById('keyGemini').value.trim();
-  else if (apiId === 'groq') key = document.getElementById('keyGroq').value.trim();
-
-  if (!key) { showKeyMsg('❌ กรุณากรอก Key ก่อนทดสอบ'); return; }
-
-  showKeyMsg('🔄 กำลังทดสอบ ' + apiId + '...');
-
-  if (apiId === 'gemini') {
-    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ contents:[{parts:[{text:'Say "OK" only'}]}] })
-    })
-    .then(function(r) {
-      if (r.status === 429) { showKeyMsg('⚠️ Gemini Key ใช้ได้ แต่ตอนนี้โดน Rate Limit — รอ 1 นาทีแล้วลองใหม่'); return; }
-      if (r.status === 400 || r.status === 403) { showKeyMsg('❌ Gemini Key ไม่ถูกต้อง — กรุณาตรวจสอบหรือสร้างใหม่'); return; }
-      if (!r.ok) { showKeyMsg('❌ Gemini ตอบ Error ' + r.status); return; }
-      return r.json();
-    })
-    .then(function(data) {
-      if (data && data.candidates) showKeyMsg('✅ Gemini Key ใช้งานได้! พร้อมแปล');
-    })
-    .catch(function() { showKeyMsg('❌ เชื่อมต่อ Gemini ไม่ได้ — ตรวจสอบ Internet'); });
-  }
-  else if (apiId === 'groq') {
-    fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-      body: JSON.stringify({
-        model:'llama-3.3-70b-versatile',
-        messages:[{role:'user',content:'Say "OK" only'}],
-        max_tokens:5
-      })
-    })
-    .then(function(r) {
-      if (r.status === 429) { showKeyMsg('⚠️ Groq Key ใช้ได้ แต่ตอนนี้โดน Rate Limit — รอ 1 นาที'); return; }
-      if (r.status === 401) { showKeyMsg('❌ Groq Key ไม่ถูกต้อง — กรุณาตรวจสอบ'); return; }
-      if (!r.ok) { showKeyMsg('❌ Groq ตอบ Error ' + r.status); return; }
-      return r.json();
-    })
-    .then(function(data) {
-      if (data && data.choices) showKeyMsg('✅ Groq Key ใช้งานได้! พร้อมแปล');
-    })
-    .catch(function() { showKeyMsg('❌ เชื่อมต่อ Groq ไม่ได้ — ตรวจสอบ Internet'); });
-  }
+  setTimeout(function() { document.getElementById('keySaveStatus').textContent = ''; }, 4000);
 }
 
 // ===== Translation Mode =====
@@ -681,56 +546,18 @@ function setTranslationMode(mode) {
   document.getElementById('tabFreeMode').classList.toggle('active', mode === 'free');
   document.getElementById('tabAiMode').classList.toggle('active', mode === 'ai');
   document.getElementById('tabAutoMode').classList.toggle('active', mode === 'auto');
-
   var desc = document.getElementById('modeDescription');
-  var modeDisplay = document.getElementById('currentModeDisplay');
   if (mode === 'free') {
-    desc.innerHTML = '<strong>🆓 โหมดฟรี:</strong> ใช้ Google Translate → MyMemory → LibreTranslate → Lingva — ไม่ต้องกรอก Key ใดๆ';
-    modeDisplay.innerHTML = 'โหมดปัจจุบัน: <strong>🆓 ฟรี</strong>';
+    desc.innerHTML = '<strong>🆓 โหมดฟรี:</strong> ใช้ Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key ใดๆ';
   } else if (mode === 'ai') {
-    desc.innerHTML = '<strong>🤖 โหมด AI:</strong> ใช้ Gemini → Groq (ต้องกรอก Key) — แม่นยำ เข้าใจบริบท สำนวน';
-    modeDisplay.innerHTML = 'โหมดปัจจุบัน: <strong>🤖 AI</strong>';
+    desc.innerHTML = '<strong>🤖 โหมด AI:</strong> ใช้ Gemini → Groq (ต้องกรอก Key) — แม่นยำ เข้าใจบริบท';
     if (!hasKey('gemini') && !hasKey('groq')) {
       desc.innerHTML += '<br><span style="color:var(--bright-orange);">⚠️ ยังไม่มี Key! กรุณากรอกด้านบน</span>';
     }
   } else {
-    desc.innerHTML = '<strong>🔄 อัตโนมัติ:</strong> ลอง AI ก่อน (Gemini → Groq) → ถ้าไม่ได้ fallback ไป Free APIs — แนะนำ!';
-    modeDisplay.innerHTML = 'โหมดปัจจุบัน: <strong>🔄 อัตโนมัติ</strong>';
+    desc.innerHTML = '<strong>🔄 อัตโนมัติ:</strong> ลอง AI ก่อน → ถ้าไม่ได้ fallback ไป Free APIs';
   }
-  try { localStorage.setItem('vb4_mode', mode); } catch(e) {}
-  renderUsageMonitor();
-}
-
-// ===== Usage Monitor UI =====
-function renderUsageMonitor() {
-  var container = document.getElementById('apiMonitor');
-  var html = '';
-  var apisToShow = translationMode === 'free' ? FREE_APIS : translationMode === 'ai' ? AI_APIS : ALL_APIS;
-
-  apisToShow.forEach(function(cfg) {
-    var count = getUsage(cfg.id);
-    var percent = Math.min((count / cfg.limit) * 100, 100);
-    var barClass = 'usage-fill';
-    if (percent >= 90) barClass += ' danger';
-    else if (percent >= 70) barClass += ' warning';
-
-    var statusText = '✅ พร้อม';
-    var cooldown = getCooldownRemaining(cfg.id);
-    if (cfg.isAi && !hasKey(cfg.id)) statusText = '🔑 ไม่มี Key';
-    else if (cooldown > 0) statusText = '⏳ Cooldown ' + cooldown + ' วินาที (โดน Rate Limit)';
-    else if (percent >= 100) statusText = '🚫 ครบ Limit วันนี้';
-    else if (!canMakeRequest(cfg.id)) statusText = '⏳ รอ Rate Limit (เกิน ' + cfg.ratePerMin + '/นาที)';
-
-    html += '<div class="api-usage-item ' + (cfg.isAi ? 'ai-item' : '') + '">'
-      + '<div class="api-usage-header"><span>' + cfg.label + (cfg.isAi ? ' 🔑' : ' 🆓') + '</span><span>' + count + ' / ' + cfg.limit + '</span></div>'
-      + '<div class="usage-bar"><div class="' + barClass + '" style="width:' + percent + '%"></div></div>'
-      + '<div class="api-status-text">' + statusText + '</div></div>';
-  });
-  container.innerHTML = html;
-
-  var total = 0;
-  ALL_APIS.forEach(function(c) { total += getUsage(c.id); });
-  document.getElementById('totalUsage').textContent = total;
+  try { localStorage.setItem('vb5_mode', mode); } catch(e) {}
 }
 
 // ===== Translation APIs =====
@@ -738,16 +565,12 @@ function translateGemini(text, src, tgt, onSuccess, onError) {
   var key = getKey('gemini');
   if (!key) { onError('NO_KEY'); return; }
   var prompt = 'Translate from ' + (LANG_NAMES[src]||src) + ' to ' + (LANG_NAMES[tgt]||tgt) + '. Return ONLY the translation, nothing else:\n\n' + text;
-
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key, {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ contents:[{parts:[{text:prompt}]}] })
   })
   .then(function(r) {
-    if (r.status === 429) {
-      setCooldown('gemini', 60); // หยุด 60 วินาที
-      throw new Error('RATE_LIMITED');
-    }
+    if (r.status === 429) { setCooldown('gemini', 65); throw new Error('RATE_LIMITED'); }
     if (r.status === 403 || r.status === 400) throw new Error('INVALID_KEY');
     if (!r.ok) throw new Error('HTTP_' + r.status);
     return r.json();
@@ -764,23 +587,22 @@ function translateGemini(text, src, tgt, onSuccess, onError) {
 function translateGroq(text, src, tgt, onSuccess, onError) {
   var key = getKey('groq');
   if (!key) { onError('NO_KEY'); return; }
-
   fetch('https://api.groq.com/openai/v1/chat/completions', {
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
     body: JSON.stringify({
       model:'llama-3.3-70b-versatile',
       messages:[
-        {role:'system',content:'You are a translator. Translate from '+(LANG_NAMES[src]||src)+' to '+(LANG_NAMES[tgt]||tgt)+'. Return ONLY the translation, no explanation.'},
+        {role:'system',content:'You are a translator. Translate from '+(LANG_NAMES[src]||src)+' to '+(LANG_NAMES[tgt]||tgt)+'. Return ONLY the translation.'},
         {role:'user',content:text}
       ],
       temperature:0.2, max_tokens:1024
     })
   })
   .then(function(r) {
-    if (r.status === 429) { setCooldown('groq', 60); throw new Error('RATE_LIMITED'); }
+    if (r.status === 429) { setCooldown('groq', 65); throw new Error('RATE_LIMITED'); }
     if (r.status === 401) throw new Error('INVALID_KEY');
-    if (!r.ok) throw new Error('HTTP_' + r.status);
+    if (!r.ok) throw new Error('HTTP_'+r.status);
     return r.json();
   })
   .then(function(data) {
@@ -822,29 +644,9 @@ function translateMyMemory(text, src, tgt, onSuccess, onError) {
   .catch(function(e) { onError(e.message || 'UNKNOWN'); });
 }
 
-function translateLibre(text, src, tgt, onSuccess, onError) {
-  fetch('https://libretranslate.de/translate', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({q:text, source:src, target:tgt, format:'text'})
-  })
-  .then(function(r) {
-    if (r.status === 429) { setCooldown('libre', 30); throw new Error('RATE_LIMITED'); }
-    if (!r.ok) throw new Error('HTTP_'+r.status);
-    return r.json();
-  })
-  .then(function(data) {
-    if (data && data.translatedText) onSuccess(data.translatedText,'libre');
-    else onError('NO_RESULT');
-  })
-  .catch(function(e) { onError(e.message || 'UNKNOWN'); });
-}
-
 function translateLingva(text, src, tgt, onSuccess, onError) {
   fetch('https://lingva.ml/api/v1/'+src+'/'+tgt+'/'+encodeURIComponent(text))
-  .then(function(r) {
-    if (!r.ok) throw new Error('HTTP_'+r.status);
-    return r.json();
-  })
+  .then(function(r) { if (!r.ok) throw new Error('HTTP_'+r.status); return r.json(); })
   .then(function(data) {
     if (data && data.translation) onSuccess(data.translation,'lingva');
     else onError('NO_RESULT');
@@ -854,33 +656,42 @@ function translateLingva(text, src, tgt, onSuccess, onError) {
 
 var TRANSLATE_FN = {
   gemini:translateGemini, groq:translateGroq, google:translateGoogle,
-  mymemory:translateMyMemory, libre:translateLibre, lingva:translateLingva
+  mymemory:translateMyMemory, lingva:translateLingva
 };
 
-// ===== Core Translation with Rate Limiting =====
+var FREE_QUEUE = ['google','mymemory','lingva'];
+var AI_QUEUE = ['gemini','groq'];
+var AUTO_QUEUE = ['gemini','groq','google','mymemory','lingva'];
+
+// ===== Core Translation =====
 function doTranslate(text) {
   if (!text || !text.trim()) return;
-  if (isTranslating) return; // ป้องกัน concurrent
+  if (isTranslating) return;
   text = text.trim();
 
   var src = document.getElementById('sourceLang').value;
   var tgt = document.getElementById('targetLang').value;
   if (src === tgt) { showTranslation(text, 'same'); return; }
 
-  var cacheKey = src+'|'+tgt+'|'+text;
+  // Cache check
+  var cacheKey = src + '|' + tgt + '|' + text;
   if (translationCache[cacheKey]) {
     showTranslation(translationCache[cacheKey].text, translationCache[cacheKey].engine);
     return;
   }
 
+  // ป้องกันแปลข้อความเดิมซ้ำ
+  if (text === lastTranslatedText) return;
+  lastTranslatedText = text;
+
   isTranslating = true;
   document.getElementById('targetText').textContent = '⏳ กำลังแปล...';
   document.getElementById('targetText').classList.remove('waiting');
 
-  var queue = [];
-  if (translationMode === 'free') queue = FREE_APIS.slice();
-  else if (translationMode === 'ai') queue = AI_APIS.slice();
-  else queue = AI_APIS.concat(FREE_APIS);
+  var queue;
+  if (translationMode === 'free') queue = FREE_QUEUE.slice();
+  else if (translationMode === 'ai') queue = AI_QUEUE.slice();
+  else queue = AUTO_QUEUE.slice();
 
   setApiMsg('🔄 กำลังแปล...');
   tryQueue(text, src, tgt, queue, 0, cacheKey);
@@ -889,72 +700,40 @@ function doTranslate(text) {
 function tryQueue(text, src, tgt, queue, index, cacheKey) {
   if (index >= queue.length) {
     isTranslating = false;
-    var cooldownMsg = '';
-    ALL_APIS.forEach(function(c) {
-      var cd = getCooldownRemaining(c.id);
-      if (cd > 0) cooldownMsg += c.label + ' (รอ ' + cd + 'วิ) ';
-    });
-    if (cooldownMsg) {
-      document.getElementById('targetText').textContent = '⏳ โดน Rate Limit — รอสักครู่แล้วพูดใหม่';
-      setApiMsg('⏳ Rate Limit: ' + cooldownMsg);
-    } else {
-      document.getElementById('targetText').textContent = '❌ แปลไม่ได้ — ตรวจสอบ Internet หรือ API Key';
-      setApiMsg('❌ ทุก API ล้มเหลว');
-    }
-    renderUsageMonitor();
+    document.getElementById('targetText').textContent = '❌ แปลไม่ได้ — ลองใหม่อีกครั้ง';
+    setApiMsg('❌ ทุก API ล้มเหลว — รอสักครู่แล้วพูดใหม่');
     return;
   }
 
-  var cfg = queue[index];
+  var apiId = queue[index];
 
-  // ตรวจ Key
-  if (cfg.isAi && !hasKey(cfg.id)) {
+  // ตรวจ Key (สำหรับ AI)
+  if ((apiId === 'gemini' || apiId === 'groq') && !hasKey(apiId)) {
     tryQueue(text, src, tgt, queue, index + 1, cacheKey);
     return;
   }
-  // ตรวจ Daily Limit
-  if (getUsage(cfg.id) >= cfg.limit) {
-    tryQueue(text, src, tgt, queue, index + 1, cacheKey);
-    return;
-  }
-  // ✅ ตรวจ Rate Limit (แก้ปัญหา 429!)
-  if (!canMakeRequest(cfg.id)) {
-    var cd = getCooldownRemaining(cfg.id);
-    if (cd > 0) {
-      setApiMsg('⏳ ' + cfg.label + ' cooldown ' + cd + ' วินาที → ลองตัวถัดไป');
-    } else {
-      setApiMsg('⏳ ' + cfg.label + ' เกิน ' + cfg.ratePerMin + '/นาที → ลองตัวถัดไป');
-    }
+  // ✅ ตรวจ Rate Limit
+  if (!canMakeRequest(apiId)) {
+    setApiMsg('⏳ ' + apiId + ' → Rate Limit, ลองตัวถัดไป...');
     tryQueue(text, src, tgt, queue, index + 1, cacheKey);
     return;
   }
 
-  setApiMsg('🔄 ใช้ ' + cfg.label + '...');
-  recordRequest(cfg.id);
+  setApiMsg('🔄 ใช้ ' + apiId + '...');
+  recordRequest(apiId);
 
-  var fn = TRANSLATE_FN[cfg.id];
+  var fn = TRANSLATE_FN[apiId];
   fn(text, src, tgt,
     function(result, engine) {
       isTranslating = false;
-      incrementUsage(engine);
       translationCache[cacheKey] = { text:result, engine:engine };
       showTranslation(result, engine);
       addHistory(text, result, src, tgt, engine);
-      setApiMsg('✅ สำเร็จ! (' + cfg.label + ')');
+      setApiMsg('✅ สำเร็จ! (' + engine + ')');
       if (document.getElementById('autoSpeak').checked) speakResult('normal');
     },
     function(errorType) {
-      // ถ้าโดน rate limit → ไม่นับ usage
-      if (errorType !== 'RATE_LIMITED') {
-        // นับ usage เฉพาะเมื่อ server ตอบกลับมาจริงแต่ผลลัพธ์ไม่ดี
-      }
-      var reason = '';
-      if (errorType === 'RATE_LIMITED') reason = ' (Rate Limit 429 — หยุด 60วิ)';
-      else if (errorType === 'INVALID_KEY') reason = ' (Key ไม่ถูกต้อง!)';
-      else if (errorType === 'NO_KEY') reason = ' (ไม่มี Key)';
-      else reason = ' (ไม่ตอบ)';
-
-      setApiMsg('⚠️ ' + cfg.label + reason + ' → ลองตัวถัดไป');
+      setApiMsg('⚠️ ' + apiId + ' ล้มเหลว (' + errorType + ') → ลองตัวถัดไป');
       tryQueue(text, src, tgt, queue, index + 1, cacheKey);
     }
   );
@@ -966,159 +745,233 @@ function showTranslation(text, engine) {
   el.classList.remove('waiting');
   var badge = document.getElementById('engineBadge');
   if (engine === 'same') { badge.style.display = 'none'; return; }
-  var cfgUsed = ALL_APIS.find(function(c){return c.id===engine;});
-  badge.textContent = (cfgUsed && cfgUsed.isAi ? '🤖' : '🆓') + ' ' + (cfgUsed ? cfgUsed.label : engine);
-  badge.className = 'engine-badge ' + (cfgUsed && cfgUsed.isAi ? 'ai' : 'free');
+  var isAi = (engine === 'gemini' || engine === 'groq');
+  badge.textContent = (isAi ? '🤖 ' : '🆓 ') + engine;
+  badge.className = 'engine-badge ' + (isAi ? 'ai' : 'free');
   badge.style.display = 'inline-block';
 }
 
 function setApiMsg(msg) { document.getElementById('apiStatusMsg').textContent = msg; }
 
-// ===== Speech Recognition =====
+// ===== ✅ Speech Recognition — รวมคำก่อนค่อยแปล =====
 function initApp() {
   try {
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { setStatus('❌ Browser ไม่รองรับ — ใช้ Chrome/Edge'); document.getElementById('micButton').disabled=true; return; }
+    if (!SR) {
+      setStatus('❌ Browser ไม่รองรับ — ใช้ Chrome/Edge');
+      document.getElementById('micButton').disabled = true;
+      return;
+    }
     recognition = new SR();
     recognition.continuous = true;
     recognition.interimResults = true;
     updateRecognitionLang();
+
     recognition.onresult = handleSpeechResult;
     recognition.onerror = handleSpeechError;
-    recognition.onend = function() { if(isListening){setTimeout(function(){try{recognition.start();}catch(e){}},200);} };
+    recognition.onend = function() {
+      if (isListening) {
+        setTimeout(function() { try { recognition.start(); } catch(e) {} }, 300);
+      }
+    };
 
-    document.getElementById('speechSpeed').addEventListener('input',function(){document.getElementById('speedVal').textContent=this.value+'x';});
-    document.getElementById('speechVolume').addEventListener('input',function(){document.getElementById('volVal').textContent=Math.round(this.value*100)+'%';});
-    document.getElementById('sourceLang').addEventListener('change',function(){updateRecognitionLang();if(isListening){stopListening();setTimeout(startListening,300);}});
+    // Event listeners
+    document.getElementById('speechSpeed').addEventListener('input', function() {
+      document.getElementById('speedVal').textContent = this.value + 'x';
+    });
+    document.getElementById('speechVolume').addEventListener('input', function() {
+      document.getElementById('volVal').textContent = Math.round(this.value * 100) + '%';
+    });
+    document.getElementById('waitDelay').addEventListener('input', function() {
+      document.getElementById('delayVal').textContent = this.value + 's';
+    });
+    document.getElementById('sourceLang').addEventListener('change', function() {
+      updateRecognitionLang();
+      if (isListening) { stopListening(); setTimeout(startListening, 300); }
+    });
 
-    setStatus('✅ พร้อมใช้งาน — กดปุ่มไมค์เพื่อเริ่ม');
-  } catch(e) { setStatus('⚠️ โหลดไม่สำเร็จ — ลอง Refresh'); }
-}
-
-function updateRecognitionLang() { if(recognition) recognition.lang=SPEECH_LANG_MAP[document.getElementById('sourceLang').value]||'th-TH'; }
-function toggleListening() { if(!recognition)return; if(isListening)stopListening();else startListening(); }
-function startListening() {
-  try{recognition.start();isListening=true;document.getElementById('micButton').classList.add('listening');document.getElementById('micLabel').textContent='🔴 กำลังฟัง...';setStatus('🎤 กำลังรับเสียง...');}
-  catch(e){setStatus('❌ เปิดไมค์ไม่ได้ — กรุณากด Allow');}
-}
-function stopListening() {
-  try{recognition.stop();}catch(e){}
-  isListening=false;document.getElementById('micButton').classList.remove('listening');document.getElementById('micLabel').textContent='กดเพื่อเริ่มแปลสด';setStatus('⏹️ หยุดแล้ว');
-}
-
-var lastFinalText = ''; // ป้องกันแปลซ้ำ
-
-function handleSpeechResult(event) {
-  var interim='',final='';
-  for(var i=event.resultIndex;i<event.results.length;i++){
-    if(event.results[i].isFinal) final+=event.results[i][0].transcript;
-    else interim+=event.results[i][0].transcript;
+    setStatus('✅ พร้อมใช้งาน — กดปุ่มไมค์เพื่อเริ่มพูด');
+  } catch(e) {
+    setStatus('⚠️ โหลดไม่สำเร็จ — ลอง Refresh');
   }
-  var el=document.getElementById('sourceText');
+}
+
+function updateRecognitionLang() {
+  if (recognition) recognition.lang = SPEECH_LANG_MAP[document.getElementById('sourceLang').value] || 'th-TH';
+}
+
+function toggleListening() {
+  if (!recognition) return;
+  if (isListening) stopListening(); else startListening();
+}
+
+function startListening() {
+  try {
+    recognition.start();
+    isListening = true;
+    finalBuffer = '';
+    lastTranslatedText = '';
+    document.getElementById('micButton').classList.add('listening');
+    document.getElementById('micLabel').textContent = '🔴 กำลังฟัง...';
+    document.getElementById('sendBtn').disabled = true;
+    setStatus('🎤 กำลังรับเสียง — พูดได้เลย!');
+  } catch(e) {
+    setStatus('❌ เปิดไมค์ไม่ได้ — กรุณากด Allow');
+  }
+}
+
+function stopListening() {
+  try { recognition.stop(); } catch(e) {}
+  isListening = false;
+  document.getElementById('micButton').classList.remove('listening');
+  document.getElementById('micLabel').textContent = 'กดเพื่อเริ่มพูด';
+  setStatus('⏹️ หยุดแล้ว');
+  // ถ้ามี buffer ค้าง → ส่งแปลทันที
+  if (finalBuffer.trim()) {
+    doTranslate(finalBuffer.trim());
+    finalBuffer = '';
+    document.getElementById('sendBtn').disabled = true;
+  }
+}
+
+/**
+ * ✅ หัวใจของการแก้ปัญหา 429
+ * - ไม่แปล interim (คำที่พูดยังไม่จบ)
+ * - สะสม final text ไว้ใน buffer
+ * - รอ X วินาที (ค่าเริ่มต้น 3) หลังพูดจบ → แล้วค่อยแปลทีเดียว
+ */
+function handleSpeechResult(event) {
+  var interim = '', final = '';
+
+  for (var i = event.resultIndex; i < event.results.length; i++) {
+    if (event.results[i].isFinal) {
+      final += event.results[i][0].transcript;
+    } else {
+      interim += event.results[i][0].transcript;
+    }
+  }
+
+  var el = document.getElementById('sourceText');
   el.classList.remove('waiting');
 
-  if(final) {
-    el.textContent=final; el.style.opacity='1';
-    // ป้องกันแปลซ้ำข้อความเดิม
-    if (final !== lastFinalText) {
-      lastFinalText = final;
-      translateDebounce(final);
-    }
-  } else if(interim) {
-    el.textContent=interim; el.style.opacity='0.6';
-    // โหมด instant เท่านั้นที่แปล interim (แต่ต้องมี debounce นาน)
-    if(currentSpeed==='instant') translateDebounce(interim);
+  if (final) {
+    // ✅ สะสมข้อความที่พูดจบแล้ว
+    finalBuffer += (finalBuffer ? ' ' : '') + final.trim();
+    el.textContent = finalBuffer;
+    el.style.opacity = '1';
+    document.getElementById('sendBtn').disabled = false;
+
+    // ✅ รีเซ็ต timer ทุกครั้งที่พูดเพิ่ม
+    if (finalTimer) clearTimeout(finalTimer);
+
+    var waitSeconds = parseFloat(document.getElementById('waitDelay').value) || 3;
+    finalTimer = setTimeout(function() {
+      // 🎯 รอจนหยุดพูด X วินาที → ค่อยส่งแปลทีเดียว!
+      if (finalBuffer.trim()) {
+        doTranslate(finalBuffer.trim());
+        finalBuffer = '';
+        document.getElementById('sendBtn').disabled = true;
+      }
+    }, waitSeconds * 1000);
+
+    // อัปเดต status
+    setStatus('🎤 รับเสียงอยู่... (รอ ' + waitSeconds + ' วิ แล้วแปลอัตโนมัติ)');
+
+  } else if (interim) {
+    // แสดง interim เป็น preview (แต่ไม่แปล!)
+    el.textContent = (finalBuffer ? finalBuffer + ' ' : '') + interim;
+    el.style.opacity = '0.6';
+  }
+}
+
+/**
+ * ✅ ปุ่ม "ส่งแปลเลย" — ไม่ต้องรอ timer
+ */
+function forceTranslateNow() {
+  if (finalTimer) clearTimeout(finalTimer);
+  if (finalBuffer.trim()) {
+    doTranslate(finalBuffer.trim());
+    finalBuffer = '';
+    document.getElementById('sendBtn').disabled = true;
+    setStatus('📤 ส่งแปลแล้ว!');
   }
 }
 
 function handleSpeechError(event) {
-  var m={'not-allowed':'❌ ไมค์ถูกบล็อก!','no-speech':'🤫 ไม่ได้ยินเสียง','network':'🌐 ไม่มีเน็ต','audio-capture':'❌ ไม่พบไมค์'};
-  setStatus(m[event.error]||'⚠️ ลองใหม่');
-}
-
-function translateDebounce(text) {
-  if(debounceTimer) clearTimeout(debounceTimer);
-
-  // ✅ Debounce นานขึ้นสำหรับ AI (ป้องกัน 429)
-  var delay;
-  if (translationMode === 'free') {
-    delay = currentSpeed==='instant' ? 300 : currentSpeed==='fast' ? 800 : 1500;
-  } else {
-    // AI mode ต้อง debounce นานกว่า เพราะ rate limit เข้ม
-    delay = currentSpeed==='instant' ? 1500 : currentSpeed==='fast' ? 2500 : 3500;
-  }
-
-  debounceTimer = setTimeout(function() { doTranslate(text); }, delay);
+  var m = {
+    'not-allowed':'❌ ไมค์ถูกบล็อก! กรุณากด Allow',
+    'no-speech':'🤫 ไม่ได้ยินเสียง — ลองพูดใหม่',
+    'network':'🌐 ไม่มีเน็ต',
+    'audio-capture':'❌ ไม่พบไมค์'
+  };
+  setStatus(m[event.error] || '⚠️ เกิดข้อผิดพลาด — ลองใหม่');
 }
 
 // ===== TTS =====
 function speakResult(speed) {
-  var text=document.getElementById('targetText').textContent;
-  if(!text||text.charAt(0)==='⏳'||text.charAt(0)==='❌'||text==='Waiting...')return;
-  var u=new SpeechSynthesisUtterance(text);
-  u.lang=SPEECH_LANG_MAP[document.getElementById('targetLang').value]||'en-US';
-  var base=parseFloat(document.getElementById('speechSpeed').value)||0.9;
-  u.volume=parseFloat(document.getElementById('speechVolume').value)||1;
-  if(speed==='slow')u.rate=base*0.6;else if(speed==='fast')u.rate=base*1.5;else u.rate=base;
+  var text = document.getElementById('targetText').textContent;
+  if (!text || text.charAt(0) === '⏳' || text.charAt(0) === '❌' || text === 'Waiting...') return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = SPEECH_LANG_MAP[document.getElementById('targetLang').value] || 'en-US';
+  var base = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
+  u.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
+  if (speed === 'slow') u.rate = base * 0.6;
+  else if (speed === 'fast') u.rate = base * 1.5;
+  else u.rate = base;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(u);
-  if(document.getElementById('classroomMode').checked&&speed!=='slow'){
-    u.onend=function(){setTimeout(function(){var s=new SpeechSynthesisUtterance(text);s.lang=u.lang;s.rate=base*0.5;s.volume=u.volume;window.speechSynthesis.speak(s);},1500);};
+  if (document.getElementById('classroomMode').checked && speed !== 'slow') {
+    u.onend = function() {
+      setTimeout(function() {
+        var s = new SpeechSynthesisUtterance(text);
+        s.lang = u.lang; s.rate = base * 0.5; s.volume = u.volume;
+        window.speechSynthesis.speak(s);
+      }, 1500);
+    };
   }
 }
 
 // ===== Utilities =====
-function setSpeed(mode) {
-  currentSpeed=mode;
-  document.getElementById('modeInstant').classList.toggle('active',mode==='instant');
-  document.getElementById('modeFast').classList.toggle('active',mode==='fast');
-  document.getElementById('modeSentence').classList.toggle('active',mode==='sentence');
-}
 function swapLanguages() {
-  var s=document.getElementById('sourceLang'),t=document.getElementById('targetLang');
-  var tmp=s.value;s.value=t.value;t.value=tmp;updateRecognitionLang();
+  var s = document.getElementById('sourceLang'), t = document.getElementById('targetLang');
+  var tmp = s.value; s.value = t.value; t.value = tmp;
+  updateRecognitionLang();
 }
-function setStatus(msg) { document.getElementById('status').textContent=msg; }
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
 
-function addHistory(orig,trans,from,to,engine) {
-  var cfgUsed=ALL_APIS.find(function(c){return c.id===engine;});
-  historyList.unshift({o:orig,t:trans,f:from,to:to,engine:cfgUsed?cfgUsed.label:engine,time:new Date().toLocaleTimeString('th-TH')});
-  if(historyList.length>50)historyList.pop();
+function addHistory(orig, trans, from, to, engine) {
+  historyList.unshift({
+    o:orig, t:trans, f:from, to:to, engine:engine,
+    time:new Date().toLocaleTimeString('th-TH')
+  });
+  if (historyList.length > 50) historyList.pop();
   renderHistory();
 }
 function renderHistory() {
-  var c=document.getElementById('historyList');
-  if(!historyList.length){c.innerHTML='<p style="color:var(--glaucous-blue);font-style:italic;font-size:0.85rem;">ยังไม่มีประวัติ</p>';return;}
-  var h='';
-  historyList.forEach(function(item){
-    h+='<div class="history-item"><strong>'+esc(item.time)+'</strong> ['+esc(item.f)+'→'+esc(item.to)+'] '+esc(item.engine)+'<br>'+esc(item.o)+' → <em>'+esc(item.t)+'</em></div>';
+  var c = document.getElementById('historyList');
+  if (!historyList.length) { c.innerHTML = '<p style="color:var(--glaucous-blue);font-style:italic;font-size:0.85rem;">ยังไม่มีประวัติ</p>'; return; }
+  var h = '';
+  historyList.forEach(function(item) {
+    h += '<div class="history-item"><strong>' + esc(item.time) + '</strong> [' + esc(item.f) + '→' + esc(item.to) + '] ' + esc(item.engine) + '<br>' + esc(item.o) + ' → <em>' + esc(item.t) + '</em></div>';
   });
-  c.innerHTML=h;
+  c.innerHTML = h;
 }
-function clearHistory(){if(confirm('ล้างประวัติ?')){historyList=[];renderHistory();}}
+function clearHistory() { if (confirm('ล้างประวัติ?')) { historyList = []; renderHistory(); } }
 function saveHistoryFile() {
-  if(!historyList.length){alert('ยังไม่มีประวัติ');return;}
-  var text='VoiceBridge History — '+new Date().toLocaleString('th-TH')+'\n\n';
-  historyList.forEach(function(item){text+=item.time+' ['+item.f+'→'+item.to+'] ('+item.engine+')\n'+item.o+' → '+item.t+'\n\n';});
-  var blob=new Blob([text],{type:'text/plain;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='voicebridge-history.txt';a.click();
+  if (!historyList.length) { alert('ยังไม่มีประวัติ'); return; }
+  var text = 'VoiceBridge History — ' + new Date().toLocaleString('th-TH') + '\n\n';
+  historyList.forEach(function(item) { text += item.time + ' [' + item.f + '→' + item.to + '] (' + item.engine + ')\n' + item.o + ' → ' + item.t + '\n\n'; });
+  var blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'voicebridge-history.txt'; a.click();
 }
-function esc(t){var d=document.createElement('div');d.textContent=t||'';return d.innerHTML;}
-
-// ===== Refresh Usage Monitor periodically (for cooldown countdown) =====
-setInterval(function() {
-  var hasCooldown = false;
-  ALL_APIS.forEach(function(c) { if (getCooldownRemaining(c.id) > 0) hasCooldown = true; });
-  if (hasCooldown) renderUsageMonitor();
-}, 5000);
+function esc(t) { var d = document.createElement('div'); d.textContent = t || ''; return d.innerHTML; }
 
 // ===== Init =====
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded', function() {
   loadApiKeys();
   var savedMode = 'free';
-  try { savedMode = localStorage.getItem('vb4_mode') || 'free'; } catch(e) {}
+  try { savedMode = localStorage.getItem('vb5_mode') || 'free'; } catch(e) {}
   setTranslationMode(savedMode);
-  renderUsageMonitor();
   initApp();
 });
 </script>
