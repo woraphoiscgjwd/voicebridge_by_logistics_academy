@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoiceBridge by Logistics Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Prompt','Segoe UI',sans-serif;
+      background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+      min-height:100vh; color:#fff; padding:16px;
+      display:flex; flex-direction:column; align-items:center;
+    }
+    .container { max-width:800px; width:100%; }
+
+    /* Header */
+    header { text-align:center; margin-bottom:20px; }
+    header h1 { font-size:2rem; margin-bottom:4px; }
+    .subtitle { opacity:0.7; font-size:0.95rem; }
+
+    /* Language Section */
+    .lang-section { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+    .lang-box { display:flex; flex-direction:column; gap:4px; }
+    .lang-box label { font-size:0.8rem; opacity:0.8; }
+    .lang-box select {
+      background:rgba(255,255,255,0.1); color:#fff;
+      border:1px solid rgba(255,255,255,0.3);
+      padding:10px 12px; border-radius:10px; font-size:0.95rem; min-width:155px;
+      font-family:'Prompt',sans-serif;
+    }
+    .lang-box select option { background:#1a1a2e; color:#fff; }
+    .swap-btn {
+      background:rgba(255,255,255,0.15); border:none; color:#fff;
+      font-size:1.4rem; width:42px; height:42px; border-radius:50%;
+      cursor:pointer; margin-top:18px; transition:background 0.2s;
+    }
+    .swap-btn:hover { background:rgba(255,255,255,0.3); }
+
+    /* Result Section */
+    .result-section { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px; }
+    .result-box {
+      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+      border-radius:14px; padding:14px; min-height:110px;
+    }
+    .result-label { font-size:0.75rem; opacity:0.6; margin-bottom:6px; font-weight:600; }
+    .result-text { font-size:1.2rem; line-height:1.6; min-height:50px; word-wrap:break-word; }
+    .tts-buttons { margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; }
+    .tts-buttons button {
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+      color:#fff; padding:5px 10px; border-radius:8px; cursor:pointer; font-size:0.8rem;
+      font-family:'Prompt',sans-serif; transition:background 0.2s;
+    }
+    .tts-buttons button:hover { background:rgba(255,255,255,0.25); }
+
+    /* Mic Section */
+    .mic-section { display:flex; flex-direction:column; align-items:center; margin-bottom:20px; }
+    .mic-btn {
+      background:linear-gradient(135deg,#e94560,#ff6b6b); border:none; color:#fff;
+      width:150px; height:150px; border-radius:50%; cursor:pointer;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+      box-shadow:0 8px 28px rgba(233,69,96,0.4); transition:transform 0.2s;
+      font-family:'Prompt',sans-serif;
+    }
+    .mic-btn:hover { transform:scale(1.05); }
+    .mic-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+    .mic-btn.listening {
+      background:linear-gradient(135deg,#00c853,#69f0ae);
+      box-shadow:0 8px 28px rgba(0,200,83,0.5);
+      animation:pulse 1.5s infinite;
+    }
+    .mic-icon { font-size:2.8rem; }
+    #micLabel { font-size:0.75rem; text-align:center; padding:0 8px; }
+    .status-text { margin-top:10px; font-size:0.85rem; opacity:0.7; text-align:center; min-height:18px; }
+    .engine-badge {
+      margin-top:6px; font-size:0.7rem; opacity:0.5;
+      background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px; display:inline-block;
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.07);} }
+
+    /* Settings & History */
+    .settings-section,.history-section {
+      background:rgba(255,255,255,0.05); border-radius:12px; padding:14px; margin-bottom:14px;
+    }
+    summary { cursor:pointer; font-size:0.95rem; font-weight:600; user-select:none; }
+    .settings-content { margin-top:10px; display:flex; flex-direction:column; gap:10px; }
+    .settings-content label { display:flex; align-items:center; gap:8px; font-size:0.85rem; flex-wrap:wrap; }
+    .settings-content input[type="range"] { flex:1; max-width:180px; }
+    .history-list { margin:10px 0; max-height:180px; overflow-y:auto; }
+    .history-item {
+      background:rgba(255,255,255,0.05); border-radius:8px; padding:8px;
+      margin-bottom:6px; font-size:0.8rem; border-left:3px solid #e94560;
+    }
+    .btn-secondary {
+      background:rgba(255,255,255,0.1); color:#fff;
+      border:1px solid rgba(255,255,255,0.3);
+      padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;
+      font-family:'Prompt',sans-serif;
+    }
+    .btn-secondary:hover { background:rgba(255,255,255,0.2); }
+
+    /* Speed Mode */
+    .speed-mode { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; justify-content:center; }
+    .speed-mode button {
+      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2);
+      color:#fff; padding:6px 12px; border-radius:20px; cursor:pointer;
+      font-size:0.8rem; font-family:'Prompt',sans-serif; transition:all 0.2s;
+    }
+    .speed-mode button.active { background:#e94560; border-color:#e94560; }
+
+    /* Footer */
+    footer {
+      text-align:center; margin-top:24px; padding-top:16px;
+      border-top:1px solid rgba(255,255,255,0.1); opacity:0.6; font-size:0.75rem;
+    }
+
+    /* Responsive */
+    @media(max-width:600px) {
+      .result-section { grid-template-columns:1fr; }
+      .lang-section { flex-direction:column; align-items:stretch; }
+      .swap-btn { margin-top:0; transform:rotate(90deg); align-self:center; }
+      .mic-btn { width:130px; height:130px; }
+      header h1 { font-size:1.6rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🎤 VoiceBridge</h1>
+    <p class="subtitle">โปรแกรมแปลภาษาด้วยเสียง — รองรับ 30+ ภาษา</p>
+  </header>
+
+  <!-- เลือกภาษา -->
+  <section class="lang-section">
+    <div class="lang-box">
+      <label>🎤 ภาษารับเข้า (พูด)</label>
+      <select id="sourceLang">
+        <option value="th">🇹🇭 ภาษาไทย</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="my">🇲🇲 မြန်မာ (พม่า)</option>
+        <option value="vi">🇻🇳 Tiếng Việt</option>
+        <option value="ms">🇲🇾 Bahasa Melayu</option>
+        <option value="id">🇮🇩 Bahasa Indonesia</option>
+        <option value="tl">🇵🇭 Filipino</option>
+        <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร)</option>
+        <option value="lo">🇱🇦 ພາສາລາວ (ลาว)</option>
+        <option value="zh">🇨🇳 中文 (จีนกลาง)</option>
+        <option value="zh-TW">🇹🇼 繁體中文 (จีนตัวเต็ม)</option>
+        <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
+        <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
+        <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
+        <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
+        <option value="ta">🇮🇳 தமிழ் (ทมิฬ)</option>
+        <option value="ur">🇵🇰 اردو (อูรดู)</option>
+        <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
+        <option value="si">🇱🇰 සිංහල (สิงหล)</option>
+        <option value="fr">🇫🇷 Français (ฝรั่งเศส)</option>
+        <option value="de">🇩🇪 Deutsch (เยอรมัน)</option>
+        <option value="es">🇪🇸 Español (สเปน)</option>
+        <option value="pt">🇧🇷 Português (โปรตุเกส)</option>
+        <option value="it">🇮🇹 Italiano (อิตาลี)</option>
+        <option value="nl">🇳🇱 Nederlands (ดัตช์)</option>
+        <option value="ru">🇷🇺 Русский (รัสเซีย)</option>
+        <option value="pl">🇵🇱 Polski (โปแลนด์)</option>
+        <option value="uk">🇺🇦 Українська (ยูเครน)</option>
+        <option value="sv">🇸🇪 Svenska (สวีเดน)</option>
+        <option value="da">🇩🇰 Dansk (เดนมาร์ก)</option>
+        <option value="fi">🇫🇮 Suomi (ฟินแลนด์)</option>
+        <option value="el">🇬🇷 Ελληνικά (กรีก)</option>
+        <option value="cs">🇨🇿 Čeština (เช็ก)</option>
+        <option value="ro">🇷🇴 Română (โรมาเนีย)</option>
+        <option value="hu">🇭🇺 Magyar (ฮังการี)</option>
+        <option value="tr">🇹🇷 Türkçe (ตุรกี)</option>
+        <option value="ar">🇸🇦 العربية (อาหรับ)</option>
+        <option value="fa">🇮🇷 فارسی (เปอร์เซีย)</option>
+        <option value="he">🇮🇱 עברית (ฮีบรู)</option>
+        <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
+        <option value="af">🇿🇦 Afrikaans</option>
+      </select>
+    </div>
+    <button class="swap-btn" onclick="swapLanguages()">⇄</button>
+    <div class="lang-box">
+      <label>📝 ภาษาส่งออก (แปล)</label>
+      <select id="targetLang">
+        <option value="en">🇬🇧 English</option>
+        <option value="th">🇹🇭 ภาษาไทย</option>
+        <option value="my">🇲🇲 မြန်မာ (พม่า)</option>
+        <option value="vi">🇻🇳 Tiếng Việt</option>
+        <option value="ms">🇲🇾 Bahasa Melayu</option>
+        <option value="id">🇮🇩 Bahasa Indonesia</option>
+        <option value="tl">🇵🇭 Filipino</option>
+        <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร)</option>
+        <option value="lo">🇱🇦 ພາສາລາວ (ลาว)</option>
+        <option value="zh">🇨🇳 中文 (จีนกลาง)</option>
+        <option value="zh-TW">🇹🇼 繁體中文 (จีนตัวเต็ม)</option>
+        <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
+        <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
+        <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
+        <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
+        <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
+        <option value="ur">🇵🇰 اردو (อูรดู)</option>
+        <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
+        <option value="si">🇱🇰 සිංහල (สิงหล)</option>
+        <option value="fr">🇫🇷 Français (ฝรั่งเศส)</option>
+        <option value="de">🇩🇪 Deutsch (เยอรมัน)</option>
+        <option value="es">🇪🇸 Español (สเปน)</option>
+        <option value="pt">🇧🇷 Português (โปรตุเกส)</option>
+        <option value="it">🇮🇹 Italiano (อิตาลี)</option>
+        <option value="nl">🇳🇱 Nederlands (ดัตช์)</option>
+        <option value="ru">🇷🇺 Русский (รัสเซีย)</option>
+        <option value="pl">🇵🇱 Polski (โปแลนด์)</option>
+        <option value="uk">🇺🇦 Українська (ยูเครน)</option>
+        <option value="sv">🇸🇪 Svenska (สวีเดน)</option>
+        <option value="da">🇩🇰 Dansk (เดนมาร์ก)</option>
+        <option value="fi">🇫🇮 Suomi (ฟินแลนด์)</option>
+        <option value="el">🇬🇷 Ελληνικά (กรีก)</option>
+        <option value="cs">🇨🇿 Čeština (เช็ก)</option>
+        <option value="ro">🇷🇴 Română (โรมาเนีย)</option>
+        <option value="hu">🇭🇺 Magyar (ฮังการี)</option>
+        <option value="tr">🇹🇷 Türkçe (ตุรกี)</option>
+        <option value="ar">🇸🇦 العربية (อาหรับ)</option>
+        <option value="fa">🇮🇷 فارسی (เปอร์เซีย)</option>
+        <option value="he">🇮🇱 עברית (ฮีบรู)</option>
+        <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
+        <option value="af">🇿🇦 Afrikaans</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- โหมดความเร็ว -->
+  <div class="speed-mode">
+    <button id="modeInstant" onclick="setMode('instant')">⚡ ทันที</button>
+    <button id="modeFast" class="active" onclick="setMode('fast')">🚀 เร็ว (0.5วิ)</button>
+    <button id="modeSentence" onclick="setMode('sentence')">📝 ทีละประโยค</button>
+  </div>
+
+  <!-- แสดงผล -->
+  <section class="result-section">
+    <div class="result-box">
+      <div class="result-label">🎤 ต้นฉบับ</div>
+      <div id="sourceText" class="result-text">รอรับเสียง...</div>
+    </div>
+    <div class="result-box">
+      <div class="result-label">📝 คำแปล</div>
+      <div id="targetText" class="result-text">Waiting...</div>
+      <div class="tts-buttons">
+        <button onclick="speakResult('normal')">🔊 พูด</button>
+        <button onclick="speakResult('slow')">🐢 ช้า</button>
+        <button onclick="speakResult('fast')">🐇 เร็ว</button>
+      </div>
+      <span id="engineBadge" class="engine-badge" style="display:none;"></span>
+    </div>
+  </section>
+
+  <!-- ปุ่มไมค์ -->
+  <section class="mic-section">
+    <button id="micButton" class="mic-btn" onclick="toggleListening()">
+      <span class="mic-icon">🎤</span>
+      <span id="micLabel">กดเพื่อเริ่มแปลสด</span>
+    </button>
+    <div id="status" class="status-text">กำลังโหลด...</div>
+  </section>
+
+  <!-- ตั้งค่า -->
+  <section class="settings-section">
+    <details>
+      <summary>⚙️ ตั้งค่า</summary>
+      <div class="settings-content">
+        <label><input type="checkbox" id="autoSpeak"> 🔊 พูดอัตโนมัติ (เฉพาะจบประโยค)</label>
+        <label><input type="checkbox" id="classroomMode"> 🎓 โหมดห้องเรียน (พูด 2 รอบ: ปกติ + ช้า)</label>
+        <label>🔊 ความเร็วเสียง: <span id="speedVal">0.9x</span>
+          <input type="range" id="speechSpeed" min="0.5" max="2" step="0.1" value="0.9">
+        </label>
+        <label>📢 ระดับเสียง: <span id="volVal">100%</span>
+          <input type="range" id="speechVolume" min="0" max="1" step="0.1" value="1">
+        </label>
+      </div>
+    </details>
+  </section>
+
+  <!-- ประวัติ -->
+  <section class="history-section">
+    <details>
+      <summary>📜 ประวัติการแปล</summary>
+      <div id="historyList" class="history-list"><p style="opacity:0.5;font-style:italic;">ยังไม่มีประวัติ</p></div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button onclick="clearHistory()" class="btn-secondary">🗑️ ล้างประวัติ</button>
+        <button onclick="saveHistory()" class="btn-secondary">💾 บันทึก</button>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <p>Designed and Developed by Woraphong Isarangkoon Na Ayuthya</p>
+    <p>📧 woraphoi@scgjwd.com</p>
+  </footer>
+
+</div>
+
+<script>
+/**
+ * VoiceBridge — Full Version
+ * Translation API Priority (ดีสุด → แย่สุด):
+ * 1. Google Translate (unofficial via lingva.ml mirrors)
+ * 2. MyMemory API
+ * 3. LibreTranslate (free instances)
+ * 4. Mymemory fallback with email
+ */
+
+// ===== Global Variables =====
+var recognition = null;
+var isListening = false;
+var translationCache = {};
+var historyList = [];
+var debounceTimer = null;
+var currentMode = 'fast'; // instant | fast | sentence
+var currentEngine = '';
+
+// Translation API endpoints (เรียงจากดีสุดไปแย่สุด)
+var TRANSLATION_APIS = [
+  { name: 'Lingva', type: 'lingva', baseUrl: 'https://lingva.ml' },
+  { name: 'Lingva2', type: 'lingva', baseUrl: 'https://lingva.thedaviddelta.com' },
+  { name: 'MyMemory', type: 'mymemory', baseUrl: 'https://api.mymemory.translated.net' },
+  { name: 'LibreTranslate', type: 'libre', baseUrl: 'https://libretranslate.de' },
+  { name: 'LibreTranslate2', type: 'libre', baseUrl: 'https://translate.argosopentech.com' }
+];
+
+// Speech Recognition language map
+var SPEECH_LANG_MAP = {
+  'th':'th-TH','en':'en-US','my':'my-MM','vi':'vi-VN','ms':'ms-MY',
+  'id':'id-ID','tl':'fil-PH','km':'km-KH','lo':'lo-LA','zh':'zh-CN',
+  'zh-TW':'zh-TW','ja':'ja-JP','ko':'ko-KR','hi':'hi-IN','bn':'bn-BD',
+  'ta':'ta-IN','ur':'ur-PK','ne':'ne-NP','si':'si-LK','fr':'fr-FR',
+  'de':'de-DE','es':'es-ES','pt':'pt-BR','it':'it-IT','nl':'nl-NL',
+  'ru':'ru-RU','pl':'pl-PL','uk':'uk-UA','sv':'sv-SE','da':'da-DK',
+  'fi':'fi-FI','el':'el-GR','cs':'cs-CZ','ro':'ro-RO','hu':'hu-HU',
+  'tr':'tr-TR','ar':'ar-SA','fa':'fa-IR','he':'he-IL','sw':'sw-KE','af':'af-ZA'
+};
+
+// ===== Init =====
+document.addEventListener('DOMContentLoaded', function() {
+  initApp();
+});
+
+function initApp() {
+  try {
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setStatus('❌ Browser ไม่รองรับ — กรุณาใช้ Chrome / Edge');
+      document.getElementById('micButton').disabled = true;
+      return;
+    }
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    updateRecognitionLang();
+
+    recognition.onresult = handleSpeechResult;
+    recognition.onerror = handleSpeechError;
+    recognition.onend = handleSpeechEnd;
+
+    // Event listeners
+    document.getElementById('speechSpeed').addEventListener('input', function() {
+      document.getElementById('speedVal').textContent = this.value + 'x';
+    });
+    document.getElementById('speechVolume').addEventListener('input', function() {
+      document.getElementById('volVal').textContent = Math.round(this.value * 100) + '%';
+    });
+    document.getElementById('sourceLang').addEventListener('change', function() {
+      updateRecognitionLang();
+      if (isListening) { stopListening(); startListening(); }
+    });
+
+    setStatus('✅ พร้อมใช้งาน — กดปุ่มไมค์เพื่อเริ่ม');
+  } catch(e) {
+    setStatus('⚠️ โหลดไม่สำเร็จ — ลอง Refresh หน้า');
+  }
+}
+
+// ===== Speed Mode =====
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('modeInstant').classList.toggle('active', mode==='instant');
+  document.getElementById('modeFast').classList.toggle('active', mode==='fast');
+  document.getElementById('modeSentence').classList.toggle('active', mode==='sentence');
+}
+
+// ===== Speech Recognition =====
+function toggleListening() {
+  if (!recognition) return;
+  if (isListening) stopListening(); else startListening();
+}
+
+function startListening() {
+  try {
+    recognition.start();
+    isListening = true;
+    document.getElementById('micButton').classList.add('listening');
+    document.getElementById('micLabel').textContent = '🔴 กำลังฟัง...';
+    setStatus('🎤 กำลังรับเสียง...');
+  } catch(e) {
+    if (e.message && e.message.indexOf('already started') > -1) return;
+    setStatus('❌ เปิดไมค์ไม่ได้ — กรุณากด Allow ที่ Browser');
+  }
+}
+
+function stopListening() {
+  try { recognition.stop(); } catch(e) {}
+  isListening = false;
+  document.getElementById('micButton').classList.remove('listening');
+  document.getElementById('micLabel').textContent = 'กดเพื่อเริ่มแปลสด';
+  setStatus('⏹️ หยุดรับเสียงแล้ว');
+}
+
+function updateRecognitionLang() {
+  if (!recognition) return;
+  var lang = document.getElementById('sourceLang').value;
+  recognition.lang = SPEECH_LANG_MAP[lang] || lang;
+}
+
+function handleSpeechResult(event) {
+  var interim = '', final = '';
+  for (var i = event.resultIndex; i < event.results.length; i++) {
+    if (event.results[i].isFinal) final += event.results[i][0].transcript;
+    else interim += event.results[i][0].transcript;
+  }
+  var el = document.getElementById('sourceText');
+  if (final) {
+    el.textContent = final;
+    el.style.opacity = '1';
+    translateDebounce(final);
+  } else if (interim) {
+    el.textContent = interim;
+    el.style.opacity = '0.6';
+    // โหมด instant → แปลทันทีแม้ยังพูดไม่จบ
+    if (currentMode === 'instant') translateDebounce(interim);
+  }
+}
+
+function handleSpeechError(event) {
+  var msg = {
+    'not-allowed':'❌ ไมค์ถูกบล็อก! กด Allow ที่ popup ด้านบน',
+    'no-speech':'🤫 ไม่ได้ยินเสียง — ลองพูดใหม่',
+    'network':'🌐 ไม่มีอินเทอร์เน็ต',
+    'audio-capture':'❌ ไม่พบไมโครโฟน',
+    'aborted':'⏹️ หยุดรับเสียง'
+  };
+  setStatus(msg[event.error] || '⚠️ ลองกดไมค์ใหม่');
+}
+
+function handleSpeechEnd() {
+  if (isListening) {
+    setTimeout(function() { try { if(isListening) recognition.start(); } catch(e){} }, 100);
+  }
+}
+
+// ===== Translation (Multi-API Fallback) =====
+function translateDebounce(text) {
+  if (debounceTimer) clearTimeout(debounceTimer);
+  var delay = currentMode === 'instant' ? 100 : currentMode === 'fast' ? 500 : 1200;
+  debounceTimer = setTimeout(function() { doTranslate(text); }, delay);
+}
+
+function doTranslate(text) {
+  if (!text || !text.trim()) return;
+  var src = document.getElementById('sourceLang').value;
+  var tgt = document.getElementById('targetLang').value;
+  var key = src + '|' + tgt + '|' + text.trim();
+
+  if (translationCache[key]) {
+    showTranslation(translationCache[key].text, translationCache[key].engine);
+    return;
+  }
+
+  document.getElementById('targetText').textContent = '⏳ กำลังแปล...';
+  tryTranslateWithFallback(text.trim(), src, tgt, 0);
+}
+
+function tryTranslateWithFallback(text, src, tgt, apiIndex) {
+  if (apiIndex >= TRANSLATION_APIS.length) {
+    document.getElementById('targetText').textContent = '❌ API ทั้งหมดใช้ไม่ได้ — ลองใหม่';
+    return;
+  }
+
+  var api = TRANSLATION_APIS[apiIndex];
+  var url = '';
+
+  if (api.type === 'lingva') {
+    url = api.baseUrl + '/api/v1/' + src + '/' + tgt + '/' + encodeURIComponent(text);
+  } else if (api.type === 'mymemory') {
+    url = api.baseUrl + '/get?q=' + encodeURIComponent(text) + '&langpair=' + src + '|' + tgt;
+  } else if (api.type === 'libre') {
+    // LibreTranslate ต้องใช้ POST
+    fetchLibreTranslate(api, text, src, tgt, apiIndex);
+    return;
+  }
+
+  fetch(url, { method: 'GET', mode: 'cors' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var translated = extractTranslation(data, api.type);
+      if (translated) {
+        var key = src + '|' + tgt + '|' + text;
+        translationCache[key] = { text: translated, engine: api.name };
+        showTranslation(translated, api.name);
+        addHistory(text, translated, src, tgt);
+        if (document.getElementById('autoSpeak').checked) speakResult('normal');
+      } else {
+        tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
+      }
+    })
+    .catch(function() {
+      tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
+    });
+}
+
+function fetchLibreTranslate(api, text, src, tgt, apiIndex) {
+  fetch(api.baseUrl + '/translate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ q: text, source: src, target: tgt, format: 'text' })
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.translatedText) {
+        var key = src + '|' + tgt + '|' + text;
+        translationCache[key] = { text: data.translatedText, engine: api.name };
+        showTranslation(data.translatedText, api.name);
+        addHistory(text, data.translatedText, src, tgt);
+        if (document.getElementById('autoSpeak').checked) speakResult('normal');
+      } else {
+        tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
+      }
+    })
+    .catch(function() {
+      tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
+    });
+}
+
+function extractTranslation(data, type) {
+  if (type === 'lingva') {
+    return data && data.translation ? data.translation : null;
+  } else if (type === 'mymemory') {
+    if (data && data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+      var t = data.responseData.translatedText;
+      if (t.toUpperCase() === t && t.length > 20) return null; // all caps = error
+      return t;
+    }
+    return null;
+  }
+  return null;
+}
+
+function showTranslation(text, engine) {
+  document.getElementById('targetText').textContent = text;
+  var badge = document.getElementById('engineBadge');
+  badge.textContent = '⚡ ' + engine;
+  badge.style.display = 'inline-block';
+  currentEngine = engine;
+}
+
+// ===== Text-to-Speech =====
+function speakResult(speed) {
+  try {
+    var text = document.getElementById('targetText').textContent;
+    if (!text || text.charAt(0) === '⏳' || text.charAt(0) === '❌' || text === 'Waiting...') return;
+
+    var u = new SpeechSynthesisUtterance(text);
+    var tgt = document.getElementById('targetLang').value;
+    u.lang = SPEECH_LANG_MAP[tgt] || tgt;
+
+    var baseSpeed = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
+    var volume = parseFloat(document.getElementById('speechVolume').value) || 1;
+
+    if (speed === 'slow') u.rate = baseSpeed * 0.6;
+    else if (speed === 'fast') u.rate = baseSpeed * 1.5;
+    else u.rate = baseSpeed;
+
+    u.volume = volume;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+
+    // โหมดห้องเรียน
+    if (document.getElementById('classroomMode').checked && speed !== 'slow') {
+      u.onend = function() {
+        setTimeout(function() {
+          var s = new SpeechSynthesisUtterance(text);
+          s.lang = u.lang;
+          s.rate = baseSpeed * 0.5;
+          s.volume = volume;
+          window.speechSynthesis.speak(s);
+        }, 1500);
+      };
+    }
+  } catch(e) {
+    setStatus('⚠️ ไม่สามารถเล่นเสียงได้');
+  }
+}
+
+// ===== Utilities =====
+function swapLanguages() {
+  var s = document.getElementById('sourceLang');
+  var t = document.getElementById('targetLang');
+  var tmp = s.value; s.value = t.value; t.value = tmp;
+  updateRecognitionLang();
+}
+
+function setStatus(msg) {
+  var el = document.getElementById('status');
+  if (el) el.textContent = msg;
+}
+
+function addHistory(orig, trans, from, to) {
+  historyList.unshift({ o: orig, t: trans, f: from, to: to, time: new Date().toLocaleTimeString('th-TH') });
+  if (historyList.length > 50) historyList.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  var c = document.getElementById('historyList');
+  if (historyList.length === 0) { c.innerHTML = '<p style="opacity:0.5;font-style:italic;">ยังไม่มีประวัติ</p>'; return; }
+  var h = '';
+  for (var i = 0; i < historyList.length; i++) {
+    var item = historyList[i];
+    h += '<div class="history-item"><strong>' + esc(item.time) + '</strong> [' + esc(item.f) + '→' + esc(item.to) + ']<br>' + esc(item.o) + ' → <em>' + esc(item.t) + '</em></div>';
+  }
+  c.innerHTML = h;
+}
+
+function clearHistory() { historyList = []; renderHistory(); }
+
+function saveHistory() {
+  if (historyList.length === 0) { alert('ยังไม่มีประวัติ'); return; }
+  var text = 'VoiceBridge Translation History\n' + new Date().toLocaleString('th-TH') + '\n\n';
+  for (var i = 0; i < historyList.length; i++) {
+    var item = historyList[i];
+    text += item.time + ' [' + item.f + '→' + item.to + ']\n' + item.o + ' → ' + item.t + '\n\n';
+  }
+  var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'voicebridge-history.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function esc(t) { var d = document.createElement('div'); d.textContent = t || ''; return d.innerHTML; }
+</script>
+</body>
+</html>
