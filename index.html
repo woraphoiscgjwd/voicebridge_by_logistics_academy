@@ -2,250 +2,437 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VoiceBridge by Logistics Academy</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ===== Brand Colors from poster.md ===== */
+    :root {
+      --empowered-blue: #0A2380;
+      --glaucous-blue: #6E82AF;
+      --electric-blue: #0055FF;
+      --matt-orange: #D25A32;
+      --bright-orange: #FA5A0A;
+      --bright-yellow: #FFC805;
+      --matt-yellow: #F59614;
+      --cool-white: #F9F9F9;
+      --card-white: #FFFFFF;
+      --border-light: rgba(10,35,128,0.08);
+      --shadow-sm: 0 2px 8px rgba(10,35,128,0.06);
+      --shadow-md: 0 4px 20px rgba(10,35,128,0.1);
+      --shadow-lg: 0 8px 32px rgba(10,35,128,0.12);
+    }
+
     * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
-      font-family:'Prompt','Segoe UI',sans-serif;
-      background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
-      min-height:100vh; color:#fff; padding:16px;
+      font-family:'Prompt', sans-serif;
+      background: var(--cool-white);
+      min-height:100vh;
+      color: var(--empowered-blue);
+      padding:16px;
       display:flex; flex-direction:column; align-items:center;
     }
-    .container { max-width:800px; width:100%; }
 
-    /* Header */
-    header { text-align:center; margin-bottom:20px; }
-    header h1 { font-size:2rem; margin-bottom:4px; }
-    .subtitle { opacity:0.7; font-size:0.95rem; }
+    .container { max-width:860px; width:100%; }
 
-    /* Language Section */
-    .lang-section { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
-    .lang-box { display:flex; flex-direction:column; gap:4px; }
-    .lang-box label { font-size:0.8rem; opacity:0.8; }
+    /* ===== Header & Logo ===== */
+    header {
+      text-align:center; margin-bottom:28px; padding:20px 0;
+    }
+    .logo {
+      height:48px; margin-bottom:14px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+    header h1 {
+      font-size:2.4rem; font-weight:700;
+      color: var(--empowered-blue);
+      letter-spacing:-0.5px;
+    }
+    header h1 span { color: var(--bright-orange); }
+    .subtitle {
+      font-size:0.95rem; font-weight:300;
+      color: var(--glaucous-blue); margin-top:4px;
+    }
+
+    /* ===== Card Component ===== */
+    .card {
+      background: var(--card-white);
+      border:1px solid var(--border-light);
+      border-radius:16px;
+      padding:20px;
+      margin-bottom:16px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s;
+    }
+    .card:hover { box-shadow: var(--shadow-md); }
+
+    /* ===== Language Section ===== */
+    .lang-section {
+      display:flex; align-items:center; justify-content:center;
+      gap:12px; flex-wrap:wrap;
+    }
+    .lang-box { display:flex; flex-direction:column; gap:6px; flex:1; min-width:160px; }
+    .lang-box label {
+      font-size:0.8rem; font-weight:600;
+      color: var(--glaucous-blue); text-transform:uppercase; letter-spacing:0.5px;
+    }
     .lang-box select {
-      background:rgba(255,255,255,0.1); color:#fff;
-      border:1px solid rgba(255,255,255,0.3);
-      padding:10px 12px; border-radius:10px; font-size:0.95rem; min-width:155px;
-      font-family:'Prompt',sans-serif;
+      background: var(--cool-white);
+      color: var(--empowered-blue);
+      border:2px solid var(--border-light);
+      padding:12px 14px; border-radius:12px;
+      font-size:0.95rem; font-family:'Prompt', sans-serif;
+      cursor:pointer; transition:border-color 0.2s;
     }
-    .lang-box select option { background:#1a1a2e; color:#fff; }
+    .lang-box select:focus { border-color: var(--electric-blue); outline:none; }
     .swap-btn {
-      background:rgba(255,255,255,0.15); border:none; color:#fff;
-      font-size:1.4rem; width:42px; height:42px; border-radius:50%;
-      cursor:pointer; margin-top:18px; transition:background 0.2s;
+      background: var(--electric-blue); border:none;
+      color:#fff; font-size:1.3rem;
+      width:46px; height:46px; border-radius:50%;
+      cursor:pointer; margin-top:20px;
+      box-shadow: 0 4px 12px rgba(0,85,255,0.25);
+      transition:all 0.2s;
     }
-    .swap-btn:hover { background:rgba(255,255,255,0.3); }
+    .swap-btn:hover { transform:scale(1.1); box-shadow: 0 6px 18px rgba(0,85,255,0.35); }
 
-    /* Result Section */
-    .result-section { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px; }
-    .result-box {
-      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
-      border-radius:14px; padding:14px; min-height:110px;
+    /* ===== Speed Mode ===== */
+    .speed-mode {
+      display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+      margin-bottom:16px;
     }
-    .result-label { font-size:0.75rem; opacity:0.6; margin-bottom:6px; font-weight:600; }
-    .result-text { font-size:1.2rem; line-height:1.6; min-height:50px; word-wrap:break-word; }
-    .tts-buttons { margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; }
-    .tts-buttons button {
-      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
-      color:#fff; padding:5px 10px; border-radius:8px; cursor:pointer; font-size:0.8rem;
-      font-family:'Prompt',sans-serif; transition:background 0.2s;
-    }
-    .tts-buttons button:hover { background:rgba(255,255,255,0.25); }
-
-    /* Mic Section */
-    .mic-section { display:flex; flex-direction:column; align-items:center; margin-bottom:20px; }
-    .mic-btn {
-      background:linear-gradient(135deg,#e94560,#ff6b6b); border:none; color:#fff;
-      width:150px; height:150px; border-radius:50%; cursor:pointer;
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
-      box-shadow:0 8px 28px rgba(233,69,96,0.4); transition:transform 0.2s;
-      font-family:'Prompt',sans-serif;
-    }
-    .mic-btn:hover { transform:scale(1.05); }
-    .mic-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-    .mic-btn.listening {
-      background:linear-gradient(135deg,#00c853,#69f0ae);
-      box-shadow:0 8px 28px rgba(0,200,83,0.5);
-      animation:pulse 1.5s infinite;
-    }
-    .mic-icon { font-size:2.8rem; }
-    #micLabel { font-size:0.75rem; text-align:center; padding:0 8px; }
-    .status-text { margin-top:10px; font-size:0.85rem; opacity:0.7; text-align:center; min-height:18px; }
-    .engine-badge {
-      margin-top:6px; font-size:0.7rem; opacity:0.5;
-      background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:10px; display:inline-block;
-    }
-    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.07);} }
-
-    /* Settings & History */
-    .settings-section,.history-section {
-      background:rgba(255,255,255,0.05); border-radius:12px; padding:14px; margin-bottom:14px;
-    }
-    summary { cursor:pointer; font-size:0.95rem; font-weight:600; user-select:none; }
-    .settings-content { margin-top:10px; display:flex; flex-direction:column; gap:10px; }
-    .settings-content label { display:flex; align-items:center; gap:8px; font-size:0.85rem; flex-wrap:wrap; }
-    .settings-content input[type="range"] { flex:1; max-width:180px; }
-    .history-list { margin:10px 0; max-height:180px; overflow-y:auto; }
-    .history-item {
-      background:rgba(255,255,255,0.05); border-radius:8px; padding:8px;
-      margin-bottom:6px; font-size:0.8rem; border-left:3px solid #e94560;
-    }
-    .btn-secondary {
-      background:rgba(255,255,255,0.1); color:#fff;
-      border:1px solid rgba(255,255,255,0.3);
-      padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85rem;
-      font-family:'Prompt',sans-serif;
-    }
-    .btn-secondary:hover { background:rgba(255,255,255,0.2); }
-
-    /* Speed Mode */
-    .speed-mode { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; justify-content:center; }
     .speed-mode button {
-      background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2);
-      color:#fff; padding:6px 12px; border-radius:20px; cursor:pointer;
-      font-size:0.8rem; font-family:'Prompt',sans-serif; transition:all 0.2s;
+      background: var(--cool-white);
+      border:2px solid var(--border-light);
+      color: var(--empowered-blue);
+      padding:8px 16px; border-radius:24px;
+      cursor:pointer; font-size:0.85rem;
+      font-family:'Prompt', sans-serif; font-weight:400;
+      transition:all 0.2s;
     }
-    .speed-mode button.active { background:#e94560; border-color:#e94560; }
+    .speed-mode button:hover { border-color: var(--electric-blue); }
+    .speed-mode button.active {
+      background: var(--empowered-blue);
+      border-color: var(--empowered-blue);
+      color:#fff;
+    }
 
-    /* Footer */
+    /* ===== Result Section ===== */
+    .result-section {
+      display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    }
+    .result-box {
+      background: var(--card-white);
+      border:2px solid var(--border-light);
+      border-radius:14px; padding:18px;
+      min-height:130px; position:relative;
+    }
+    .result-box.source-box { border-left:4px solid var(--electric-blue); }
+    .result-box.target-box { border-left:4px solid var(--bright-orange); }
+    .result-label {
+      font-size:0.75rem; font-weight:600;
+      text-transform:uppercase; letter-spacing:0.5px;
+      margin-bottom:8px;
+    }
+    .source-box .result-label { color: var(--electric-blue); }
+    .target-box .result-label { color: var(--bright-orange); }
+    .result-text {
+      font-size:1.15rem; line-height:1.7;
+      min-height:50px; word-wrap:break-word;
+      color: var(--empowered-blue);
+    }
+    .result-text.waiting { color: var(--glaucous-blue); font-style:italic; }
+    .tts-buttons { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+    .tts-buttons button {
+      background: var(--cool-white);
+      border:1.5px solid var(--bright-orange);
+      color: var(--bright-orange);
+      padding:6px 14px; border-radius:8px;
+      cursor:pointer; font-size:0.8rem;
+      font-family:'Prompt', sans-serif; font-weight:600;
+      transition:all 0.2s;
+    }
+    .tts-buttons button:hover { background: var(--bright-orange); color:#fff; }
+    .engine-badge {
+      margin-top:10px; font-size:0.7rem; font-weight:600;
+      background: rgba(0,85,255,0.08);
+      border:1px solid rgba(0,85,255,0.2);
+      padding:4px 12px; border-radius:12px;
+      display:inline-block; color: var(--electric-blue);
+    }
+
+    /* ===== Mic Section ===== */
+    .mic-section {
+      display:flex; flex-direction:column; align-items:center;
+      padding:24px 0;
+    }
+    .mic-btn {
+      background: linear-gradient(135deg, var(--bright-orange), var(--matt-orange));
+      border:none; color:#fff;
+      width:150px; height:150px; border-radius:50%;
+      cursor:pointer; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:8px;
+      box-shadow: 0 8px 32px rgba(250,90,10,0.3);
+      transition:all 0.2s; font-family:'Prompt', sans-serif;
+    }
+    .mic-btn:hover { transform:scale(1.05); box-shadow: 0 12px 40px rgba(250,90,10,0.4); }
+    .mic-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+    .mic-btn.listening {
+      background: linear-gradient(135deg, #00c853, #69f0ae);
+      box-shadow: 0 8px 32px rgba(0,200,83,0.4);
+      animation: pulse 1.5s infinite;
+    }
+    .mic-icon { font-size:3rem; }
+    #micLabel { font-size:0.8rem; text-align:center; font-weight:400; }
+    .status-text {
+      margin-top:12px; font-size:0.85rem;
+      color: var(--glaucous-blue); text-align:center; min-height:20px;
+    }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+
+    /* ===== Panel (Settings/History) ===== */
+    .panel {
+      background: var(--card-white);
+      border:1px solid var(--border-light);
+      border-radius:14px; padding:18px;
+      margin-bottom:14px; box-shadow: var(--shadow-sm);
+    }
+    summary {
+      cursor:pointer; font-size:0.95rem; font-weight:600;
+      color: var(--empowered-blue); user-select:none;
+    }
+    .panel-content {
+      margin-top:14px; display:flex; flex-direction:column; gap:12px;
+    }
+    .panel-content label {
+      display:flex; align-items:center; gap:10px;
+      font-size:0.85rem; color: var(--empowered-blue); flex-wrap:wrap;
+    }
+    .panel-content input[type="range"] {
+      flex:1; max-width:200px; accent-color: var(--electric-blue);
+    }
+    .panel-content input[type="checkbox"] {
+      accent-color: var(--electric-blue);
+      width:18px; height:18px;
+    }
+    .panel-content select {
+      background: var(--cool-white);
+      color: var(--empowered-blue);
+      border:2px solid var(--border-light);
+      padding:10px 14px; border-radius:10px;
+      font-family:'Prompt', sans-serif; font-size:0.85rem;
+    }
+    .panel-content select:focus { border-color: var(--electric-blue); outline:none; }
+
+    /* ===== API Monitor ===== */
+    .api-monitor { display:flex; flex-direction:column; gap:14px; margin-top:14px; }
+    .api-usage-item {
+      background: var(--cool-white); border-radius:12px; padding:12px 16px;
+      border-left:3px solid var(--electric-blue);
+    }
+    .api-usage-header {
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:0.85rem; font-weight:600; margin-bottom:8px;
+      color: var(--empowered-blue);
+    }
+    .api-usage-header span:last-child { font-weight:400; color: var(--glaucous-blue); }
+    .usage-bar {
+      background: rgba(10,35,128,0.06); border-radius:6px;
+      height:8px; overflow:hidden; margin-bottom:6px;
+    }
+    .usage-fill {
+      height:100%; border-radius:6px;
+      transition:width 0.4s ease, background 0.4s ease;
+      background: linear-gradient(90deg, #69f0ae, var(--electric-blue));
+    }
+    .usage-fill.warning { background: linear-gradient(90deg, var(--bright-yellow), var(--matt-yellow)); }
+    .usage-fill.danger { background: linear-gradient(90deg, var(--bright-orange), var(--matt-orange)); }
+    .api-status-text { font-size:0.72rem; color: var(--glaucous-blue); }
+    .api-usage-summary {
+      display:flex; align-items:center; gap:12px; font-size:0.85rem;
+      padding-top:12px; border-top:1px solid var(--border-light);
+      color: var(--empowered-blue);
+    }
+
+    /* ===== History ===== */
+    .history-list { margin:12px 0; max-height:220px; overflow-y:auto; }
+    .history-item {
+      background: var(--cool-white); border-radius:10px; padding:10px 12px;
+      margin-bottom:8px; font-size:0.82rem;
+      border-left:3px solid var(--bright-orange);
+      color: var(--empowered-blue);
+    }
+    .history-item em { color: var(--electric-blue); font-style:normal; font-weight:600; }
+
+    /* ===== Buttons ===== */
+    .btn-primary {
+      background: var(--electric-blue); color:#fff;
+      border:none; padding:8px 18px; border-radius:10px;
+      cursor:pointer; font-size:0.85rem;
+      font-family:'Prompt', sans-serif; font-weight:600;
+      transition:all 0.2s;
+    }
+    .btn-primary:hover { background: var(--empowered-blue); }
+    .btn-secondary {
+      background: var(--cool-white);
+      color: var(--empowered-blue);
+      border:1.5px solid var(--border-light);
+      padding:8px 16px; border-radius:10px;
+      cursor:pointer; font-size:0.85rem;
+      font-family:'Prompt', sans-serif; font-weight:400;
+      transition:all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--electric-blue); color: var(--electric-blue); }
+
+    /* ===== Footer ===== */
     footer {
-      text-align:center; margin-top:24px; padding-top:16px;
-      border-top:1px solid rgba(255,255,255,0.1); opacity:0.6; font-size:0.75rem;
+      text-align:center; margin-top:32px; padding:20px 0;
+      border-top:1px solid var(--border-light);
+      color: var(--glaucous-blue); font-size:0.75rem;
     }
 
-    /* Responsive */
-    @media(max-width:600px) {
+    /* ===== API Status Inline ===== */
+    #apiStatus {
+      font-size:0.78rem; color: var(--matt-orange);
+      min-height:18px; font-weight:400;
+    }
+
+    /* ===== Responsive ===== */
+    @media(max-width:640px) {
       .result-section { grid-template-columns:1fr; }
       .lang-section { flex-direction:column; align-items:stretch; }
       .swap-btn { margin-top:0; transform:rotate(90deg); align-self:center; }
       .mic-btn { width:130px; height:130px; }
-      header h1 { font-size:1.6rem; }
+      header h1 { font-size:1.8rem; }
+      .card { padding:16px; }
     }
   </style>
 </head>
 <body>
 <div class="container">
 
+  <!-- ===== Header with Logo ===== -->
   <header>
-    <h1>🎤 VoiceBridge</h1>
+    <img src="https://www.scgjwdacademy.com/assets/img/logo_scgschool.svg" alt="SCG JWD Academy" class="logo">
+    <h1>🎤 Voice<span>Bridge</span></h1>
     <p class="subtitle">โปรแกรมแปลภาษาด้วยเสียง — รองรับ 30+ ภาษา</p>
   </header>
 
-  <!-- เลือกภาษา -->
-  <section class="lang-section">
-    <div class="lang-box">
-      <label>🎤 ภาษารับเข้า (พูด)</label>
-      <select id="sourceLang">
-        <option value="th">🇹🇭 ภาษาไทย</option>
-        <option value="en">🇬🇧 English</option>
-        <option value="my">🇲🇲 မြန်မာ (พม่า)</option>
-        <option value="vi">🇻🇳 Tiếng Việt</option>
-        <option value="ms">🇲🇾 Bahasa Melayu</option>
-        <option value="id">🇮🇩 Bahasa Indonesia</option>
-        <option value="tl">🇵🇭 Filipino</option>
-        <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร)</option>
-        <option value="lo">🇱🇦 ພາສາລາວ (ลาว)</option>
-        <option value="zh">🇨🇳 中文 (จีนกลาง)</option>
-        <option value="zh-TW">🇹🇼 繁體中文 (จีนตัวเต็ม)</option>
-        <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
-        <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
-        <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
-        <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-        <option value="ta">🇮🇳 தமிழ் (ทมิฬ)</option>
-        <option value="ur">🇵🇰 اردو (อูรดู)</option>
-        <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-        <option value="si">🇱🇰 සිංහල (สิงหล)</option>
-        <option value="fr">🇫🇷 Français (ฝรั่งเศส)</option>
-        <option value="de">🇩🇪 Deutsch (เยอรมัน)</option>
-        <option value="es">🇪🇸 Español (สเปน)</option>
-        <option value="pt">🇧🇷 Português (โปรตุเกส)</option>
-        <option value="it">🇮🇹 Italiano (อิตาลี)</option>
-        <option value="nl">🇳🇱 Nederlands (ดัตช์)</option>
-        <option value="ru">🇷🇺 Русский (รัสเซีย)</option>
-        <option value="pl">🇵🇱 Polski (โปแลนด์)</option>
-        <option value="uk">🇺🇦 Українська (ยูเครน)</option>
-        <option value="sv">🇸🇪 Svenska (สวีเดน)</option>
-        <option value="da">🇩🇰 Dansk (เดนมาร์ก)</option>
-        <option value="fi">🇫🇮 Suomi (ฟินแลนด์)</option>
-        <option value="el">🇬🇷 Ελληνικά (กรีก)</option>
-        <option value="cs">🇨🇿 Čeština (เช็ก)</option>
-        <option value="ro">🇷🇴 Română (โรมาเนีย)</option>
-        <option value="hu">🇭🇺 Magyar (ฮังการี)</option>
-        <option value="tr">🇹🇷 Türkçe (ตุรกี)</option>
-        <option value="ar">🇸🇦 العربية (อาหรับ)</option>
-        <option value="fa">🇮🇷 فارسی (เปอร์เซีย)</option>
-        <option value="he">🇮🇱 עברית (ฮีบรู)</option>
-        <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
-        <option value="af">🇿🇦 Afrikaans</option>
-      </select>
-    </div>
-    <button class="swap-btn" onclick="swapLanguages()">⇄</button>
-    <div class="lang-box">
-      <label>📝 ภาษาส่งออก (แปล)</label>
-      <select id="targetLang">
-        <option value="en">🇬🇧 English</option>
-        <option value="th">🇹🇭 ภาษาไทย</option>
-        <option value="my">🇲🇲 မြန်မာ (พม่า)</option>
-        <option value="vi">🇻🇳 Tiếng Việt</option>
-        <option value="ms">🇲🇾 Bahasa Melayu</option>
-        <option value="id">🇮🇩 Bahasa Indonesia</option>
-        <option value="tl">🇵🇭 Filipino</option>
-        <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร)</option>
-        <option value="lo">🇱🇦 ພາສາລາວ (ลาว)</option>
-        <option value="zh">🇨🇳 中文 (จีนกลาง)</option>
-        <option value="zh-TW">🇹🇼 繁體中文 (จีนตัวเต็ม)</option>
-        <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
-        <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
-        <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
-        <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-        <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
-        <option value="ur">🇵🇰 اردو (อูรดู)</option>
-        <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-        <option value="si">🇱🇰 සිංහල (สิงหล)</option>
-        <option value="fr">🇫🇷 Français (ฝรั่งเศส)</option>
-        <option value="de">🇩🇪 Deutsch (เยอรมัน)</option>
-        <option value="es">🇪🇸 Español (สเปน)</option>
-        <option value="pt">🇧🇷 Português (โปรตุเกส)</option>
-        <option value="it">🇮🇹 Italiano (อิตาลี)</option>
-        <option value="nl">🇳🇱 Nederlands (ดัตช์)</option>
-        <option value="ru">🇷🇺 Русский (รัสเซีย)</option>
-        <option value="pl">🇵🇱 Polski (โปแลนด์)</option>
-        <option value="uk">🇺🇦 Українська (ยูเครน)</option>
-        <option value="sv">🇸🇪 Svenska (สวีเดน)</option>
-        <option value="da">🇩🇰 Dansk (เดนมาร์ก)</option>
-        <option value="fi">🇫🇮 Suomi (ฟินแลนด์)</option>
-        <option value="el">🇬🇷 Ελληνικά (กรีก)</option>
-        <option value="cs">🇨🇿 Čeština (เช็ก)</option>
-        <option value="ro">🇷🇴 Română (โรมาเนีย)</option>
-        <option value="hu">🇭🇺 Magyar (ฮังการี)</option>
-        <option value="tr">🇹🇷 Türkçe (ตุรกี)</option>
-        <option value="ar">🇸🇦 العربية (อาหรับ)</option>
-        <option value="fa">🇮🇷 فارسی (เปอร์เซีย)</option>
-        <option value="he">🇮🇱 עברית (ฮีบรู)</option>
-        <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
-        <option value="af">🇿🇦 Afrikaans</option>
-      </select>
-    </div>
-  </section>
+  <!-- ===== Language Selector ===== -->
+  <div class="card">
+    <section class="lang-section">
+      <div class="lang-box">
+        <label>🎤 ภาษารับเข้า (พูด)</label>
+        <select id="sourceLang">
+          <option value="th">🇹🇭 ภาษาไทย</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="my">🇲🇲 မြန်မာ (พม่า)</option>
+          <option value="vi">🇻🇳 Tiếng Việt</option>
+          <option value="ms">🇲🇾 Bahasa Melayu</option>
+          <option value="id">🇮🇩 Bahasa Indonesia</option>
+          <option value="tl">🇵🇭 Filipino</option>
+          <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร)</option>
+          <option value="lo">🇱🇦 ພາສາລາວ (ลาว)</option>
+          <option value="zh">🇨🇳 中文 (จีนกลาง)</option>
+          <option value="zh-TW">🇹🇼 繁體中文 (จีนตัวเต็ม)</option>
+          <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
+          <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
+          <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
+          <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมิฬ)</option>
+          <option value="ur">🇵🇰 اردو (อูรดู)</option>
+          <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
+          <option value="si">🇱🇰 සිංහල (สิงหล)</option>
+          <option value="fr">🇫🇷 Français (ฝรั่งเศส)</option>
+          <option value="de">🇩🇪 Deutsch (เยอรมัน)</option>
+          <option value="es">🇪🇸 Español (สเปน)</option>
+          <option value="pt">🇧🇷 Português (โปรตุเกส)</option>
+          <option value="it">🇮🇹 Italiano (อิตาลี)</option>
+          <option value="nl">🇳🇱 Nederlands (ดัตช์)</option>
+          <option value="ru">🇷🇺 Русский (รัสเซีย)</option>
+          <option value="pl">🇵🇱 Polski (โปแลนด์)</option>
+          <option value="uk">🇺🇦 Українська (ยูเครน)</option>
+          <option value="sv">🇸🇪 Svenska (สวีเดน)</option>
+          <option value="da">🇩🇰 Dansk (เดนมาร์ก)</option>
+          <option value="fi">🇫🇮 Suomi (ฟินแลนด์)</option>
+          <option value="el">🇬🇷 Ελληνικά (กรีก)</option>
+          <option value="cs">🇨🇿 Čeština (เช็ก)</option>
+          <option value="ro">🇷🇴 Română (โรมาเนีย)</option>
+          <option value="hu">🇭🇺 Magyar (ฮังการี)</option>
+          <option value="tr">🇹🇷 Türkçe (ตุรกี)</option>
+          <option value="ar">🇸🇦 العربية (อาหรับ)</option>
+          <option value="fa">🇮🇷 فارسی (เปอร์เซีย)</option>
+          <option value="he">🇮🇱 עברית (ฮีบรู)</option>
+          <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
+          <option value="af">🇿🇦 Afrikaans</option>
+        </select>
+      </div>
+      <button class="swap-btn" onclick="swapLanguages()" title="สลับภาษา">⇄</button>
+      <div class="lang-box">
+        <label>📝 ภาษาส่งออก (แปล)</label>
+        <select id="targetLang">
+          <option value="en">🇬🇧 English</option>
+          <option value="th">🇹🇭 ภาษาไทย</option>
+          <option value="my">🇲🇲 မြန်မာ (พม่า)</option>
+          <option value="vi">🇻🇳 Tiếng Việt</option>
+          <option value="ms">🇲🇾 Bahasa Melayu</option>
+          <option value="id">🇮🇩 Bahasa Indonesia</option>
+          <option value="tl">🇵🇭 Filipino</option>
+          <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร)</option>
+          <option value="lo">🇱🇦 ພາສາລາວ (ลาว)</option>
+          <option value="zh">🇨🇳 中文 (จีนกลาง)</option>
+          <option value="zh-TW">🇹🇼 繁體中文 (จีนตัวเต็ม)</option>
+          <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
+          <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
+          <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
+          <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
+          <option value="ur">🇵🇰 اردو (อูรดู)</option>
+          <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
+          <option value="si">🇱🇰 සිංහල (สิงหล)</option>
+          <option value="fr">🇫🇷 Français (ฝรั่งเศส)</option>
+          <option value="de">🇩🇪 Deutsch (เยอรมัน)</option>
+          <option value="es">🇪🇸 Español (สเปน)</option>
+          <option value="pt">🇧🇷 Português (โปรตุเกส)</option>
+          <option value="it">🇮🇹 Italiano (อิตาลี)</option>
+          <option value="nl">🇳🇱 Nederlands (ดัตช์)</option>
+          <option value="ru">🇷🇺 Русский (รัสเซีย)</option>
+          <option value="pl">🇵🇱 Polski (โปแลนด์)</option>
+          <option value="uk">🇺🇦 Українська (ยูเครน)</option>
+          <option value="sv">🇸🇪 Svenska (สวีเดน)</option>
+          <option value="da">🇩🇰 Dansk (เดนมาร์ก)</option>
+          <option value="fi">🇫🇮 Suomi (ฟินแลนด์)</option>
+          <option value="el">🇬🇷 Ελληνικά (กรีก)</option>
+          <option value="cs">🇨🇿 Čeština (เช็ก)</option>
+          <option value="ro">🇷🇴 Română (โรมาเนีย)</option>
+          <option value="hu">🇭🇺 Magyar (ฮังการี)</option>
+          <option value="tr">🇹🇷 Türkçe (ตุรกี)</option>
+          <option value="ar">🇸🇦 العربية (อาหรับ)</option>
+          <option value="fa">🇮🇷 فارسی (เปอร์เซีย)</option>
+          <option value="he">🇮🇱 עברית (ฮีบรู)</option>
+          <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
+          <option value="af">🇿🇦 Afrikaans</option>
+        </select>
+      </div>
+    </section>
+  </div>
 
-  <!-- โหมดความเร็ว -->
+  <!-- ===== Speed Mode ===== -->
   <div class="speed-mode">
     <button id="modeInstant" onclick="setMode('instant')">⚡ ทันที</button>
     <button id="modeFast" class="active" onclick="setMode('fast')">🚀 เร็ว (0.5วิ)</button>
     <button id="modeSentence" onclick="setMode('sentence')">📝 ทีละประโยค</button>
   </div>
 
-  <!-- แสดงผล -->
+  <!-- ===== Translation Results ===== -->
   <section class="result-section">
-    <div class="result-box">
+    <div class="result-box source-box">
       <div class="result-label">🎤 ต้นฉบับ</div>
-      <div id="sourceText" class="result-text">รอรับเสียง...</div>
+      <div id="sourceText" class="result-text waiting">รอรับเสียง...</div>
     </div>
-    <div class="result-box">
+    <div class="result-box target-box">
       <div class="result-label">📝 คำแปล</div>
-      <div id="targetText" class="result-text">Waiting...</div>
+      <div id="targetText" class="result-text waiting">Waiting...</div>
       <div class="tts-buttons">
         <button onclick="speakResult('normal')">🔊 พูด</button>
         <button onclick="speakResult('slow')">🐢 ช้า</button>
@@ -255,7 +442,7 @@
     </div>
   </section>
 
-  <!-- ปุ่มไมค์ -->
+  <!-- ===== Mic Button ===== -->
   <section class="mic-section">
     <button id="micButton" class="mic-btn" onclick="toggleListening()">
       <span class="mic-icon">🎤</span>
@@ -264,50 +451,106 @@
     <div id="status" class="status-text">กำลังโหลด...</div>
   </section>
 
-  <!-- ตั้งค่า -->
-  <section class="settings-section">
+  <!-- ===== Settings ===== -->
+  <section class="panel">
     <details>
       <summary>⚙️ ตั้งค่า</summary>
-      <div class="settings-content">
-        <label><input type="checkbox" id="autoSpeak"> 🔊 พูดอัตโนมัติ (เฉพาะจบประโยค)</label>
+      <div class="panel-content">
+        <label>🌐 เลือก Translation API:
+          <select id="apiSelect">
+            <option value="auto">🔄 อัตโนมัติ (Fallback ทุกตัว)</option>
+            <option value="google">⭐ Google Translate (แม่นที่สุด)</option>
+            <option value="mymemory">📝 MyMemory</option>
+            <option value="libre">🔓 LibreTranslate</option>
+            <option value="lingva">🌐 Lingva</option>
+          </select>
+        </label>
+        <div id="apiStatus"></div>
+        <label><input type="checkbox" id="autoSpeak"> 🔊 พูดอัตโนมัติ (เมื่อแปลเสร็จ)</label>
         <label><input type="checkbox" id="classroomMode"> 🎓 โหมดห้องเรียน (พูด 2 รอบ: ปกติ + ช้า)</label>
-        <label>🔊 ความเร็วเสียง: <span id="speedVal">0.9x</span>
+        <label>🔊 ความเร็วเสียง: <strong id="speedVal">0.9x</strong>
           <input type="range" id="speechSpeed" min="0.5" max="2" step="0.1" value="0.9">
         </label>
-        <label>📢 ระดับเสียง: <span id="volVal">100%</span>
+        <label>📢 ระดับเสียง: <strong id="volVal">100%</strong>
           <input type="range" id="speechVolume" min="0" max="1" step="0.1" value="1">
         </label>
       </div>
     </details>
   </section>
 
-  <!-- ประวัติ -->
-  <section class="history-section">
+  <!-- ===== API Usage Monitor ===== -->
+  <section class="panel">
+    <details>
+      <summary>📊 สถานะ API (Usage / Limit)</summary>
+      <div class="api-monitor" id="apiMonitor">
+        <div class="api-usage-item">
+          <div class="api-usage-header">
+            <span>⭐ Google Translate</span>
+            <span id="googleCount">0 / 5,000</span>
+          </div>
+          <div class="usage-bar"><div id="googleBar" class="usage-fill" style="width:0%"></div></div>
+          <div class="api-status-text" id="googleStatusText">✅ พร้อมใช้งาน</div>
+        </div>
+        <div class="api-usage-item">
+          <div class="api-usage-header">
+            <span>📝 MyMemory</span>
+            <span id="mymemoryCount">0 / 1,000</span>
+          </div>
+          <div class="usage-bar"><div id="mymemoryBar" class="usage-fill" style="width:0%"></div></div>
+          <div class="api-status-text" id="mymemoryStatusText">✅ พร้อมใช้งาน</div>
+        </div>
+        <div class="api-usage-item">
+          <div class="api-usage-header">
+            <span>🔓 LibreTranslate</span>
+            <span id="libreCount">0 / 500</span>
+          </div>
+          <div class="usage-bar"><div id="libreBar" class="usage-fill" style="width:0%"></div></div>
+          <div class="api-status-text" id="libreStatusText">✅ พร้อมใช้งาน</div>
+        </div>
+        <div class="api-usage-item">
+          <div class="api-usage-header">
+            <span>🌐 Lingva</span>
+            <span id="lingvaCount">0 / 1,000</span>
+          </div>
+          <div class="usage-bar"><div id="lingvaBar" class="usage-fill" style="width:0%"></div></div>
+          <div class="api-status-text" id="lingvaStatusText">✅ พร้อมใช้งาน</div>
+        </div>
+        <div class="api-usage-summary">
+          <span>📈 รวมวันนี้: <strong id="totalUsage">0</strong> ครั้ง</span>
+          <button onclick="resetUsage()" class="btn-secondary" style="margin-left:auto;">🔄 รีเซ็ต</button>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ===== History ===== -->
+  <section class="panel">
     <details>
       <summary>📜 ประวัติการแปล</summary>
-      <div id="historyList" class="history-list"><p style="opacity:0.5;font-style:italic;">ยังไม่มีประวัติ</p></div>
-      <div style="display:flex;gap:8px;margin-top:8px;">
+      <div id="historyList" class="history-list">
+        <p style="color:var(--glaucous-blue);font-style:italic;font-size:0.85rem;">ยังไม่มีประวัติ</p>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;">
         <button onclick="clearHistory()" class="btn-secondary">🗑️ ล้างประวัติ</button>
         <button onclick="saveHistory()" class="btn-secondary">💾 บันทึก</button>
       </div>
     </details>
   </section>
 
+  <!-- ===== Footer ===== -->
   <footer>
-    <p>Designed and Developed by Woraphong Isarangkoon Na Ayuthya</p>
+    <p>Designed and Developed by <strong>Woraphong Isarangkoon Na Ayuthya</strong></p>
     <p>📧 woraphoi@scgjwd.com</p>
   </footer>
 
 </div>
 
+<!-- ===== JAVASCRIPT ===== -->
 <script>
 /**
- * VoiceBridge — Full Version
- * Translation API Priority (ดีสุด → แย่สุด):
- * 1. Google Translate (unofficial via lingva.ml mirrors)
- * 2. MyMemory API
- * 3. LibreTranslate (free instances)
- * 4. Mymemory fallback with email
+ * VoiceBridge v2.0 — Light Theme Edition
+ * Brand: Logistics Academy (poster.md guidelines)
+ * Font: Prompt only | Colors: Brand approved only
  */
 
 // ===== Global Variables =====
@@ -316,17 +559,17 @@ var isListening = false;
 var translationCache = {};
 var historyList = [];
 var debounceTimer = null;
-var currentMode = 'fast'; // instant | fast | sentence
-var currentEngine = '';
+var currentMode = 'fast';
 
-// Translation API endpoints (เรียงจากดีสุดไปแย่สุด)
-var TRANSLATION_APIS = [
-  { name: 'Lingva', type: 'lingva', baseUrl: 'https://lingva.ml' },
-  { name: 'Lingva2', type: 'lingva', baseUrl: 'https://lingva.thedaviddelta.com' },
-  { name: 'MyMemory', type: 'mymemory', baseUrl: 'https://api.mymemory.translated.net' },
-  { name: 'LibreTranslate', type: 'libre', baseUrl: 'https://libretranslate.de' },
-  { name: 'LibreTranslate2', type: 'libre', baseUrl: 'https://translate.argosopentech.com' }
-];
+// ===== API Configuration =====
+var API_LIMITS = {
+  google:   { limit: 5000, label: 'Google Translate' },
+  mymemory: { limit: 1000, label: 'MyMemory' },
+  libre:    { limit: 500,  label: 'LibreTranslate' },
+  lingva:   { limit: 1000, label: 'Lingva' }
+};
+
+var API_PRIORITY = ['google', 'mymemory', 'libre', 'lingva'];
 
 // Speech Recognition language map
 var SPEECH_LANG_MAP = {
@@ -340,16 +583,164 @@ var SPEECH_LANG_MAP = {
   'tr':'tr-TR','ar':'ar-SA','fa':'fa-IR','he':'he-IL','sw':'sw-KE','af':'af-ZA'
 };
 
+// ===== Usage Tracking (localStorage) =====
+function loadUsage() {
+  try {
+    var stored = localStorage.getItem('vb_api_usage');
+    if (stored) {
+      var data = JSON.parse(stored);
+      if (data.date === new Date().toDateString()) return data.counts;
+    }
+  } catch(e) {}
+  return { google:0, mymemory:0, libre:0, lingva:0 };
+}
+
+function saveUsage(counts) {
+  try {
+    localStorage.setItem('vb_api_usage', JSON.stringify({
+      date: new Date().toDateString(),
+      counts: counts
+    }));
+  } catch(e) {}
+}
+
+var apiUsage = loadUsage();
+
+function incrementUsage(apiKey) {
+  var key = apiKey.toLowerCase();
+  if (key === 'google translate') key = 'google';
+  if (key === 'libretranslate') key = 'libre';
+  if (apiUsage[key] !== undefined) {
+    apiUsage[key]++;
+    saveUsage(apiUsage);
+    updateUsageUI();
+  }
+}
+
+function isApiAvailable(apiKey) {
+  if (API_LIMITS[apiKey]) return apiUsage[apiKey] < API_LIMITS[apiKey].limit;
+  return true;
+}
+
+function updateUsageUI() {
+  var total = 0;
+  Object.keys(API_LIMITS).forEach(function(key) {
+    var count = apiUsage[key] || 0;
+    var limit = API_LIMITS[key].limit;
+    var percent = Math.min((count / limit) * 100, 100);
+    total += count;
+
+    var countEl = document.getElementById(key + 'Count');
+    if (countEl) countEl.textContent = count.toLocaleString() + ' / ' + limit.toLocaleString();
+
+    var barEl = document.getElementById(key + 'Bar');
+    if (barEl) {
+      barEl.style.width = percent + '%';
+      barEl.className = 'usage-fill';
+      if (percent >= 90) barEl.classList.add('danger');
+      else if (percent >= 70) barEl.classList.add('warning');
+    }
+
+    var statusEl = document.getElementById(key + 'StatusText');
+    if (statusEl) {
+      if (percent >= 100) statusEl.textContent = '🚫 ครบ Limit — จะข้ามไป API ถัดไปอัตโนมัติ';
+      else if (percent >= 90) statusEl.textContent = '⚠️ ใกล้ครบ! เหลือ ' + (limit - count) + ' ครั้ง';
+      else if (percent >= 70) statusEl.textContent = '⏳ ใช้ไปมากกว่า 70%';
+      else statusEl.textContent = '✅ พร้อมใช้งาน';
+    }
+  });
+  var totalEl = document.getElementById('totalUsage');
+  if (totalEl) totalEl.textContent = total.toLocaleString();
+}
+
+function resetUsage() {
+  if (confirm('ต้องการรีเซ็ตตัวนับ API ทั้งหมด?')) {
+    apiUsage = { google:0, mymemory:0, libre:0, lingva:0 };
+    saveUsage(apiUsage);
+    updateUsageUI();
+  }
+}
+
+// ===== Translation APIs =====
+var API_ENDPOINTS = {
+  google: {
+    name: 'google',
+    translate: function(text, src, tgt, onSuccess, onError) {
+      var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl='
+        + src + '&tl=' + tgt + '&dt=t&q=' + encodeURIComponent(text);
+      fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data[0]) {
+            var result = '';
+            for (var i = 0; i < data[0].length; i++) {
+              if (data[0][i] && data[0][i][0]) result += data[0][i][0];
+            }
+            if (result) onSuccess(result, 'google');
+            else onError();
+          } else onError();
+        })
+        .catch(onError);
+    }
+  },
+  mymemory: {
+    name: 'mymemory',
+    translate: function(text, src, tgt, onSuccess, onError) {
+      var url = 'https://api.mymemory.translated.net/get?q='
+        + encodeURIComponent(text) + '&langpair=' + src + '|' + tgt;
+      fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+            var t = data.responseData.translatedText;
+            if (t && !(t.toUpperCase() === t && t.length > 20)) onSuccess(t, 'mymemory');
+            else onError();
+          } else onError();
+        })
+        .catch(onError);
+    }
+  },
+  libre: {
+    name: 'libre',
+    translate: function(text, src, tgt, onSuccess, onError) {
+      fetch('https://libretranslate.de/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ q: text, source: src, target: tgt, format: 'text' })
+      })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.translatedText) onSuccess(data.translatedText, 'libre');
+          else onError();
+        })
+        .catch(onError);
+    }
+  },
+  lingva: {
+    name: 'lingva',
+    translate: function(text, src, tgt, onSuccess, onError) {
+      fetch('https://lingva.ml/api/v1/' + src + '/' + tgt + '/' + encodeURIComponent(text))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.translation) onSuccess(data.translation, 'lingva');
+          else onError();
+        })
+        .catch(onError);
+    }
+  }
+};
+
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', function() {
   initApp();
+  updateUsageUI();
 });
 
 function initApp() {
   try {
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setStatus('❌ Browser ไม่รองรับ — กรุณาใช้ Chrome / Edge');
+      setStatus('❌ Browser ไม่รองรับ — กรุณาใช้ Chrome หรือ Edge');
       document.getElementById('micButton').disabled = true;
       return;
     }
@@ -362,7 +753,6 @@ function initApp() {
     recognition.onerror = handleSpeechError;
     recognition.onend = handleSpeechEnd;
 
-    // Event listeners
     document.getElementById('speechSpeed').addEventListener('input', function() {
       document.getElementById('speedVal').textContent = this.value + 'x';
     });
@@ -383,9 +773,9 @@ function initApp() {
 // ===== Speed Mode =====
 function setMode(mode) {
   currentMode = mode;
-  document.getElementById('modeInstant').classList.toggle('active', mode==='instant');
-  document.getElementById('modeFast').classList.toggle('active', mode==='fast');
-  document.getElementById('modeSentence').classList.toggle('active', mode==='sentence');
+  document.getElementById('modeInstant').classList.toggle('active', mode === 'instant');
+  document.getElementById('modeFast').classList.toggle('active', mode === 'fast');
+  document.getElementById('modeSentence').classList.toggle('active', mode === 'sentence');
 }
 
 // ===== Speech Recognition =====
@@ -427,7 +817,10 @@ function handleSpeechResult(event) {
     if (event.results[i].isFinal) final += event.results[i][0].transcript;
     else interim += event.results[i][0].transcript;
   }
+
   var el = document.getElementById('sourceText');
+  el.classList.remove('waiting');
+
   if (final) {
     el.textContent = final;
     el.style.opacity = '1';
@@ -435,7 +828,6 @@ function handleSpeechResult(event) {
   } else if (interim) {
     el.textContent = interim;
     el.style.opacity = '0.6';
-    // โหมด instant → แปลทันทีแม้ยังพูดไม่จบ
     if (currentMode === 'instant') translateDebounce(interim);
   }
 }
@@ -453,11 +845,11 @@ function handleSpeechError(event) {
 
 function handleSpeechEnd() {
   if (isListening) {
-    setTimeout(function() { try { if(isListening) recognition.start(); } catch(e){} }, 100);
+    setTimeout(function() { try { if (isListening) recognition.start(); } catch(e) {} }, 100);
   }
 }
 
-// ===== Translation (Multi-API Fallback) =====
+// ===== Translation =====
 function translateDebounce(text) {
   if (debounceTimer) clearTimeout(debounceTimer);
   var delay = currentMode === 'instant' ? 100 : currentMode === 'fast' ? 500 : 1200;
@@ -470,96 +862,91 @@ function doTranslate(text) {
   var tgt = document.getElementById('targetLang').value;
   var key = src + '|' + tgt + '|' + text.trim();
 
+  // ตรวจ Cache
   if (translationCache[key]) {
     showTranslation(translationCache[key].text, translationCache[key].engine);
     return;
   }
 
   document.getElementById('targetText').textContent = '⏳ กำลังแปล...';
-  tryTranslateWithFallback(text.trim(), src, tgt, 0);
-}
+  document.getElementById('targetText').classList.remove('waiting');
+  var selectedApi = document.getElementById('apiSelect').value;
 
-function tryTranslateWithFallback(text, src, tgt, apiIndex) {
-  if (apiIndex >= TRANSLATION_APIS.length) {
-    document.getElementById('targetText').textContent = '❌ API ทั้งหมดใช้ไม่ได้ — ลองใหม่';
-    return;
-  }
-
-  var api = TRANSLATION_APIS[apiIndex];
-  var url = '';
-
-  if (api.type === 'lingva') {
-    url = api.baseUrl + '/api/v1/' + src + '/' + tgt + '/' + encodeURIComponent(text);
-  } else if (api.type === 'mymemory') {
-    url = api.baseUrl + '/get?q=' + encodeURIComponent(text) + '&langpair=' + src + '|' + tgt;
-  } else if (api.type === 'libre') {
-    // LibreTranslate ต้องใช้ POST
-    fetchLibreTranslate(api, text, src, tgt, apiIndex);
-    return;
-  }
-
-  fetch(url, { method: 'GET', mode: 'cors' })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var translated = extractTranslation(data, api.type);
-      if (translated) {
-        var key = src + '|' + tgt + '|' + text;
-        translationCache[key] = { text: translated, engine: api.name };
-        showTranslation(translated, api.name);
-        addHistory(text, translated, src, tgt);
-        if (document.getElementById('autoSpeak').checked) speakResult('normal');
-      } else {
-        tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
-      }
-    })
-    .catch(function() {
-      tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
-    });
-}
-
-function fetchLibreTranslate(api, text, src, tgt, apiIndex) {
-  fetch(api.baseUrl + '/translate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ q: text, source: src, target: tgt, format: 'text' })
-  })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data && data.translatedText) {
-        var key = src + '|' + tgt + '|' + text;
-        translationCache[key] = { text: data.translatedText, engine: api.name };
-        showTranslation(data.translatedText, api.name);
-        addHistory(text, data.translatedText, src, tgt);
-        if (document.getElementById('autoSpeak').checked) speakResult('normal');
-      } else {
-        tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
-      }
-    })
-    .catch(function() {
-      tryTranslateWithFallback(text, src, tgt, apiIndex + 1);
-    });
-}
-
-function extractTranslation(data, type) {
-  if (type === 'lingva') {
-    return data && data.translation ? data.translation : null;
-  } else if (type === 'mymemory') {
-    if (data && data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
-      var t = data.responseData.translatedText;
-      if (t.toUpperCase() === t && t.length > 20) return null; // all caps = error
-      return t;
+  if (selectedApi === 'auto') {
+    tryApiByIndex(text.trim(), src, tgt, 0);
+  } else {
+    if (!isApiAvailable(selectedApi)) {
+      updateApiStatusMsg('⚠️ ' + API_LIMITS[selectedApi].label + ' ครบ limit — เปลี่ยนเป็น Auto');
+      tryApiByIndex(text.trim(), src, tgt, 0);
+      return;
     }
-    return null;
+    var api = API_ENDPOINTS[selectedApi];
+    api.translate(text.trim(), src, tgt,
+      function(result, engine) {
+        incrementUsage(engine);
+        var k = src + '|' + tgt + '|' + text.trim();
+        translationCache[k] = { text: result, engine: engine };
+        showTranslation(result, engine);
+        addHistory(text.trim(), result, src, tgt);
+        updateApiStatusMsg('✅ ' + API_LIMITS[engine].label + ' สำเร็จ');
+        if (document.getElementById('autoSpeak').checked) speakResult('normal');
+      },
+      function() {
+        incrementUsage(selectedApi);
+        updateApiStatusMsg('⚠️ ' + API_LIMITS[selectedApi].label + ' ล้มเหลว — ลอง Auto...');
+        tryApiByIndex(text.trim(), src, tgt, 0);
+      }
+    );
   }
-  return null;
+}
+
+function tryApiByIndex(text, src, tgt, index) {
+  if (index >= API_PRIORITY.length) {
+    document.getElementById('targetText').textContent = '❌ API ทั้งหมดใช้ไม่ได้ — ลองใหม่อีกครั้ง';
+    updateApiStatusMsg('❌ ทุก API ล้มเหลว');
+    return;
+  }
+
+  var apiKey = API_PRIORITY[index];
+  if (!isApiAvailable(apiKey)) {
+    updateApiStatusMsg('⏭️ ' + API_LIMITS[apiKey].label + ' ครบ limit — ข้าม');
+    tryApiByIndex(text, src, tgt, index + 1);
+    return;
+  }
+
+  var api = API_ENDPOINTS[apiKey];
+  var cacheKey = document.getElementById('sourceLang').value + '|' + document.getElementById('targetLang').value + '|' + text;
+
+  api.translate(text, src, tgt,
+    function(result, engine) {
+      incrementUsage(engine);
+      translationCache[cacheKey] = { text: result, engine: engine };
+      showTranslation(result, engine);
+      addHistory(text, result, src, tgt);
+      updateApiStatusMsg('✅ ' + API_LIMITS[engine].label + ' สำเร็จ');
+      if (document.getElementById('autoSpeak').checked) speakResult('normal');
+    },
+    function() {
+      incrementUsage(apiKey);
+      updateApiStatusMsg('⏳ ' + API_LIMITS[apiKey].label + ' ล้มเหลว — ลองตัวถัดไป...');
+      tryApiByIndex(text, src, tgt, index + 1);
+    }
+  );
 }
 
 function showTranslation(text, engine) {
-  document.getElementById('targetText').textContent = text;
+  var el = document.getElementById('targetText');
+  el.textContent = text;
+  el.classList.remove('waiting');
   var badge = document.getElementById('engineBadge');
-  badge.textContent = '⚡ ' + engine;
+  var label = API_LIMITS[engine] ? API_LIMITS[engine].label : engine;
+  badge.textContent = '⚡ ' + label;
   badge.style.display = 'inline-block';
-  currentEngine = engine;
+}
+
+function updateApiStatusMsg(msg) {
+  var el = document.getElementById('apiStatus');
+  if (el) el.textContent = msg;
 }
 
 // ===== Text-to-Speech =====
@@ -578,27 +965,22 @@ function speakResult(speed) {
     if (speed === 'slow') u.rate = baseSpeed * 0.6;
     else if (speed === 'fast') u.rate = baseSpeed * 1.5;
     else u.rate = baseSpeed;
-
     u.volume = volume;
 
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
 
-    // โหมดห้องเรียน
+    // Classroom mode: พูดรอบที่ 2 ช้าลง
     if (document.getElementById('classroomMode').checked && speed !== 'slow') {
       u.onend = function() {
         setTimeout(function() {
           var s = new SpeechSynthesisUtterance(text);
-          s.lang = u.lang;
-          s.rate = baseSpeed * 0.5;
-          s.volume = volume;
+          s.lang = u.lang; s.rate = baseSpeed * 0.5; s.volume = volume;
           window.speechSynthesis.speak(s);
         }, 1500);
       };
     }
-  } catch(e) {
-    setStatus('⚠️ ไม่สามารถเล่นเสียงได้');
-  }
+  } catch(e) { setStatus('⚠️ ไม่สามารถเล่นเสียงได้'); }
 }
 
 // ===== Utilities =====
@@ -622,23 +1004,32 @@ function addHistory(orig, trans, from, to) {
 
 function renderHistory() {
   var c = document.getElementById('historyList');
-  if (historyList.length === 0) { c.innerHTML = '<p style="opacity:0.5;font-style:italic;">ยังไม่มีประวัติ</p>'; return; }
+  if (historyList.length === 0) {
+    c.innerHTML = '<p style="color:var(--glaucous-blue);font-style:italic;font-size:0.85rem;">ยังไม่มีประวัติ</p>';
+    return;
+  }
   var h = '';
   for (var i = 0; i < historyList.length; i++) {
     var item = historyList[i];
-    h += '<div class="history-item"><strong>' + esc(item.time) + '</strong> [' + esc(item.f) + '→' + esc(item.to) + ']<br>' + esc(item.o) + ' → <em>' + esc(item.t) + '</em></div>';
+    h += '<div class="history-item"><strong>' + esc(item.time) + '</strong> [' + esc(item.f) + ' → ' + esc(item.to) + ']<br>'
+      + esc(item.o) + ' → <em>' + esc(item.t) + '</em></div>';
   }
   c.innerHTML = h;
 }
 
-function clearHistory() { historyList = []; renderHistory(); }
+function clearHistory() {
+  if (confirm('ต้องการล้างประวัติทั้งหมด?')) {
+    historyList = [];
+    renderHistory();
+  }
+}
 
 function saveHistory() {
   if (historyList.length === 0) { alert('ยังไม่มีประวัติ'); return; }
   var text = 'VoiceBridge Translation History\n' + new Date().toLocaleString('th-TH') + '\n\n';
   for (var i = 0; i < historyList.length; i++) {
     var item = historyList[i];
-    text += item.time + ' [' + item.f + '→' + item.to + ']\n' + item.o + ' → ' + item.t + '\n\n';
+    text += item.time + ' [' + item.f + ' → ' + item.to + ']\n' + item.o + ' → ' + item.t + '\n\n';
   }
   var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   var url = URL.createObjectURL(blob);
