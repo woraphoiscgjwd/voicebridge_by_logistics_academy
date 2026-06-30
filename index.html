@@ -60,7 +60,7 @@
       font-size:1.5rem; color: var(--glaucous-blue); padding-bottom:8px;
     }
 
-    /* Result Section - 3 boxes */
+    /* Result Section */
     .result-section { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:16px; }
     .result-box {
       background: var(--card-white); border:2px solid var(--border-light);
@@ -220,7 +220,7 @@
 
   <header>
     <h1>🎤 Voice<span>Bridge</span></h1>
-    <p class="subtitle">โปรแกรมแปลภาษาด้วยเสียง — แปล 3 ภาษาพร้อมกัน + ออกเสียงทุกภาษา (รวมพม่า/ลาว/เขมร)</p>
+    <p class="subtitle">โปรแกรมแปลภาษาด้วยเสียง — Input 1 ภาษา → แปลออก 2 ภาษาพร้อมกัน + ออกเสียงทุกภาษา</p>
   </header>
 
   <!-- Translation Mode -->
@@ -232,11 +232,11 @@
     </div>
     <div id="modeDescription" class="mode-description">
       <strong>🆓 โหมดฟรี:</strong> ใช้ Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key ใดๆ<br>
-      🔊 ออกเสียงทุกภาษา (ใช้ Google Translate TTS เป็น fallback)
+      🔊 ออกเสียงทุกภาษารวมพม่า/ลาว/เขมร (Google Translate TTS fallback)
     </div>
   </div>
 
-  <!-- Language Selector — Input เฉพาะภาษาที่รับเสียงได้ -->
+  <!-- Language Selector — Input + 2 Outputs -->
   <div class="card">
     <section class="lang-section">
       <div class="lang-box input-lang">
@@ -253,7 +253,7 @@
           <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทมิฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -295,8 +295,8 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทมิฬ)</option>
-          <option value="ur">🇵🇰 اردو (อูรดู)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
+          <option value="ur">🇵🇰 اردو (อูรدู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
           <option value="si">🇱🇰 සිංහල (สิงหล)</option>
           <option value="fr">🇫🇷 Français</option>
@@ -317,7 +317,7 @@
           <option value="hu">🇭🇺 Magyar</option>
           <option value="tr">🇹🇷 Türkçe</option>
           <option value="ar">🇸🇦 العربية</option>
-          <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
+          <option value="sw">🇰🇪 Kiswahili</option>
           <option value="af">🇿🇦 Afrikaans</option>
         </select>
       </div>
@@ -340,10 +340,10 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทமிฬ)</option>
-          <option value="ur">🇵🇰 اردو (อูرดู)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
+          <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-          <option value="si">🇱🇰 සිංහල (สිงหล)</option>
+          <option value="si">🇱🇰 සිංහල (สิงหล)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -362,7 +362,7 @@
           <option value="hu">🇭🇺 Magyar</option>
           <option value="tr">🇹🇷 Türkçe</option>
           <option value="ar">🇸🇦 العربية</option>
-          <option value="sw">🇰🇪 Kiswahili (สวาฮีลี)</option>
+          <option value="sw">🇰🇪 Kiswahili</option>
           <option value="af">🇿🇦 Afrikaans</option>
         </select>
       </div>
@@ -399,7 +399,7 @@
     </div>
   </section>
 
-  <!-- Mic + Send Button -->
+  <!-- Mic + Send -->
   <section class="mic-section">
     <button id="micButton" class="mic-btn" onclick="toggleListening()">
       <span class="mic-icon">🎤</span>
@@ -412,29 +412,29 @@
     <div id="bufferInfo" class="buffer-info">💡 พูดให้เสร็จ → ระบบรอ 3 วินาที แล้วแปลทั้ง 2 ภาษาพร้อมกัน หรือกด "ส่งแปลเลย"</div>
   </section>
 
-  <!-- Settings -->
+  <!-- Settings — เลือกให้พูดภาษาที่ 2 / 3 -->
   <section class="panel">
     <details>
-      <summary>⚙️ ตั้งค่าทั่วไป</summary>
+      <summary>⚙️ ตั้งค่า — เสียงและการพูดอัตโนมัติ</summary>
       <div class="panel-content">
-        <label><input type="checkbox" id="autoSpeak2" checked> 🔊 พูดอัตโนมัติ — ภาษาที่ 2</label>
-        <label><input type="checkbox" id="autoSpeak3"> 🔊 พูดอัตโนมัติ — ภาษาที่ 3</label>
+        <label><input type="checkbox" id="autoSpeak2" checked> 🔊 พูดอัตโนมัติ — <strong>ภาษาที่ 2</strong></label>
+        <label><input type="checkbox" id="autoSpeak3"> 🔊 พูดอัตโนมัติ — <strong>ภาษาที่ 3</strong></label>
         <label><input type="checkbox" id="classroomMode"> 🎓 โหมดห้องเรียน (พูด 2 รอบ: ปกติ + ช้า)</label>
-        <label>🔊 ความเร็วเสียง: <strong id="speedVal">0.9x</strong>
-          <input type="range" id="speechSpeed" min="0.5" max="2" step="0.1" value="0.9">
-        </label>
-        <label>📢 ระดับเสียง: <strong id="volVal">100%</strong>
-          <input type="range" id="speechVolume" min="0" max="1" step="0.1" value="1">
-        </label>
-        <label>⏱️ เวลารอ (วินาที): <strong id="delayVal">3s</strong>
-          <input type="range" id="waitDelay" min="1" max="10" step="0.5" value="3">
-        </label>
         <label>🔢 ลำดับพูดอัตโนมัติ:
           <select id="autoSpeakOrder">
             <option value="2first">ภาษา 2 ก่อน → แล้วภาษา 3</option>
             <option value="3first">ภาษา 3 ก่อน → แล้วภาษา 2</option>
             <option value="simultaneous">พร้อมกัน (ไม่รอ)</option>
           </select>
+        </label>
+        <label>🔊 ความเร็วเสียง: <strong id="speedVal">0.9x</strong>
+          <input type="range" id="speechSpeed" min="0.5" max="2" step="0.1" value="0.9">
+        </label>
+        <label>📢 ระดับเสียง: <strong id="volVal">100%</strong>
+          <input type="range" id="speechVolume" min="0" max="1" step="0.1" value="1">
+        </label>
+        <label>⏱️ เวลารอก่อนแปล (วินาที): <strong id="delayVal">3s</strong>
+          <input type="range" id="waitDelay" min="1" max="10" step="0.5" value="3">
         </label>
         <label>🔊 TTS Engine:
           <select id="ttsEngine">
@@ -504,13 +504,12 @@
 <script>
 /**
  * VoiceBridge v7.0
- * - แปล 3 ภาษาพร้อมกัน
+ * - Input 1 ภาษา → แปลออก 2 ภาษาพร้อมกัน
  * - Google Translate TTS (fallback) รองรับพม่า/ลาว/เขมร
- * - Rate Limiter + Buffer ป้องกัน 429
+ * - เลือกพูดอัตโนมัติ ภาษาที่ 2 / ภาษาที่ 3 / ทั้งคู่
  */
 
 // ===== Language Config =====
-// ภาษาที่ Web Speech API รับเสียงได้ (STT)
 var SPEECH_LANG_MAP = {
   'th':'th-TH','en':'en-US','vi':'vi-VN','ms':'ms-MY',
   'id':'id-ID','tl':'fil-PH','zh':'zh-CN',
@@ -521,9 +520,6 @@ var SPEECH_LANG_MAP = {
   'fi':'fi-FI','el':'el-GR','cs':'cs-CZ','ro':'ro-RO',
   'hu':'hu-HU','tr':'tr-TR','ar':'ar-SA'
 };
-
-// ภาษาที่ Web Speech TTS (Browser) รองรับ
-var BROWSER_TTS_LANGS = ['th','en','vi','ms','id','tl','zh','zh-TW','ja','ko','hi','ta','fr','de','es','pt','it','nl','ru','pl','uk','sv','da','fi','el','cs','ro','hu','tr','ar'];
 
 // ภาษาที่ต้องใช้ Google Translate TTS (Browser ไม่รองรับ)
 var GOOGLE_TTS_ONLY = ['my','lo','km','bn','ne','si','ur','sw','af'];
@@ -583,18 +579,14 @@ function canMakeRequest(apiId) {
 function recordRequest(apiId) { if (rateLimiter[apiId]) rateLimiter[apiId].requests.push(Date.now()); }
 function setCooldown(apiId, seconds) { if (rateLimiter[apiId]) rateLimiter[apiId].cooldownUntil = Date.now() + (seconds * 1000); }
 
-// ===== Google Translate TTS — ทางเลือกที่ 2 =====
+// ===== Google Translate TTS =====
 function speakWithGoogleTTS(text, langCode, speed, onEnd) {
   var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
-  // Google TTS จำกัดข้อความ ~200 ตัวอักษรต่อ request — ตัดเป็นชิ้น
   var chunks = splitTextForTTS(text, 190);
   var chunkIndex = 0;
 
   function playNext() {
-    if (chunkIndex >= chunks.length) {
-      if (onEnd) onEnd();
-      return;
-    }
+    if (chunkIndex >= chunks.length) { if (onEnd) onEnd(); return; }
     var chunk = chunks[chunkIndex];
     var url = 'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob'
       + '&tl=' + encodeURIComponent(ttsLang)
@@ -606,16 +598,9 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
     currentAudio = audio;
     audio.playbackRate = speed === 'slow' ? 0.8 : speed === 'fast' ? 1.3 : 1.0;
     audio.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
-
     audio.onended = function() { chunkIndex++; playNext(); };
-    audio.onerror = function() {
-      console.warn('Google TTS error for chunk:', chunk);
-      chunkIndex++; playNext();
-    };
-    audio.play().catch(function(e) {
-      console.warn('Google TTS play failed:', e);
-      if (onEnd) onEnd();
-    });
+    audio.onerror = function() { chunkIndex++; playNext(); };
+    audio.play().catch(function(e) { console.warn('Google TTS play failed:', e); if (onEnd) onEnd(); });
   }
   playNext();
 }
@@ -627,53 +612,29 @@ function splitTextForTTS(text, maxLen) {
   var current = '';
   for (var i = 0; i < sentences.length; i++) {
     if ((current + sentences[i]).length > maxLen && current.length > 0) {
-      chunks.push(current.trim());
-      current = sentences[i];
-    } else {
-      current += sentences[i];
-    }
+      chunks.push(current.trim()); current = sentences[i];
+    } else { current += sentences[i]; }
   }
   if (current.trim()) chunks.push(current.trim());
-  // ถ้ายังยาวเกิน ตัดตามความยาว
   var result = [];
   for (var j = 0; j < chunks.length; j++) {
     if (chunks[j].length > maxLen) {
-      for (var k = 0; k < chunks[j].length; k += maxLen) {
-        result.push(chunks[j].substring(k, k + maxLen));
-      }
-    } else {
-      result.push(chunks[j]);
-    }
+      for (var k = 0; k < chunks[j].length; k += maxLen) result.push(chunks[j].substring(k, k + maxLen));
+    } else { result.push(chunks[j]); }
   }
   return result;
 }
 
 // ===== Unified TTS Engine =====
-function needsGoogleTTS(langCode) {
-  return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1;
-}
+function needsGoogleTTS(langCode) { return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1; }
 
 function speakText(text, langCode, speed, onEnd) {
   var engine = document.getElementById('ttsEngine').value;
-
-  // Force Google TTS
-  if (engine === 'google') {
-    speakWithGoogleTTS(text, langCode, speed, onEnd);
-    return;
-  }
-
-  // Force Browser only
-  if (engine === 'browser') {
-    speakWithBrowser(text, langCode, speed, onEnd);
-    return;
-  }
-
-  // Auto mode: ลอง Browser ก่อน ถ้าไม่รองรับ → fallback Google TTS
-  if (needsGoogleTTS(langCode)) {
-    speakWithGoogleTTS(text, langCode, speed, onEnd);
-  } else {
-    speakWithBrowser(text, langCode, speed, onEnd);
-  }
+  if (engine === 'google') { speakWithGoogleTTS(text, langCode, speed, onEnd); return; }
+  if (engine === 'browser') { speakWithBrowser(text, langCode, speed, onEnd); return; }
+  // Auto: ถ้าภาษาที่ Browser ไม่รองรับ → ใช้ Google TTS
+  if (needsGoogleTTS(langCode)) { speakWithGoogleTTS(text, langCode, speed, onEnd); }
+  else { speakWithBrowser(text, langCode, speed, onEnd); }
 }
 
 function speakWithBrowser(text, langCode, speed, onEnd) {
@@ -694,14 +655,9 @@ function speakWithBrowser(text, langCode, speed, onEnd) {
         s.onend = function() { if (onEnd) onEnd(); };
         window.speechSynthesis.speak(s);
       }, 1000);
-    } else {
-      if (onEnd) onEnd();
-    }
+    } else { if (onEnd) onEnd(); }
   };
-  u.onerror = function() {
-    // Fallback to Google TTS if browser fails
-    speakWithGoogleTTS(text, langCode, speed, onEnd);
-  };
+  u.onerror = function() { speakWithGoogleTTS(text, langCode, speed, onEnd); };
   window.speechSynthesis.speak(u);
 }
 
@@ -715,18 +671,13 @@ function saveApiKeys() {
     if (g) localStorage.setItem('vb7_key_gemini', g); else localStorage.removeItem('vb7_key_gemini');
     if (q) localStorage.setItem('vb7_key_groq', q); else localStorage.removeItem('vb7_key_groq');
   } catch(e) {}
-  updateKeyStatus();
-  showKeyMsg('✅ บันทึกแล้ว!');
+  updateKeyStatus(); showKeyMsg('✅ บันทึกแล้ว!');
 }
 function clearApiKeys() {
   if (confirm('ลบ API Keys ทั้งหมด?')) {
-    localStorage.removeItem('vb7_key_gemini');
-    localStorage.removeItem('vb7_key_groq');
-    document.getElementById('keyGemini').value = '';
-    document.getElementById('keyGroq').value = '';
-    updateKeyStatus();
-    setTranslationMode('free');
-    showKeyMsg('🗑️ ลบแล้ว — เปลี่ยนเป็นโหมดฟรี');
+    localStorage.removeItem('vb7_key_gemini'); localStorage.removeItem('vb7_key_groq');
+    document.getElementById('keyGemini').value = ''; document.getElementById('keyGroq').value = '';
+    updateKeyStatus(); setTranslationMode('free'); showKeyMsg('🗑️ ลบแล้ว');
   }
 }
 function loadApiKeys() {
@@ -751,14 +702,11 @@ function setTranslationMode(mode) {
   document.getElementById('tabAiMode').classList.toggle('active', mode === 'ai');
   document.getElementById('tabAutoMode').classList.toggle('active', mode === 'auto');
   var desc = document.getElementById('modeDescription');
-  if (mode === 'free') {
-    desc.innerHTML = '<strong>🆓 โหมดฟรี:</strong> Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key<br>🔊 ออกเสียงทุกภาษา (Google Translate TTS เป็น fallback)';
-  } else if (mode === 'ai') {
+  if (mode === 'free') desc.innerHTML = '<strong>🆓 โหมดฟรี:</strong> Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key<br>🔊 ออกเสียงทุกภาษา (Google Translate TTS fallback)';
+  else if (mode === 'ai') {
     desc.innerHTML = '<strong>🤖 โหมด AI:</strong> Gemini → Groq (ต้องกรอก Key) — แม่นยำ เข้าใจบริบท';
-    if (!hasKey('gemini') && !hasKey('groq')) desc.innerHTML += '<br><span style="color:var(--bright-orange);">⚠️ ยังไม่มี Key! กรุณากรอกด้านล่าง</span>';
-  } else {
-    desc.innerHTML = '<strong>🔄 อัตโนมัติ:</strong> ลอง AI ก่อน → ถ้าไม่ได้ fallback ไป Free APIs';
-  }
+    if (!hasKey('gemini') && !hasKey('groq')) desc.innerHTML += '<br><span style="color:var(--bright-orange);">⚠️ ยังไม่มี Key!</span>';
+  } else desc.innerHTML = '<strong>🔄 อัตโนมัติ:</strong> ลอง AI ก่อน → fallback ไป Free APIs';
   try { localStorage.setItem('vb7_mode', mode); } catch(e) {}
 }
 
@@ -770,20 +718,16 @@ function translateGemini(text, src, tgt, onSuccess, onError) {
   fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key, {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ contents:[{parts:[{text:prompt}]}] })
-  })
-  .then(function(r) {
+  }).then(function(r) {
     if (r.status === 429) { setCooldown('gemini', 65); throw new Error('RATE_LIMITED'); }
-    if (r.status === 403 || r.status === 400) throw new Error('INVALID_KEY');
     if (!r.ok) throw new Error('HTTP_' + r.status);
     return r.json();
-  })
-  .then(function(data) {
+  }).then(function(data) {
     if (data.candidates && data.candidates[0] && data.candidates[0].content) {
       var r = data.candidates[0].content.parts[0].text.trim().replace(/^["']|["']$/g,'');
       if (r) onSuccess(r,'gemini'); else onError('EMPTY');
     } else onError('NO_RESULT');
-  })
-  .catch(function(e) { onError(e.message || 'UNKNOWN'); });
+  }).catch(function(e) { onError(e.message || 'UNKNOWN'); });
 }
 
 function translateGroq(text, src, tgt, onSuccess, onError) {
@@ -797,23 +741,18 @@ function translateGroq(text, src, tgt, onSuccess, onError) {
       messages:[
         {role:'system',content:'You are a translator. Translate from '+(LANG_NAMES[src]||src)+' to '+(LANG_NAMES[tgt]||tgt)+'. Return ONLY the translation.'},
         {role:'user',content:text}
-      ],
-      temperature:0.2, max_tokens:1024
+      ], temperature:0.2, max_tokens:1024
     })
-  })
-  .then(function(r) {
+  }).then(function(r) {
     if (r.status === 429) { setCooldown('groq', 65); throw new Error('RATE_LIMITED'); }
-    if (r.status === 401) throw new Error('INVALID_KEY');
     if (!r.ok) throw new Error('HTTP_'+r.status);
     return r.json();
-  })
-  .then(function(data) {
+  }).then(function(data) {
     if (data.choices && data.choices[0] && data.choices[0].message) {
       var r = data.choices[0].message.content.trim().replace(/^["']|["']$/g,'');
       if (r) onSuccess(r,'groq'); else onError('EMPTY');
     } else onError('NO_RESULT');
-  })
-  .catch(function(e) { onError(e.message || 'UNKNOWN'); });
+  }).catch(function(e) { onError(e.message || 'UNKNOWN'); });
 }
 
 function translateGoogle(text, src, tgt, onSuccess, onError) {
@@ -822,15 +761,13 @@ function translateGoogle(text, src, tgt, onSuccess, onError) {
     if (r.status === 429) { setCooldown('google', 30); throw new Error('RATE_LIMITED'); }
     if (!r.ok) throw new Error('HTTP_' + r.status);
     return r.json();
-  })
-  .then(function(data) {
+  }).then(function(data) {
     if (data && data[0]) {
       var r = '';
       for (var i=0; i<data[0].length; i++) { if(data[0][i]&&data[0][i][0]) r+=data[0][i][0]; }
       if (r) onSuccess(r,'google'); else onError('EMPTY');
     } else onError('NO_RESULT');
-  })
-  .catch(function(e) { onError(e.message || 'UNKNOWN'); });
+  }).catch(function(e) { onError(e.message || 'UNKNOWN'); });
 }
 
 function translateMyMemory(text, src, tgt, onSuccess, onError) {
@@ -842,8 +779,7 @@ function translateMyMemory(text, src, tgt, onSuccess, onError) {
       if (t && !(t.toUpperCase()===t && t.length>20)) onSuccess(t,'mymemory');
       else onError('BAD_RESULT');
     } else onError('NO_RESULT');
-  })
-  .catch(function(e) { onError(e.message || 'UNKNOWN'); });
+  }).catch(function(e) { onError(e.message || 'UNKNOWN'); });
 }
 
 function translateLingva(text, src, tgt, onSuccess, onError) {
@@ -852,8 +788,7 @@ function translateLingva(text, src, tgt, onSuccess, onError) {
   .then(function(data) {
     if (data && data.translation) onSuccess(data.translation,'lingva');
     else onError('NO_RESULT');
-  })
-  .catch(function(e) { onError(e.message || 'UNKNOWN'); });
+  }).catch(function(e) { onError(e.message || 'UNKNOWN'); });
 }
 
 var TRANSLATE_FN = { gemini:translateGemini, groq:translateGroq, google:translateGoogle, mymemory:translateMyMemory, lingva:translateLingva };
@@ -886,10 +821,8 @@ function translateTarget(text, src, tgt, targetNum) {
     handleAutoSpeak(targetNum, translationCache[cacheKey].text);
     return;
   }
-
-  var elId = 'targetText' + targetNum;
-  document.getElementById(elId).textContent = '⏳ กำลังแปล...';
-  document.getElementById(elId).classList.remove('waiting');
+  document.getElementById('targetText' + targetNum).textContent = '⏳ กำลังแปล...';
+  document.getElementById('targetText' + targetNum).classList.remove('waiting');
 
   var queue;
   if (translationMode === 'free') queue = FREE_QUEUE.slice();
@@ -902,17 +835,13 @@ function translateTarget(text, src, tgt, targetNum) {
 
 function tryQueue(text, src, tgt, queue, index, cacheKey, targetNum) {
   if (index >= queue.length) {
-    document.getElementById('targetText' + targetNum).textContent = '❌ แปลไม่ได้ — ลองใหม่อีกครั้ง';
+    document.getElementById('targetText' + targetNum).textContent = '❌ แปลไม่ได้ — ลองใหม่';
     setApiMsg('❌ ภาษาที่ ' + targetNum + ': ทุก API ล้มเหลว');
     return;
   }
   var apiId = queue[index];
-  if ((apiId === 'gemini' || apiId === 'groq') && !hasKey(apiId)) {
-    tryQueue(text, src, tgt, queue, index + 1, cacheKey, targetNum); return;
-  }
-  if (!canMakeRequest(apiId)) {
-    tryQueue(text, src, tgt, queue, index + 1, cacheKey, targetNum); return;
-  }
+  if ((apiId === 'gemini' || apiId === 'groq') && !hasKey(apiId)) { tryQueue(text, src, tgt, queue, index+1, cacheKey, targetNum); return; }
+  if (!canMakeRequest(apiId)) { tryQueue(text, src, tgt, queue, index+1, cacheKey, targetNum); return; }
 
   recordRequest(apiId);
   TRANSLATE_FN[apiId](text, src, tgt,
@@ -923,14 +852,13 @@ function tryQueue(text, src, tgt, queue, index, cacheKey, targetNum) {
       setApiMsg('✅ ภาษาที่ ' + targetNum + ' สำเร็จ! (' + engine + ')');
       handleAutoSpeak(targetNum, result);
     },
-    function() { tryQueue(text, src, tgt, queue, index + 1, cacheKey, targetNum); }
+    function() { tryQueue(text, src, tgt, queue, index+1, cacheKey, targetNum); }
   );
 }
 
 function showTranslation(text, engine, targetNum) {
   var el = document.getElementById('targetText' + targetNum);
-  el.textContent = text;
-  el.classList.remove('waiting');
+  el.textContent = text; el.classList.remove('waiting');
   var badge = document.getElementById('engineBadge' + targetNum);
   var ttsBadge = document.getElementById('ttsBadge' + targetNum);
   if (engine === 'same') { badge.style.display = 'none'; ttsBadge.style.display = 'none'; return; }
@@ -939,18 +867,13 @@ function showTranslation(text, engine, targetNum) {
   badge.className = 'engine-badge ' + (isAi ? 'ai' : 'free');
   badge.style.display = 'inline-block';
 
-  // แสดง TTS badge
   var langKey = targetNum === 2 ? 'targetLang2' : 'targetLang3';
   var langCode = document.getElementById(langKey).value;
-  if (needsGoogleTTS(langCode)) {
-    ttsBadge.textContent = '🔊 Google TTS';
-    ttsBadge.style.display = 'inline-block';
-  } else {
-    ttsBadge.style.display = 'none';
-  }
+  if (needsGoogleTTS(langCode)) { ttsBadge.textContent = '🔊 Google TTS'; ttsBadge.style.display = 'inline-block'; }
+  else { ttsBadge.style.display = 'none'; }
 }
 
-// ===== Auto Speak =====
+// ===== Auto Speak — เลือกพูดภาษาที่ 2 / 3 =====
 var speakQueue = [];
 var isSpeaking = false;
 
@@ -977,9 +900,7 @@ function processNextSpeak() {
   });
   isSpeaking = true;
   var item = speakQueue.shift();
-  doSpeakTarget(item.targetNum, item.text, item.speed, function() {
-    setTimeout(processNextSpeak, 500);
-  });
+  doSpeakTarget(item.targetNum, item.text, item.speed, function() { setTimeout(processNextSpeak, 500); });
 }
 
 function doSpeakTarget(targetNum, text, speed, onEnd) {
@@ -989,8 +910,7 @@ function doSpeakTarget(targetNum, text, speed, onEnd) {
 }
 
 function speakResult(targetNum, speed) {
-  var elId = 'targetText' + targetNum;
-  var text = document.getElementById(elId).textContent;
+  var text = document.getElementById('targetText' + targetNum).textContent;
   if (!text || text.charAt(0) === '⏳' || text.charAt(0) === '❌' || text === 'Waiting...') return;
   var langKey = targetNum === 2 ? 'targetLang2' : 'targetLang3';
   var langCode = document.getElementById(langKey).value;
@@ -1005,8 +925,7 @@ function initApp() {
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) {
       setStatus('❌ Browser ไม่รองรับ — ใช้ Chrome/Edge');
-      document.getElementById('micButton').disabled = true;
-      return;
+      document.getElementById('micButton').disabled = true; return;
     }
     recognition = new SR();
     recognition.continuous = true;
@@ -1016,30 +935,15 @@ function initApp() {
     recognition.onresult = handleSpeechResult;
     recognition.onerror = handleSpeechError;
     recognition.onend = function() {
-      if (isListening) {
-        setTimeout(function() { try { recognition.start(); } catch(e) {} }, 300);
-      }
+      if (isListening) setTimeout(function() { try { recognition.start(); } catch(e) {} }, 300);
     };
 
-    // Event listeners
-    document.getElementById('speechSpeed').addEventListener('input', function() {
-      document.getElementById('speedVal').textContent = this.value + 'x';
-    });
-    document.getElementById('speechVolume').addEventListener('input', function() {
-      document.getElementById('volVal').textContent = Math.round(this.value * 100) + '%';
-    });
-    document.getElementById('waitDelay').addEventListener('input', function() {
-      document.getElementById('delayVal').textContent = this.value + 's';
-    });
-    document.getElementById('sourceLang').addEventListener('change', function() {
-      updateRecognitionLang();
-      if (isListening) { stopListening(); setTimeout(startListening, 300); }
-    });
+    document.getElementById('speechSpeed').addEventListener('input', function() { document.getElementById('speedVal').textContent = this.value + 'x'; });
+    document.getElementById('speechVolume').addEventListener('input', function() { document.getElementById('volVal').textContent = Math.round(this.value * 100) + '%'; });
+    document.getElementById('waitDelay').addEventListener('input', function() { document.getElementById('delayVal').textContent = this.value + 's'; });
 
     setStatus('✅ พร้อมใช้งาน — กดปุ่มไมค์เพื่อเริ่มพูด');
-  } catch(e) {
-    setStatus('⚠️ โหลดไม่สำเร็จ — ลอง Refresh');
-  }
+  } catch(e) { setStatus('⚠️ โหลดไม่สำเร็จ — ลอง Refresh'); }
 }
 
 function updateRecognitionLang() {
@@ -1053,17 +957,13 @@ function toggleListening() {
 
 function startListening() {
   try {
-    recognition.start();
-    isListening = true;
-    finalBuffer = '';
-    lastTranslatedText = '';
+    recognition.start(); isListening = true;
+    finalBuffer = ''; lastTranslatedText = '';
     document.getElementById('micButton').classList.add('listening');
     document.getElementById('micLabel').textContent = '🔴 กำลังฟัง...';
     document.getElementById('sendBtn').disabled = true;
     setStatus('🎤 กำลังรับเสียง — พูดได้เลย!');
-  } catch(e) {
-    setStatus('❌ เปิดไมค์ไม่ได้ — กรุณากด Allow');
-  }
+  } catch(e) { setStatus('❌ เปิดไมค์ไม่ได้ — กรุณากด Allow'); }
 }
 
 function stopListening() {
@@ -1072,11 +972,7 @@ function stopListening() {
   document.getElementById('micButton').classList.remove('listening');
   document.getElementById('micLabel').textContent = 'กดเพื่อเริ่มพูด';
   setStatus('⏹️ หยุดแล้ว');
-  if (finalBuffer.trim()) {
-    doTranslate(finalBuffer.trim());
-    finalBuffer = '';
-    document.getElementById('sendBtn').disabled = true;
-  }
+  if (finalBuffer.trim()) { doTranslate(finalBuffer.trim()); finalBuffer = ''; document.getElementById('sendBtn').disabled = true; }
 }
 
 function handleSpeechResult(event) {
@@ -1085,26 +981,19 @@ function handleSpeechResult(event) {
     if (event.results[i].isFinal) final += event.results[i][0].transcript;
     else interim += event.results[i][0].transcript;
   }
-
   var el = document.getElementById('sourceText');
   el.classList.remove('waiting');
 
   if (final) {
     finalBuffer += (finalBuffer ? ' ' : '') + final.trim();
-    el.textContent = finalBuffer;
-    el.style.opacity = '1';
+    el.textContent = finalBuffer; el.style.opacity = '1';
     document.getElementById('sendBtn').disabled = false;
 
     if (finalTimer) clearTimeout(finalTimer);
     var waitSeconds = parseFloat(document.getElementById('waitDelay').value) || 3;
     finalTimer = setTimeout(function() {
-      if (finalBuffer.trim()) {
-        doTranslate(finalBuffer.trim());
-        finalBuffer = '';
-        document.getElementById('sendBtn').disabled = true;
-      }
+      if (finalBuffer.trim()) { doTranslate(finalBuffer.trim()); finalBuffer = ''; document.getElementById('sendBtn').disabled = true; }
     }, waitSeconds * 1000);
-
     setStatus('🎤 รับเสียงอยู่... (รอ ' + waitSeconds + ' วิ แล้วแปลอัตโนมัติ)');
   } else if (interim) {
     el.textContent = (finalBuffer ? finalBuffer + ' ' : '') + interim;
@@ -1114,32 +1003,19 @@ function handleSpeechResult(event) {
 
 function forceTranslateNow() {
   if (finalTimer) clearTimeout(finalTimer);
-  if (finalBuffer.trim()) {
-    doTranslate(finalBuffer.trim());
-    finalBuffer = '';
-    document.getElementById('sendBtn').disabled = true;
-    setStatus('📤 ส่งแปลแล้ว!');
-  }
+  if (finalBuffer.trim()) { doTranslate(finalBuffer.trim()); finalBuffer = ''; document.getElementById('sendBtn').disabled = true; setStatus('📤 ส่งแปลแล้ว!'); }
 }
 
 function handleSpeechError(event) {
-  var m = {
-    'not-allowed':'❌ ไมค์ถูกบล็อก! กรุณากด Allow',
-    'no-speech':'🤫 ไม่ได้ยินเสียง — ลองพูดใหม่',
-    'network':'🌐 ไม่มีเน็ต',
-    'audio-capture':'❌ ไม่พบไมค์'
-  };
-  setStatus(m[event.error] || '⚠️ เกิดข้อผิดพลาด — ลองใหม่');
+  var m = { 'not-allowed':'❌ ไมค์ถูกบล็อก!','no-speech':'🤫 ไม่ได้ยินเสียง','network':'🌐 ไม่มีเน็ต','audio-capture':'❌ ไม่พบไมค์' };
+  setStatus(m[event.error] || '⚠️ เกิดข้อผิดพลาด');
 }
 
 // ===== Utilities =====
 function setStatus(msg) { document.getElementById('status').textContent = msg; }
 
 function addHistory(orig, trans, from, to, engine, targetNum) {
-  historyList.unshift({
-    o:orig, t:trans, f:from, to:to, engine:engine, targetNum:targetNum,
-    time:new Date().toLocaleTimeString('th-TH')
-  });
+  historyList.unshift({ o:orig, t:trans, f:from, to:to, engine:engine, targetNum:targetNum, time:new Date().toLocaleTimeString('th-TH') });
   if (historyList.length > 50) historyList.pop();
   renderHistory();
 }
@@ -1148,7 +1024,7 @@ function renderHistory() {
   if (!historyList.length) { c.innerHTML = '<p style="color:var(--glaucous-blue);font-style:italic;font-size:0.85rem;">ยังไม่มีประวัติ</p>'; return; }
   var h = '';
   historyList.forEach(function(item) {
-    h += '<div class="history-item"><strong>' + esc(item.time) + '</strong> [' + esc(item.f) + '→' + esc(item.to) + '] (ภาษา' + item.targetNum + ') ' + esc(item.engine) + '<br>' + esc(item.o) + ' → <em>' + esc(item.t) + '</em></div>';
+    h += '<div class="history-item"><strong>' + esc(item.time) + '</strong> [' + esc(item.f) + '→' + esc(item.to) + '] ภาษา' + item.targetNum + ' (' + esc(item.engine) + ')<br>' + esc(item.o) + ' → <em>' + esc(item.t) + '</em></div>';
   });
   c.innerHTML = h;
 }
