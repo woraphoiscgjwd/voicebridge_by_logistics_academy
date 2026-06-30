@@ -594,14 +594,28 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
     var chunk = chunks[chunkIndex];
 
     // ★ แก้ไข: เปลี่ยนจาก client=tw-ob → client=gtx + ใช้ translate.googleapis.com
-    var url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx'
-      + '&tl=' + encodeURIComponent(ttsLang)
-      + '&q=' + encodeURIComponent(chunk);
+  var url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx'
+    + '&tl=' + encodeURIComponent(ttsLang)
+    + '&q=' + encodeURIComponent(chunk);
 
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
     var audio = new Audio();
     currentAudio = audio;
 
+    var retryCount = 0;
+    var maxRetries = 1;
+
+audio.onerror = function() {
+  if (retryCount < maxRetries) {
+    retryCount++;
+    // ลอง fallback อื่น (เช่น Browser Speech Synthesis)
+  } else {
+    // หยุด — ไม่วนลูปต่อ
+    chunkIndex++;
+    playNext();
+  }
+};
+    
     // ตั้งค่าความเร็ว + volume
     var baseSpeed = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
     if (speed === 'slow') audio.playbackRate = baseSpeed * 0.6;
@@ -690,6 +704,9 @@ function tryFallbackTTS(text, ttsLang, langCode, speed, onSuccess, onFail) {
   onFail();
 }
 
+function showTTSFallbackMsg(langCode) {
+  setApiMsg('⚠️ ไม่สามารถออกเสียง ' + langName + ' ได้ — กรุณาอ่านข้อความแทน');
+}
 // ========================================================
 // ===== [เพิ่มใหม่] แจ้ง user เมื่อ TTS ไม่ได้ =====
 // ========================================================
