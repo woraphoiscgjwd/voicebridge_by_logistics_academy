@@ -87,7 +87,7 @@
       background:none; border:1.5px solid var(--border-light); border-radius:50%;
       width:36px; height:36px; cursor:pointer; font-size:1.2rem;
       display:flex; align-items:center; justify-content:center;
-      transition:all 0.2s; margin-bottom:8px;
+      transition:all 0.2s; margin-bottom:8px; color: var(--empowered-blue);
     }
     .swap-btn:hover { background:var(--electric-blue); color:#fff; border-color:var(--electric-blue); transform:rotate(180deg); }
     /* Result Section */
@@ -107,14 +107,39 @@
     .result-text { font-size:1rem; line-height:1.7; min-height:50px; word-wrap:break-word; }
     .result-text.waiting { color: var(--glaucous-blue); font-style:italic; }
     .char-count { font-size:0.65rem; color:var(--glaucous-blue); text-align:right; margin-top:4px; }
+    /* TTS & Copy Buttons */
     .tts-buttons { margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; }
     .tts-buttons button, .copy-btn {
-      background: var(--cool-white); border:1.5px solid var(--border-light);
+      background: var(--cool-white);
+      border:1.5px solid var(--border-light);
       padding:5px 12px; border-radius:8px; cursor:pointer; font-size:0.75rem;
       font-family:'Prompt', sans-serif; font-weight:600; transition:all 0.2s;
+      color: var(--empowered-blue);
     }
-    .tts-buttons button:hover { background: var(--bright-orange); color:#fff; border-color: var(--bright-orange); }
-    .copy-btn:hover { background: var(--electric-blue); color:#fff; border-color: var(--electric-blue); }
+    .tts-buttons button:hover {
+      background: var(--bright-orange); color:#fff; border-color: var(--bright-orange);
+    }
+    .copy-btn:hover {
+      background: var(--electric-blue); color:#fff; border-color: var(--electric-blue);
+    }
+    /* Dark Mode — ปุ่มในกล่องแปล */
+    [data-theme="dark"] .tts-buttons button,
+    [data-theme="dark"] .copy-btn {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.2);
+      color: #E8E8E8;
+    }
+    [data-theme="dark"] .tts-buttons button:hover {
+      background: var(--bright-orange);
+      color: #fff;
+      border-color: var(--bright-orange);
+    }
+    [data-theme="dark"] .copy-btn:hover {
+      background: var(--electric-blue);
+      color: #fff;
+      border-color: var(--electric-blue);
+    }
+    /* Badges */
     .engine-badge {
       margin-top:8px; font-size:0.65rem; font-weight:600;
       padding:3px 10px; border-radius:12px; display:inline-block;
@@ -135,7 +160,7 @@
       border:none; transition:all 0.2s;
     }
     .mode-tab.active { background: var(--empowered-blue); color:#fff; }
-    [data-theme="dark"] .mode-tab.active { background: var(--electric-blue); }
+    [data-theme="dark"] .mode-tab.active { background: var(--electric-blue); color:#fff; }
     .mode-tab:hover:not(.active) { background: rgba(0,85,255,0.05); }
     .mode-description {
       margin-top:10px; padding:10px 16px; border-radius:10px;
@@ -203,7 +228,11 @@
     }
     .panel-content input[type="range"] { flex:1; max-width:200px; accent-color: var(--electric-blue); }
     .panel-content input[type="checkbox"] { accent-color: var(--electric-blue); width:18px; height:18px; }
-    .panel-content select { padding:6px 10px; border-radius:8px; border:1.5px solid var(--border-light); font-family:'Prompt',sans-serif; font-size:0.82rem; background:var(--cool-white); color:var(--empowered-blue); }
+    .panel-content select {
+      padding:6px 10px; border-radius:8px; border:1.5px solid var(--border-light);
+      font-family:'Prompt',sans-serif; font-size:0.82rem;
+      background:var(--cool-white); color:var(--empowered-blue);
+    }
     /* API Key Section */
     .api-key-section { display:flex; flex-direction:column; gap:10px; }
     .api-key-row {
@@ -231,6 +260,7 @@
       margin-bottom:8px; font-size:0.8rem; border-left:3px solid var(--bright-orange);
     }
     .history-item em { color: var(--electric-blue); font-style:normal; font-weight:600; }
+    /* Buttons */
     .btn-primary {
       background: var(--electric-blue); color:#fff; border:none;
       padding:8px 18px; border-radius:10px; cursor:pointer; font-size:0.85rem;
@@ -250,6 +280,27 @@
       transition:all 0.2s;
     }
     .retry-btn:hover { background: var(--bright-orange); color:#fff; }
+    /* Dark Mode — Retry Button */
+    [data-theme="dark"] .retry-btn {
+      background: rgba(250,90,10,0.15);
+      color: #FF8A65;
+      border-color: #FF8A65;
+    }
+    [data-theme="dark"] .retry-btn:hover {
+      background: var(--bright-orange);
+      color: #fff;
+    }
+    /* Dark Mode — Secondary Buttons */
+    [data-theme="dark"] .btn-secondary {
+      background: rgba(255,255,255,0.05);
+      color: #E8E8E8;
+      border-color: rgba(255,255,255,0.2);
+    }
+    [data-theme="dark"] .btn-secondary:hover {
+      border-color: var(--electric-blue);
+      color: var(--electric-blue);
+    }
+    /* Footer */
     footer {
       text-align:center; margin-top:32px; padding:20px 0;
       border-top:1px solid var(--border-light); color: var(--glaucous-blue); font-size:0.75rem;
@@ -263,6 +314,7 @@
       font-family:'Prompt', sans-serif;
     }
     .toast.show { opacity:1; transform:translateY(0); }
+    /* Responsive */
     @media(max-width:768px) {
       .result-section { grid-template-columns:1fr; }
       .lang-section { grid-template-columns:1fr; }
@@ -402,7 +454,7 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทமிฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
           <option value="si">🇱🇰 සිංහල (สิงหล)</option>
@@ -471,7 +523,7 @@
     </div>
   </section>
 
-  <!-- Input Section: Voice + Text -->
+  <!-- Input Section -->
   <section class="mic-section">
     <div class="input-mode-tabs" role="tablist">
       <button class="input-mode-tab active" id="tabVoiceInput" role="tab">🎤 พูด</button>
@@ -493,7 +545,7 @@
 
     <!-- Text Input -->
     <div id="textInputPanel" style="display:none; width:100%; max-width:600px;">
-      <textarea id="textInputArea" class="text-input-area" placeholder="พิมพ์ข้อความที่ต้องการแปล..." aria-label="พิมพ์ข้อความที่ต้องการแปล"></textarea>
+      <textarea id="textInputArea" class="text-input-area" placeholder="พิมพ์ข้อความที่ต้องการแปล... (Ctrl+Enter เพื่อแปล)" aria-label="พิมพ์ข้อความที่ต้องการแปล"></textarea>
       <div class="text-input-actions">
         <button id="translateTextBtn" class="btn-primary">📤 แปลเลย</button>
         <button id="clearTextBtn" class="btn-secondary">🗑️ ล้าง</button>
@@ -598,9 +650,9 @@
 /**
  * VoiceBridge v7.2 — Complete Rewrite (Fixed & Enhanced)
  * ✅ แก้ไข Bugs ทั้งหมดจาก v7.1
+ * ✅ แก้ไข Dark Mode buttons visibility
  * ✅ เพิ่ม: Dark Mode, Text Input, Copy, Swap, Retry, Accessibility
  * ✅ เพิ่ม: Cache Limit, Reconnect Limit, Fetch Timeout, IIFE
- * ✅ เพิ่ม: Character Count, Toast Notifications
  */
 (function() {
   'use strict';
@@ -666,7 +718,7 @@
   let ttsAttemptCount = 0;
   let speakQueue = [];
   let isSpeaking = false;
-  let lastSourceText = ''; // สำหรับ retry
+  let lastSourceText = '';
 
   // ===== Rate Limiter =====
   const rateLimiter = {
@@ -1158,12 +1210,10 @@
     const tgt2 = document.getElementById('targetLang2').value;
     const tgt3 = document.getElementById('targetLang3').value;
 
-    // Update source display
     document.getElementById('sourceText').textContent = text;
     document.getElementById('sourceText').classList.remove('waiting');
     updateCharCount('sourceCharCount', text);
 
-    // Clear retry containers
     document.getElementById('retryContainer2').innerHTML = '';
     document.getElementById('retryContainer3').innerHTML = '';
 
@@ -1199,7 +1249,6 @@
     if (index >= queue.length) {
       document.getElementById('targetText' + targetNum).textContent = '❌ แปลไม่ได้ — กรุณาลองใหม่';
       setApiMsg('❌ ภาษาที่ ' + targetNum + ': ทุก API ล้มเหลว');
-      // Show retry button
       showRetryButton(targetNum);
       return;
     }
@@ -1233,7 +1282,7 @@
     btn.textContent = '🔄 ลองแปลใหม่';
     btn.addEventListener('click', function() {
       if (lastSourceText) {
-        lastTranslatedText = ''; // reset to allow re-translate
+        lastTranslatedText = '';
         doTranslate(lastSourceText);
       }
     });
@@ -1273,18 +1322,27 @@
       showToast('⚠️ ยังไม่มีข้อความให้คัดลอก');
       return;
     }
-    navigator.clipboard.writeText(text).then(function() {
-      showToast('📋 คัดลอกแล้ว!');
-    }).catch(function() {
-      // Fallback
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      showToast('📋 คัดลอกแล้ว!');
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        showToast('📋 คัดลอกแล้ว!');
+      }).catch(function() {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('📋 คัดลอกแล้ว!');
   }
 
   // ===== Swap Languages =====
@@ -1294,7 +1352,6 @@
     const sourceVal = sourceEl.value;
     const target2Val = target2El.value;
 
-    // Check if source has the target2 value as option and vice versa
     const sourceOptions = Array.from(sourceEl.options).map(o => o.value);
     const target2Options = Array.from(target2El.options).map(o => o.value);
 
@@ -1333,7 +1390,7 @@
     } catch(e) {}
   }
 
-  // ===== Input Mode (Voice/Text) =====
+  // ===== Input Mode =====
   function setInputMode(mode) {
     document.getElementById('tabVoiceInput').classList.toggle('active', mode === 'voice');
     document.getElementById('tabTextInput').classList.toggle('active', mode === 'text');
@@ -1347,7 +1404,7 @@
     document.getElementById('sourceText').textContent = text;
     document.getElementById('sourceText').classList.remove('waiting');
     updateCharCount('sourceCharCount', text);
-    lastTranslatedText = ''; // allow re-translate
+    lastTranslatedText = '';
     doTranslate(text);
     showToast('📤 ส่งแปลแล้ว!');
   }
@@ -1366,7 +1423,7 @@
     updateRecognitionLang();
 
     recognition.onresult = function(event) {
-      reconnectCount = 0; // reset on successful result
+      reconnectCount = 0;
       handleSpeechResult(event);
     };
 
@@ -1533,7 +1590,7 @@
     showToast('💾 บันทึกประวัติแล้ว');
   }
 
-  // ===== Event Listeners (No inline onclick) =====
+  // ===== Event Listeners =====
   function bindEvents() {
     // Mode tabs
     document.getElementById('tabFreeMode').addEventListener('click', () => setTranslationMode('free'));
@@ -1557,7 +1614,6 @@
     document.getElementById('textInputArea').addEventListener('input', function() {
       document.getElementById('textCharCount').textContent = this.value.length + ' ตัวอักษร';
     });
-    // Enter key for text input
     document.getElementById('textInputArea').addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && e.ctrlKey) {
         e.preventDefault();
