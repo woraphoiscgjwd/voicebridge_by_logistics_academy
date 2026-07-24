@@ -123,22 +123,95 @@
       background: var(--electric-blue); color:#fff; border-color: var(--electric-blue);
     }
     /* Dark Mode — ปุ่มในกล่องแปล */
-    [data-theme="dark"] .tts-buttons button,
-    [data-theme="dark"] .copy-btn {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.2);
-      color: #E8E8E8;
-    }
-    [data-theme="dark"] .tts-buttons button:hover {
-      background: var(--bright-orange);
-      color: #fff;
-      border-color: var(--bright-orange);
-    }
-    [data-theme="dark"] .copy-btn:hover {
-      background: var(--electric-blue);
-      color: #fff;
-      border-color: var(--electric-blue);
-    }
+    /* ===== Dark Mode — ปุ่ม TTS + Copy (แก้ไขเพิ่ม specificity) ===== */
+[data-theme="dark"] .result-box .tts-buttons button,
+[data-theme="dark"] .result-box .tts-buttons .copy-btn {
+  background: rgba(255,255,255,0.1) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  color: #FFFFFF !important;
+}
+[data-theme="dark"] .result-box .tts-buttons button:hover {
+  background: #FA5A0A !important;
+  color: #FFFFFF !important;
+  border-color: #FA5A0A !important;
+}
+[data-theme="dark"] .result-box .tts-buttons .copy-btn:hover {
+  background: #0055FF !important;
+  color: #FFFFFF !important;
+  border-color: #0055FF !important;
+}
+
+/* ===== Dark Mode — Retry Button ===== */
+[data-theme="dark"] .result-box .retry-btn {
+  background: rgba(250,90,10,0.2) !important;
+  color: #FF8A65 !important;
+  border-color: #FF8A65 !important;
+}
+[data-theme="dark"] .result-box .retry-btn:hover {
+  background: #FA5A0A !important;
+  color: #FFFFFF !important;
+}
+
+/* ===== Dark Mode — Secondary Buttons (ล้าง/บันทึก) ===== */
+[data-theme="dark"] .btn-secondary {
+  background: rgba(255,255,255,0.08) !important;
+  color: #E8E8E8 !important;
+  border-color: rgba(255,255,255,0.2) !important;
+}
+[data-theme="dark"] .btn-secondary:hover {
+  border-color: #0055FF !important;
+  color: #0055FF !important;
+}
+
+/* ===== Dark Mode — Primary Button ===== */
+[data-theme="dark"] .btn-primary {
+  background: #0055FF !important;
+  color: #FFFFFF !important;
+}
+[data-theme="dark"] .btn-primary:hover {
+  background: #003FCC !important;
+}
+
+/* ===== Dark Mode — Send Button ===== */
+[data-theme="dark"] .send-btn {
+  background: #0055FF !important;
+  color: #FFFFFF !important;
+}
+
+/* ===== Dark Mode — Mode Tabs + Input Mode Tabs ===== */
+[data-theme="dark"] .mode-tab {
+  background: rgba(255,255,255,0.05) !important;
+  color: #AABBDD !important;
+}
+[data-theme="dark"] .mode-tab.active {
+  background: #0055FF !important;
+  color: #FFFFFF !important;
+}
+[data-theme="dark"] .input-mode-tab {
+  background: rgba(255,255,255,0.05) !important;
+  color: #AABBDD !important;
+}
+[data-theme="dark"] .input-mode-tab.active {
+  background: #0055FF !important;
+  color: #FFFFFF !important;
+}
+
+/* ===== Dark Mode — Swap Button ===== */
+[data-theme="dark"] .swap-btn {
+  color: #E8E8E8 !important;
+  border-color: rgba(255,255,255,0.2) !important;
+}
+[data-theme="dark"] .swap-btn:hover {
+  background: #0055FF !important;
+  color: #FFFFFF !important;
+  border-color: #0055FF !important;
+}
+
+/* ===== Dark Mode — Theme Toggle ===== */
+[data-theme="dark"] .theme-toggle {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.2) !important;
+}
     /* Badges */
     .engine-badge {
       margin-top:8px; font-size:0.65rem; font-weight:600;
