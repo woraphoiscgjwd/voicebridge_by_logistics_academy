@@ -38,7 +38,6 @@
       background: var(--card-white); border:1px solid var(--border-light);
       border-radius:16px; padding:20px; margin-bottom:16px; box-shadow: var(--shadow-sm);
     }
-    /* Language Section */
     .lang-section { display:grid; grid-template-columns:1fr auto 1fr 1fr; gap:12px; align-items:end; }
     .lang-box { display:flex; flex-direction:column; gap:6px; }
     .lang-box label { font-size:0.78rem; font-weight:600; color: var(--glaucous-blue); text-transform:uppercase; }
@@ -55,7 +54,6 @@
       display:flex; align-items:center; justify-content:center;
       font-size:1.5rem; color: var(--glaucous-blue); padding-bottom:8px;
     }
-    /* Result Section */
     .result-section { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:16px; }
     .result-box {
       background: var(--card-white); border:2px solid var(--border-light);
@@ -88,7 +86,6 @@
       font-size:0.6rem; padding:2px 8px; border-radius:8px; display:inline-block; margin-top:4px;
       background: rgba(255,200,5,0.15); border:1px solid rgba(255,200,5,0.4); color: var(--matt-yellow);
     }
-    /* Mode Selector */
     .mode-section { margin-bottom:16px; }
     .mode-tabs { display:flex; gap:0; border-radius:12px; overflow:hidden; border:2px solid var(--border-light); }
     .mode-tab {
@@ -104,7 +101,6 @@
       background: rgba(0,85,255,0.04); font-size:0.8rem; color: var(--glaucous-blue);
     }
     .mode-description strong { color: var(--empowered-blue); }
-    /* Mic Section */
     .mic-section { display:flex; flex-direction:column; align-items:center; padding:24px 0; }
     .mic-btn {
       background: linear-gradient(135deg, var(--bright-orange), var(--matt-orange));
@@ -134,7 +130,6 @@
       margin-top:8px; font-size:0.75rem; color: var(--glaucous-blue);
       padding:6px 12px; border-radius:8px; background: rgba(0,85,255,0.04);
     }
-    /* Settings */
     .panel {
       background: var(--card-white); border:1px solid var(--border-light);
       border-radius:14px; padding:18px; margin-bottom:14px; box-shadow: var(--shadow-sm);
@@ -147,7 +142,6 @@
     .panel-content input[type="range"] { flex:1; max-width:200px; accent-color: var(--electric-blue); }
     .panel-content input[type="checkbox"] { accent-color: var(--electric-blue); width:18px; height:18px; }
     .panel-content select { padding:6px 10px; border-radius:8px; border:1.5px solid var(--border-light); font-family:'Prompt',sans-serif; font-size:0.82rem; }
-    /* API Key Section */
     .api-key-section { display:flex; flex-direction:column; gap:10px; }
     .api-key-row {
       display:flex; align-items:center; gap:8px; flex-wrap:wrap;
@@ -167,7 +161,6 @@
       font-size:0.75rem; color: var(--glaucous-blue); padding:8px 12px;
       background: rgba(0,85,255,0.03); border-radius:8px; line-height:1.6;
     }
-    /* History */
     .history-list { margin:12px 0; max-height:220px; overflow-y:auto; }
     .history-item {
       background: var(--cool-white); border-radius:10px; padding:10px 12px;
@@ -191,7 +184,6 @@
       border-top:1px solid var(--border-light); color: var(--glaucous-blue); font-size:0.75rem;
     }
     #apiStatusMsg { font-size:0.78rem; color: var(--matt-orange); min-height:18px; margin-top:8px; }
-    /* ===== Mobile Audio Unlock Banner ===== */
     .audio-unlock-banner {
       display:none; background: rgba(250,90,10,0.08); border:1.5px solid var(--bright-orange);
       border-radius:12px; padding:14px; text-align:center; margin-bottom:16px;
@@ -203,27 +195,15 @@
       font-family:'Prompt', sans-serif; font-weight:600; font-size:0.9rem;
       margin-top:8px;
     }
-    /* ★ [v7.2] Text Input Section */
-    .text-input-section {
-      margin-top:16px; width:100%; max-width:600px;
-    }
-    .text-input-section .hint {
-      font-size:0.8rem; color:var(--glaucous-blue); margin-bottom:6px;
-    }
-    .text-input-section .input-row {
-      display:flex; gap:8px;
-    }
+    .text-input-section { margin-top:16px; width:100%; max-width:600px; }
+    .text-input-section .hint { font-size:0.8rem; color:var(--glaucous-blue); margin-bottom:6px; }
+    .text-input-section .input-row { display:flex; gap:8px; }
     .text-input-section input[type="text"] {
       flex:1; padding:12px 14px; border:2px solid var(--border-light); border-radius:12px;
       font-family:'Prompt',sans-serif; font-size:0.9rem; color:var(--empowered-blue);
       background:var(--card-white);
     }
     .text-input-section input[type="text"]:focus { border-color:var(--electric-blue); outline:none; }
-    .stt-warning {
-      display:none; margin-top:8px; padding:8px 12px; border-radius:8px;
-      background:rgba(250,90,10,0.08); border:1px solid rgba(250,90,10,0.2);
-      font-size:0.78rem; color:var(--matt-orange);
-    }
     @media(max-width:768px) {
       .result-section { grid-template-columns:1fr; }
       .lang-section { grid-template-columns:1fr; }
@@ -243,14 +223,12 @@
     <p class="subtitle">🎤 โปรแกรมแปลภาษาด้วยเสียง โดย Logistics Academy</p>
   </header>
 
-  <!-- Mobile Audio Unlock -->
   <div class="audio-unlock-banner" id="audioUnlockBanner">
     🔊 กดปุ่มด้านล่างเพื่อเปิดใช้งานเสียงบนมือถือ
     <br>
     <button onclick="unlockAudio()">🔓 เปิดใช้เสียง</button>
   </div>
 
-  <!-- Translation Mode -->
   <div class="card mode-section">
     <div class="mode-tabs">
       <button class="mode-tab active" id="tabFreeMode" onclick="setTranslationMode('free')">🆓 โหมดฟรี</button>
@@ -263,7 +241,6 @@
     </div>
   </div>
 
-  <!-- Language Selector -->
   <div class="card">
     <section class="lang-section">
       <div class="lang-box input-lang">
@@ -280,7 +257,7 @@
           <option value="ja">🇯🇵 日本語 (ญี่ปุ่น)</option>
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทมิฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -299,7 +276,6 @@
           <option value="hu">🇭🇺 Magyar</option>
           <option value="tr">🇹🇷 Türkçe</option>
           <option value="ar">🇸🇦 العربية</option>
-          <!-- ★ [v7.2] เพิ่ม 9 ภาษาที่เดิมมีเฉพาะปลายทาง -->
           <option value="my">🇲🇲 မြန်မာ (พม่า) ⌨️</option>
           <option value="lo">🇱🇦 ພາສາລາວ (ลาว) ⌨️</option>
           <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร) ⌨️</option>
@@ -333,7 +309,7 @@
           <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-          <option value="si">🇱🇰 සිංහල (สิงหล)</option>
+          <option value="si">🇱🇰 සිංහල (สිงหล)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -374,10 +350,10 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทமிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-          <option value="si">🇱🇰 සිංහල (สිงහල)</option>
+          <option value="si">🇱🇰 සිංහල (สිงหල)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -403,7 +379,6 @@
     </section>
   </div>
 
-  <!-- Results -->
   <section class="result-section">
     <div class="result-box source-box">
       <div class="result-label">🎤 ภาษาที่ 1 — ต้นฉบับ</div>
@@ -433,7 +408,6 @@
     </div>
   </section>
 
-  <!-- Mic + Send -->
   <section class="mic-section">
     <button id="micButton" class="mic-btn" onclick="toggleListening()">
       <span class="mic-icon">🎤</span>
@@ -444,20 +418,16 @@
       📤 ส่งแปลเลย
     </button>
     <div id="bufferInfo" class="buffer-info">💡 พูดให้เสร็จ → ระบบรอ 3 วินาที แล้วแปลทั้ง 2 ภาษาพร้อมกัน หรือกด "ส่งแปลเลย"</div>
-
-    <!-- ★ [v7.2] ช่องพิมพ์ข้อความ -->
     <div class="text-input-section" id="textInputSection">
-      <div class="hint">⌨️ พิมพ์ข้อความเพื่อแปล (สำหรับภาษาที่ไมค์ไม่รองรับ เช่น พม่า ลาว เขมร)</div>
+      <div class="hint">⌨️ พิมพ์ข้อความเพื่อแปล (สำหรับภาษาที่ไมค์ไม่รองรับ)</div>
       <div class="input-row">
         <input type="text" id="manualTextInput" placeholder="พิมพ์ข้อความที่ต้องการแปล..."
           onkeydown="if(event.key==='Enter')translateManualText()">
         <button onclick="translateManualText()" class="btn-primary" style="white-space:nowrap;">📤 แปล</button>
       </div>
-      <div class="stt-warning" id="sttWarning"></div>
     </div>
   </section>
 
-  <!-- Settings -->
   <section class="panel">
     <details>
       <summary>⚙️ ตั้งค่า — เสียงและการพูดอัตโนมัติ</summary>
@@ -493,7 +463,6 @@
     </details>
   </section>
 
-  <!-- API Keys -->
   <section class="panel">
     <details>
       <summary>🔑 ตั้งค่า API Keys (สำหรับโหมด AI — ไม่บังคับ)</summary>
@@ -526,7 +495,6 @@
     </details>
   </section>
 
-  <!-- History -->
   <section class="panel">
     <details>
       <summary>📜 ประวัติการแปล</summary>
@@ -547,13 +515,21 @@
 </div>
 <script>
 /**
-* VoiceBridge v7.2.0 — Full Fix (TTS + STT + Text Input)
-* ★ แก้ไข: TTS ไม่ทำงานบนมือถือ (iOS/Android)
-* ★ แก้ไข: Bug ซ้ำซ้อน (showTTSFallbackMsg, audio.onerror, retryCount)
-* ★ เพิ่ม: Audio unlock, Fetch as blob, User gesture chain
-* ★ [v7.2] เพิ่ม: SPEECH_LANG_MAP 9 ภาษา, ช่องพิมพ์ข้อความ, Multi-URL TTS, STT Warning
-* คงโครงสร้างเดิมทั้งหมด
-*/
+ * VoiceBridge v7.3.0 — Safari iOS + Android + Desktop Full Fix
+ * ★★★ แก้ปัญหาหลัก: TTS ไม่ทำงานบน Safari iOS ★★★
+ *
+ * สาเหตุ Safari iOS:
+ * 1. fetch() ไป Google TTS ถูก block (CORS/ITP)
+ * 2. audio.play() หลัง async ถูก block (ไม่ใช่ user gesture)
+ * 3. speechSynthesis หยุดหลัง 15 วิ
+ *
+ * วิธีแก้:
+ * A. ตรวจจับ Safari iOS → ใช้ speechSynthesis เป็นตัวเลือกแรก (sync กับ tap)
+ * B. Google TTS ใช้ <audio src="url"> โดยตรง แทน fetch+blob (Safari friendly)
+ * C. หลาย URL สำรอง (googleapis / google.com / google.co.th)
+ * D. Safari speechSynthesis pause/resume ทุก 10 วิ ป้องกันหยุด
+ * E. ช่องพิมพ์ข้อความสำหรับภาษาที่ไมค์ไม่รองรับ
+ */
 
 // ===== Language Config =====
 var SPEECH_LANG_MAP = {
@@ -565,7 +541,6 @@ var SPEECH_LANG_MAP = {
   'pl':'pl-PL','uk':'uk-UA','sv':'sv-SE','da':'da-DK',
   'fi':'fi-FI','el':'el-GR','cs':'cs-CZ','ro':'ro-RO',
   'hu':'hu-HU','tr':'tr-TR','ar':'ar-SA',
-  // ★ [v7.2] เพิ่ม 9 ภาษา
   'my':'my-MM','lo':'lo-LA','km':'km-KH','bn':'bn-BD',
   'ne':'ne-NP','si':'si-LK','ur':'ur-PK','sw':'sw-KE','af':'af-ZA'
 };
@@ -591,8 +566,6 @@ var LANG_NAMES = {
   'my':'Burmese','lo':'Lao','km':'Khmer','bn':'Bengali',
   'ne':'Nepali','si':'Sinhala','ur':'Urdu','sw':'Swahili','af':'Afrikaans'
 };
-
-// ★ [v7.2] ภาษาที่ Web Speech API STT ไม่รองรับ
 var STT_UNSUPPORTED = ['my','lo','km','bn','ne','si','ur','sw','af'];
 
 // ===== State =====
@@ -606,6 +579,20 @@ var finalTimer = null;
 var lastTranslatedText = '';
 var currentAudio = null;
 var audioUnlocked = false;
+
+// ===== Platform Detection =====
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+function isSafariIOS() {
+  var ua = navigator.userAgent;
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|OPiOS|Chrome/i.test(ua);
+  return isIOS && isSafari;
+}
+function isIOSAnyBrowser() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
 
 // ===== Rate Limiter =====
 var rateLimiter = {
@@ -627,12 +614,8 @@ function recordRequest(apiId) { if (rateLimiter[apiId]) rateLimiter[apiId].reque
 function setCooldown(apiId, seconds) { if (rateLimiter[apiId]) rateLimiter[apiId].cooldownUntil = Date.now() + (seconds * 1000); }
 
 // ================================================================
-// ★★★ MOBILE FIX: Audio Unlock System ★★★
+// ★★★ AUDIO UNLOCK SYSTEM (Mobile + Safari) ★★★
 // ================================================================
-function isMobile() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
 function unlockAudio() {
   if (audioUnlocked) return;
   try {
@@ -661,7 +644,6 @@ function unlockAudio() {
   document.getElementById('audioUnlockBanner').style.display = 'none';
 }
 
-// Auto unlock on first touch/click
 (function() {
   function onFirst() {
     unlockAudio();
@@ -680,15 +662,138 @@ function unlockAudio() {
 })();
 
 // ================================================================
-// ★★★ [v7.2] Google Translate TTS — Multi-URL Fallback + Retry ★★★
+// ★★★ [v7.3] UNIFIED TTS — Safari iOS + Android + Desktop ★★★
 // ================================================================
-function speakWithGoogleTTS(text, langCode, speed, onEnd) {
+function needsGoogleTTS(langCode) { return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1; }
+var ttsAttemptCount = 0;
+var MAX_TTS_ATTEMPTS = 3;
+
+function speakText(text, langCode, speed, onEnd) {
+  ttsAttemptCount++;
+  if (ttsAttemptCount > MAX_TTS_ATTEMPTS) {
+    ttsAttemptCount = 0;
+    showTTSFallbackMsg(langCode);
+    if (onEnd) onEnd();
+    return;
+  }
+  var engine = document.getElementById('ttsEngine').value;
+
+  // ★★★ SAFARI iOS FIX: ใช้ speechSynthesis เป็นตัวเลือกแรกเสมอ
+  // เพราะ Safari ต้องการ audio.play() ใน user gesture call stack โดยตรง
+  // fetch() เป็น async → Safari จะ block audio.play() หลัง fetch
+  if (isIOSAnyBrowser()) {
+    speakWithBrowserSafari(text, langCode, speed, function() {
+      ttsAttemptCount = 0; if (onEnd) onEnd();
+    }, function() {
+      // Browser TTS ล้มเหลว → ลอง Google TTS แบบ direct URL (ไม่ fetch)
+      speakWithGoogleTTSDirect(text, langCode, speed, function() {
+        ttsAttemptCount = 0; if (onEnd) onEnd();
+      });
+    });
+    return;
+  }
+
+  // ===== ปกติ (Chrome/Edge/Android) =====
+  if (engine === 'google') {
+    speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
+    return;
+  }
+  if (engine === 'browser') {
+    speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
+    return;
+  }
+  // Auto
+  if (needsGoogleTTS(langCode)) {
+    speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
+  } else {
+    speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
+  }
+}
+
+// ================================================================
+// ★★★ [v7.3] Safari iOS Browser TTS — sync กับ user gesture ★★★
+// ================================================================
+function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
+  if (!('speechSynthesis' in window)) { onFail(); return; }
+
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(text);
+  var targetLang = SPEECH_LANG_MAP[langCode] || langCode;
+  u.lang = targetLang;
+
+  // หา voice ที่ตรง
+  var voices = window.speechSynthesis.getVoices();
+  var bestVoice = null;
+  for (var i = 0; i < voices.length; i++) {
+    var vl = voices[i].lang.toLowerCase();
+    var tl = targetLang.toLowerCase();
+    var lc = langCode.toLowerCase();
+    if (vl === tl) { bestVoice = voices[i]; break; }
+    if (vl.indexOf(lc) === 0) { bestVoice = voices[i]; }
+  }
+  if (bestVoice) u.voice = bestVoice;
+
+  var base = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
+  u.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
+  if (speed === 'slow') u.rate = base * 0.6;
+  else if (speed === 'fast') u.rate = base * 1.5;
+  else u.rate = base;
+
+  var didEnd = false;
+  var resumeInterval = null;
+
+  function cleanup() {
+    if (resumeInterval) { clearInterval(resumeInterval); resumeInterval = null; }
+  }
+
+  u.onend = function() {
+    if (didEnd) return; didEnd = true; cleanup();
+    // ★ Classroom mode: พูดซ้ำช้า
+    if (document.getElementById('classroomMode').checked && speed !== 'slow') {
+      setTimeout(function() {
+        var s = new SpeechSynthesisUtterance(text);
+        s.lang = u.lang; s.rate = base * 0.5; s.volume = u.volume;
+        if (bestVoice) s.voice = bestVoice;
+        s.onend = function() { onSuccess(); };
+        s.onerror = function() { onSuccess(); };
+        window.speechSynthesis.speak(s);
+      }, 1000);
+    } else { onSuccess(); }
+  };
+
+  u.onerror = function() {
+    if (didEnd) return; didEnd = true; cleanup();
+    onFail();
+  };
+
+  // ★ Safari iOS bug: speechSynthesis หยุดหลัง ~15 วินาที
+  // แก้โดย pause/resume ทุก 10 วินาที
+  resumeInterval = setInterval(function() {
+    if (didEnd) { clearInterval(resumeInterval); return; }
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    }
+  }, 10000);
+
+  // Timeout safety (30 วิ)
+  setTimeout(function() {
+    if (!didEnd) { didEnd = true; cleanup(); onFail(); }
+  }, 30000);
+
+  window.speechSynthesis.speak(u);
+}
+
+// ================================================================
+// ★★★ [v7.3] Google TTS Direct URL — สำหรับ Safari iOS fallback ★★★
+// ★ ใช้ <audio src="url"> โดยตรง ไม่ผ่าน fetch (Safari friendly)
+// ================================================================
+function speakWithGoogleTTSDirect(text, langCode, speed, onEnd) {
   var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
   var chunks = splitTextForTTS(text, 180);
   var chunkIndex = 0;
 
-  // ★ แก้ใหม่: หลาย URL สำรอง
-  function getTTSUrls(chunk) {
+  function getUrls(chunk) {
     var t = encodeURIComponent(chunk);
     var l = encodeURIComponent(ttsLang);
     return [
@@ -700,12 +805,84 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
 
   function playNext() {
     if (chunkIndex >= chunks.length) { if (onEnd) onEnd(); return; }
-    var chunk = chunks[chunkIndex];
-    var urls = getTTSUrls(chunk);
-    tryUrl(urls, 0, chunk);
+    tryDirectUrl(getUrls(chunks[chunkIndex]), 0);
   }
 
-  function tryUrl(urls, idx, chunk) {
+  function tryDirectUrl(urls, idx) {
+    if (idx >= urls.length) {
+      showTTSFallbackMsg(langCode);
+      chunkIndex++; playNext();
+      return;
+    }
+
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
+    // ★ Safari: ใช้ <audio> src โดยตรง ไม่ผ่าน fetch
+    var audio = new Audio();
+    audio.src = urls[idx];
+    audio.preload = 'auto';
+
+    var baseSpeed = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
+    if (speed === 'slow') audio.playbackRate = baseSpeed * 0.6;
+    else if (speed === 'fast') audio.playbackRate = baseSpeed * 1.4;
+    else audio.playbackRate = baseSpeed;
+    audio.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
+
+    var settled = false;
+
+    audio.oncanplaythrough = function() {
+      if (settled) return;
+      currentAudio = audio;
+      var p = audio.play();
+      if (p) p.catch(function() {
+        if (!settled) { settled = true; tryDirectUrl(urls, idx + 1); }
+      });
+    };
+
+    audio.onended = function() {
+      if (!settled) { settled = true; chunkIndex++; playNext(); }
+    };
+
+    audio.onerror = function() {
+      if (!settled) { settled = true; tryDirectUrl(urls, idx + 1); }
+    };
+
+    // Timeout 8 วินาที
+    setTimeout(function() {
+      if (!settled) { settled = true; audio.pause(); tryDirectUrl(urls, idx + 1); }
+    }, 8000);
+
+    audio.load();
+  }
+
+  playNext();
+}
+
+// ================================================================
+// ★★★ Google TTS Fetch+Blob — สำหรับ Chrome/Android/Desktop ★★★
+// ================================================================
+function speakWithGoogleTTS(text, langCode, speed, onEnd) {
+  var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
+  var chunks = splitTextForTTS(text, 180);
+  var chunkIndex = 0;
+
+  function getUrls(chunk) {
+    var t = encodeURIComponent(chunk);
+    var l = encodeURIComponent(ttsLang);
+    return [
+      'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t,
+      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + l + '&q=' + t,
+      'https://translate.google.co.th/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t
+    ];
+  }
+
+  function playNext() {
+    if (chunkIndex >= chunks.length) { if (onEnd) onEnd(); return; }
+    var urls = getUrls(chunks[chunkIndex]);
+    tryFetchUrl(urls, 0, chunks[chunkIndex]);
+  }
+
+  function tryFetchUrl(urls, idx, chunk) {
     if (idx >= urls.length) {
       // ทุก URL ล้มเหลว → fallback browser TTS
       tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
@@ -723,7 +900,6 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
       if (!response.ok) throw new Error('HTTP_' + response.status);
       return response.blob();
     }).then(function(blob) {
-      // ★ เช็ค blob ว่างเปล่า
       if (blob.size < 100) throw new Error('EMPTY_AUDIO');
 
       var blobUrl = URL.createObjectURL(blob);
@@ -742,18 +918,17 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
       };
       audio.onerror = function() {
         URL.revokeObjectURL(blobUrl);
-        tryUrl(urls, idx + 1, chunk); // ★ ลอง URL ถัดไป
+        tryFetchUrl(urls, idx + 1, chunk);
       };
-
       var playPromise = audio.play();
       if (playPromise) {
         playPromise.catch(function() {
           URL.revokeObjectURL(blobUrl);
-          tryUrl(urls, idx + 1, chunk); // ★ ลอง URL ถัดไป
+          tryFetchUrl(urls, idx + 1, chunk);
         });
       }
     }).catch(function() {
-      tryUrl(urls, idx + 1, chunk); // ★ fetch ล้มเหลว ลอง URL ถัดไป
+      tryFetchUrl(urls, idx + 1, chunk);
     });
   }
 
@@ -787,7 +962,6 @@ function tryFallbackTTS(text, ttsLang, langCode, speed, onSuccess, onFail) {
   } else { onFail(); }
 }
 
-// ===== showTTSFallbackMsg =====
 function showTTSFallbackMsg(langCode) {
   var langName = LANG_NAMES[langCode] || langCode;
   setApiMsg('⚠️ ไม่สามารถออกเสียง ' + langName + ' ได้ในขณะนี้ — กรุณาอ่านข้อความแทน');
@@ -813,37 +987,7 @@ function splitTextForTTS(text, maxLen) {
   return result;
 }
 
-// ===== Unified TTS Engine =====
-function needsGoogleTTS(langCode) { return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1; }
-var ttsAttemptCount = 0;
-var MAX_TTS_ATTEMPTS = 3;
-
-function speakText(text, langCode, speed, onEnd) {
-  ttsAttemptCount++;
-  if (ttsAttemptCount > MAX_TTS_ATTEMPTS) {
-    ttsAttemptCount = 0;
-    showTTSFallbackMsg(langCode);
-    if (onEnd) onEnd();
-    return;
-  }
-  var engine = document.getElementById('ttsEngine').value;
-  if (engine === 'google') {
-    speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-    return;
-  }
-  if (engine === 'browser') {
-    speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-    return;
-  }
-  // Auto
-  if (needsGoogleTTS(langCode)) {
-    speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-  } else {
-    speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-  }
-}
-
-// ===== Browser TTS =====
+// ===== Browser TTS (Chrome/Android/Desktop) =====
 function speakWithBrowser(text, langCode, speed, onEnd) {
   window.speechSynthesis.cancel();
   var spoken = false;
@@ -1118,7 +1262,6 @@ function doSpeakTarget(targetNum, text, speed, onEnd) {
   speakText(text, langCode, speed, onEnd);
 }
 
-// ★ speakResult — เรียก unlockAudio ทุกครั้งที่กดปุ่มพูด (user gesture)
 function speakResult(targetNum, speed) {
   unlockAudio();
   var text = document.getElementById('targetText' + targetNum).textContent;
@@ -1151,23 +1294,16 @@ function initApp() {
     document.getElementById('speechSpeed').addEventListener('input', function() { document.getElementById('speedVal').textContent = this.value + 'x'; });
     document.getElementById('speechVolume').addEventListener('input', function() { document.getElementById('volVal').textContent = Math.round(this.value * 100) + '%'; });
     document.getElementById('waitDelay').addEventListener('input', function() { document.getElementById('delayVal').textContent = this.value + 's'; });
-    // Pre-load voices
     if ('speechSynthesis' in window) {
       window.speechSynthesis.getVoices();
       window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
     }
     setStatus('✅ พร้อมใช้งาน — กดปุ่มไมค์เพื่อเริ่มพูด');
-    checkSTTSupport(); // ★ [v7.2]
   } catch(e) { setStatus('⚠️ โหลดไม่สำเร็จ — ลอง Refresh'); }
 }
-
-// ★ [v7.2] updateRecognitionLang + checkSTTSupport
 function updateRecognitionLang() {
-  var src = document.getElementById('sourceLang').value;
-  if (recognition) recognition.lang = SPEECH_LANG_MAP[src] || 'th-TH';
-  checkSTTSupport();
+  if (recognition) recognition.lang = SPEECH_LANG_MAP[document.getElementById('sourceLang').value] || 'th-TH';
 }
-
 function toggleListening() {
   if (!recognition) return;
   unlockAudio();
@@ -1225,9 +1361,7 @@ function handleSpeechError(event) {
   setStatus(m[event.error] || '⚠️ เกิดข้อผิดพลาด');
 }
 
-// ================================================================
-// ★★★ [v7.2] ช่องพิมพ์ข้อความ + STT Warning ★★★
-// ================================================================
+// ===== Manual Text Input =====
 function translateManualText() {
   unlockAudio();
   var input = document.getElementById('manualTextInput');
@@ -1241,19 +1375,6 @@ function translateManualText() {
   doTranslate(text);
   input.value = '';
   setStatus('📤 ส่งข้อความพิมพ์แปลแล้ว!');
-}
-
-function checkSTTSupport() {
-  var src = document.getElementById('sourceLang').value;
-  var warning = document.getElementById('sttWarning');
-  if (!warning) return;
-  if (STT_UNSUPPORTED.indexOf(src) !== -1) {
-    var langName = LANG_NAMES[src] || src;
-    warning.innerHTML = '⚠️ ภาษา' + langName + ' — ไมค์อาจไม่รองรับการรับเสียงบน Browser นี้<br>👉 <strong>แนะนำ: ใช้ช่องพิมพ์ข้อความด้านบนแทน</strong>';
-    warning.style.display = 'block';
-  } else {
-    warning.style.display = 'none';
-  }
 }
 
 // ===== Utilities =====
@@ -1293,4 +1414,3 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
-```
