@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -191,7 +192,7 @@
       border-top:1px solid var(--border-light); color: var(--glaucous-blue); font-size:0.75rem;
     }
     #apiStatusMsg { font-size:0.78rem; color: var(--matt-orange); min-height:18px; margin-top:8px; }
-    /* ===== [เพิ่มใหม่] Mobile Audio Unlock Banner ===== */
+    /* ===== Mobile Audio Unlock Banner ===== */
     .audio-unlock-banner {
       display:none; background: rgba(250,90,10,0.08); border:1.5px solid var(--bright-orange);
       border-radius:12px; padding:14px; text-align:center; margin-bottom:16px;
@@ -202,6 +203,27 @@
       padding:10px 24px; border-radius:10px; cursor:pointer;
       font-family:'Prompt', sans-serif; font-weight:600; font-size:0.9rem;
       margin-top:8px;
+    }
+    /* ★ [v7.2] Text Input Section */
+    .text-input-section {
+      margin-top:16px; width:100%; max-width:600px;
+    }
+    .text-input-section .hint {
+      font-size:0.8rem; color:var(--glaucous-blue); margin-bottom:6px;
+    }
+    .text-input-section .input-row {
+      display:flex; gap:8px;
+    }
+    .text-input-section input[type="text"] {
+      flex:1; padding:12px 14px; border:2px solid var(--border-light); border-radius:12px;
+      font-family:'Prompt',sans-serif; font-size:0.9rem; color:var(--empowered-blue);
+      background:var(--card-white);
+    }
+    .text-input-section input[type="text"]:focus { border-color:var(--electric-blue); outline:none; }
+    .stt-warning {
+      display:none; margin-top:8px; padding:8px 12px; border-radius:8px;
+      background:rgba(250,90,10,0.08); border:1px solid rgba(250,90,10,0.2);
+      font-size:0.78rem; color:var(--matt-orange);
     }
     @media(max-width:768px) {
       .result-section { grid-template-columns:1fr; }
@@ -222,7 +244,7 @@
     <p class="subtitle">🎤 โปรแกรมแปลภาษาด้วยเสียง โดย Logistics Academy</p>
   </header>
 
-  <!-- ===== [เพิ่มใหม่] Mobile Audio Unlock ===== -->
+  <!-- Mobile Audio Unlock -->
   <div class="audio-unlock-banner" id="audioUnlockBanner">
     🔊 กดปุ่มด้านล่างเพื่อเปิดใช้งานเสียงบนมือถือ
     <br>
@@ -278,6 +300,16 @@
           <option value="hu">🇭🇺 Magyar</option>
           <option value="tr">🇹🇷 Türkçe</option>
           <option value="ar">🇸🇦 العربية</option>
+          <!-- ★ [v7.2] เพิ่ม 9 ภาษาที่เดิมมีเฉพาะปลายทาง -->
+          <option value="my">🇲🇲 မြန်မာ (พม่า) ⌨️</option>
+          <option value="lo">🇱🇦 ພາສາລາວ (ลาว) ⌨️</option>
+          <option value="km">🇰🇭 ភាសាខ្មែរ (เขมร) ⌨️</option>
+          <option value="bn">🇧🇩 বাংলা (เบงกาลี) ⌨️</option>
+          <option value="ne">🇳🇵 नेपाली (เนปาล) ⌨️</option>
+          <option value="si">🇱🇰 සිංහල (สิงหล) ⌨️</option>
+          <option value="ur">🇵🇰 اردو (อูรดู) ⌨️</option>
+          <option value="sw">🇰🇪 Kiswahili ⌨️</option>
+          <option value="af">🇿🇦 Afrikaans ⌨️</option>
         </select>
       </div>
       <div class="arrow-divider">→</div>
@@ -346,7 +378,7 @@
           <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-          <option value="si">🇱🇰 සිංහල (สิงหล)</option>
+          <option value="si">🇱🇰 සිංහල (สිงහල)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -413,6 +445,17 @@
       📤 ส่งแปลเลย
     </button>
     <div id="bufferInfo" class="buffer-info">💡 พูดให้เสร็จ → ระบบรอ 3 วินาที แล้วแปลทั้ง 2 ภาษาพร้อมกัน หรือกด "ส่งแปลเลย"</div>
+
+    <!-- ★ [v7.2] ช่องพิมพ์ข้อความ -->
+    <div class="text-input-section" id="textInputSection">
+      <div class="hint">⌨️ พิมพ์ข้อความเพื่อแปล (สำหรับภาษาที่ไมค์ไม่รองรับ เช่น พม่า ลาว เขมร)</div>
+      <div class="input-row">
+        <input type="text" id="manualTextInput" placeholder="พิมพ์ข้อความที่ต้องการแปล..."
+          onkeydown="if(event.key==='Enter')translateManualText()">
+        <button onclick="translateManualText()" class="btn-primary" style="white-space:nowrap;">📤 แปล</button>
+      </div>
+      <div class="stt-warning" id="sttWarning"></div>
+    </div>
   </section>
 
   <!-- Settings -->
@@ -505,10 +548,11 @@
 </div>
 <script>
 /**
-* VoiceBridge v7.1.1 — Mobile TTS Fix
+* VoiceBridge v7.2.0 — Full Fix (TTS + STT + Text Input)
 * ★ แก้ไข: TTS ไม่ทำงานบนมือถือ (iOS/Android)
 * ★ แก้ไข: Bug ซ้ำซ้อน (showTTSFallbackMsg, audio.onerror, retryCount)
 * ★ เพิ่ม: Audio unlock, Fetch as blob, User gesture chain
+* ★ [v7.2] เพิ่ม: SPEECH_LANG_MAP 9 ภาษา, ช่องพิมพ์ข้อความ, Multi-URL TTS, STT Warning
 * คงโครงสร้างเดิมทั้งหมด
 */
 
@@ -521,7 +565,10 @@ var SPEECH_LANG_MAP = {
   'pt':'pt-BR','it':'it-IT','nl':'nl-NL','ru':'ru-RU',
   'pl':'pl-PL','uk':'uk-UA','sv':'sv-SE','da':'da-DK',
   'fi':'fi-FI','el':'el-GR','cs':'cs-CZ','ro':'ro-RO',
-  'hu':'hu-HU','tr':'tr-TR','ar':'ar-SA'
+  'hu':'hu-HU','tr':'tr-TR','ar':'ar-SA',
+  // ★ [v7.2] เพิ่ม 9 ภาษา
+  'my':'my-MM','lo':'lo-LA','km':'km-KH','bn':'bn-BD',
+  'ne':'ne-NP','si':'si-LK','ur':'ur-PK','sw':'sw-KE','af':'af-ZA'
 };
 var GOOGLE_TTS_ONLY = ['my','lo','km','bn','ne','si','ur','sw','af'];
 var GTTS_LANG_MAP = {
@@ -546,6 +593,9 @@ var LANG_NAMES = {
   'ne':'Nepali','si':'Sinhala','ur':'Urdu','sw':'Swahili','af':'Afrikaans'
 };
 
+// ★ [v7.2] ภาษาที่ Web Speech API STT ไม่รองรับ
+var STT_UNSUPPORTED = ['my','lo','km','bn','ne','si','ur','sw','af'];
+
 // ===== State =====
 var recognition = null;
 var isListening = false;
@@ -556,7 +606,7 @@ var finalBuffer = '';
 var finalTimer = null;
 var lastTranslatedText = '';
 var currentAudio = null;
-var audioUnlocked = false; // ★ [เพิ่มใหม่]
+var audioUnlocked = false;
 
 // ===== Rate Limiter =====
 var rateLimiter = {
@@ -578,7 +628,7 @@ function recordRequest(apiId) { if (rateLimiter[apiId]) rateLimiter[apiId].reque
 function setCooldown(apiId, seconds) { if (rateLimiter[apiId]) rateLimiter[apiId].cooldownUntil = Date.now() + (seconds * 1000); }
 
 // ================================================================
-// ★★★ [เพิ่มใหม่] MOBILE FIX: Audio Unlock System ★★★
+// ★★★ MOBILE FIX: Audio Unlock System ★★★
 // ================================================================
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -586,7 +636,6 @@ function isMobile() {
 
 function unlockAudio() {
   if (audioUnlocked) return;
-  // 1. Unlock AudioContext
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
     var buffer = ctx.createBuffer(1, 1, 22050);
@@ -596,14 +645,12 @@ function unlockAudio() {
     source.start(0);
     if (ctx.state === 'suspended') ctx.resume();
   } catch(e) {}
-  // 2. Unlock HTML5 Audio
   try {
     var a = new Audio();
     a.src = 'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA/+M4wAAAAAAAAAAAAEluZm8AAAAPAAAAAwAAABMAB//7//8AAAAAAP/jOMAAAAAAAAAAAExhdmM1OC4xMwAAAAAAAAAAAAAAACQCkAAAAAAAABMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/jOMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/jOMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
     a.volume = 0.01;
     a.play().then(function(){ a.pause(); }).catch(function(){});
   } catch(e) {}
-  // 3. Unlock Speech Synthesis (iOS)
   try {
     if ('speechSynthesis' in window) {
       var u = new SpeechSynthesisUtterance('');
@@ -626,7 +673,6 @@ function unlockAudio() {
   document.addEventListener('touchstart', onFirst, true);
   document.addEventListener('touchend', onFirst, true);
   document.addEventListener('click', onFirst, true);
-  // แสดง banner เฉพาะ mobile
   if (isMobile()) {
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('audioUnlockBanner').style.display = 'block';
@@ -635,27 +681,49 @@ function unlockAudio() {
 })();
 
 // ================================================================
-// ★★★ [แก้ไขใหม่] Google Translate TTS — Fetch as Blob (Mobile Fix) ★★★
+// ★★★ [v7.2] Google Translate TTS — Multi-URL Fallback + Retry ★★★
 // ================================================================
 function speakWithGoogleTTS(text, langCode, speed, onEnd) {
   var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
   var chunks = splitTextForTTS(text, 180);
   var chunkIndex = 0;
 
+  function getTTSUrls(chunk) {
+    var encodedText = encodeURIComponent(chunk);
+    var encodedLang = encodeURIComponent(ttsLang);
+    return [
+      'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + encodedLang + '&q=' + encodedText,
+      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + encodedLang + '&q=' + encodedText
+    ];
+  }
+
   function playNext() {
     if (chunkIndex >= chunks.length) { if (onEnd) onEnd(); return; }
     var chunk = chunks[chunkIndex];
-    var url = 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx'
-      + '&tl=' + encodeURIComponent(ttsLang)
-      + '&q=' + encodeURIComponent(chunk);
+    var urls = getTTSUrls(chunk);
+    tryTTSUrl(urls, 0, chunk);
+  }
 
+  function tryTTSUrl(urls, urlIndex, chunk) {
+    if (urlIndex >= urls.length) {
+      tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
+        chunkIndex++; playNext();
+      }, function() {
+        showTTSFallbackMsg(langCode);
+        chunkIndex++; playNext();
+      });
+      return;
+    }
+
+    var url = urls[urlIndex];
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
-    // ★ MOBILE FIX: Fetch เป็น blob → สร้าง object URL → เล่นจาก blob
     fetch(url).then(function(response) {
       if (!response.ok) throw new Error('HTTP_' + response.status);
       return response.blob();
     }).then(function(blob) {
+      if (blob.size < 100) throw new Error('EMPTY_AUDIO');
+
       var blobUrl = URL.createObjectURL(blob);
       var audio = new Audio(blobUrl);
       currentAudio = audio;
@@ -673,18 +741,12 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
       };
       audio.onerror = function() {
         URL.revokeObjectURL(blobUrl);
-        // Fallback → browser TTS
-        tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
-          chunkIndex++; playNext();
-        }, function() {
-          chunkIndex++; playNext();
-        });
+        tryTTSUrl(urls, urlIndex + 1, chunk);
       };
 
       var playPromise = audio.play();
       if (playPromise) {
         playPromise.catch(function() {
-          // Autoplay blocked → try browser TTS
           URL.revokeObjectURL(blobUrl);
           tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
             chunkIndex++; playNext();
@@ -695,15 +757,10 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
         });
       }
     }).catch(function() {
-      // Fetch failed → try browser TTS
-      tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
-        chunkIndex++; playNext();
-      }, function() {
-        showTTSFallbackMsg(langCode);
-        chunkIndex++; playNext();
-      });
+      tryTTSUrl(urls, urlIndex + 1, chunk);
     });
   }
+
   playNext();
 }
 
@@ -734,7 +791,7 @@ function tryFallbackTTS(text, ttsLang, langCode, speed, onSuccess, onFail) {
   } else { onFail(); }
 }
 
-// ===== [แก้ไข] showTTSFallbackMsg — เหลือตัวเดียว =====
+// ===== showTTSFallbackMsg =====
 function showTTSFallbackMsg(langCode) {
   var langName = LANG_NAMES[langCode] || langCode;
   setApiMsg('⚠️ ไม่สามารถออกเสียง ' + langName + ' ได้ในขณะนี้ — กรุณาอ่านข้อความแทน');
@@ -743,7 +800,7 @@ function showTTSFallbackMsg(langCode) {
 function splitTextForTTS(text, maxLen) {
   if (text.length <= maxLen) return [text];
   var chunks = [];
-  var sentences = text.split(/([.!?。！？\n]+)/);
+  var sentences = text.split(/([.!?。!?\n]+)/);
   var current = '';
   for (var i = 0; i < sentences.length; i++) {
     if ((current + sentences[i]).length > maxLen && current.length > 0) {
@@ -760,7 +817,7 @@ function splitTextForTTS(text, maxLen) {
   return result;
 }
 
-// ===== [แก้ไข] Unified TTS Engine — ป้องกันวนลูป =====
+// ===== Unified TTS Engine =====
 function needsGoogleTTS(langCode) { return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1; }
 var ttsAttemptCount = 0;
 var MAX_TTS_ATTEMPTS = 3;
@@ -790,7 +847,7 @@ function speakText(text, langCode, speed, onEnd) {
   }
 }
 
-// ===== [แก้ไข] Browser TTS — ป้องกัน doSpeak() 2 ครั้ง =====
+// ===== Browser TTS =====
 function speakWithBrowser(text, langCode, speed, onEnd) {
   window.speechSynthesis.cancel();
   var spoken = false;
@@ -1065,9 +1122,9 @@ function doSpeakTarget(targetNum, text, speed, onEnd) {
   speakText(text, langCode, speed, onEnd);
 }
 
-// ★ [แก้ไข] speakResult — เรียก unlockAudio ทุกครั้งที่กดปุ่มพูด (user gesture)
+// ★ speakResult — เรียก unlockAudio ทุกครั้งที่กดปุ่มพูด (user gesture)
 function speakResult(targetNum, speed) {
-  unlockAudio(); // ★ MOBILE FIX
+  unlockAudio();
   var text = document.getElementById('targetText' + targetNum).textContent;
   if (!text || text.charAt(0) === '⏳' || text.charAt(0) === '❌' || text === 'Waiting...') return;
   var langKey = targetNum === 2 ? 'targetLang2' : 'targetLang3';
@@ -1104,14 +1161,20 @@ function initApp() {
       window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
     }
     setStatus('✅ พร้อมใช้งาน — กดปุ่มไมค์เพื่อเริ่มพูด');
+    checkSTTSupport(); // ★ [v7.2]
   } catch(e) { setStatus('⚠️ โหลดไม่สำเร็จ — ลอง Refresh'); }
 }
+
+// ★ [v7.2] updateRecognitionLang + checkSTTSupport
 function updateRecognitionLang() {
-  if (recognition) recognition.lang = SPEECH_LANG_MAP[document.getElementById('sourceLang').value] || 'th-TH';
+  var src = document.getElementById('sourceLang').value;
+  if (recognition) recognition.lang = SPEECH_LANG_MAP[src] || 'th-TH';
+  checkSTTSupport();
 }
+
 function toggleListening() {
   if (!recognition) return;
-  unlockAudio(); // ★ MOBILE FIX: unlock ตอนกดไมค์
+  unlockAudio();
   if (isListening) stopListening(); else startListening();
 }
 function startListening() {
@@ -1125,7 +1188,7 @@ function startListening() {
   } catch(e) { setStatus('❌ เปิดไมค์ไม่ได้ — กรุณากด Allow'); }
 }
 function stopListening() {
-  if (finalTimer) { clearTimeout(finalTimer); finalTimer = null; } // ★ [แก้ไข] clear timer
+  if (finalTimer) { clearTimeout(finalTimer); finalTimer = null; }
   try { recognition.stop(); } catch(e) {}
   isListening = false;
   document.getElementById('micButton').classList.remove('listening');
@@ -1157,13 +1220,44 @@ function handleSpeechResult(event) {
   }
 }
 function forceTranslateNow() {
-  unlockAudio(); // ★ MOBILE FIX
+  unlockAudio();
   if (finalTimer) clearTimeout(finalTimer);
   if (finalBuffer.trim()) { doTranslate(finalBuffer.trim()); finalBuffer = ''; document.getElementById('sendBtn').disabled = true; setStatus('📤 ส่งแปลแล้ว!'); }
 }
 function handleSpeechError(event) {
   var m = { 'not-allowed':'❌ ไมค์ถูกบล็อก!','no-speech':'🤫 ไม่ได้ยินเสียง','network':'🌐 ไม่มีเน็ต','audio-capture':'❌ ไม่พบไมค์' };
   setStatus(m[event.error] || '⚠️ เกิดข้อผิดพลาด');
+}
+
+// ================================================================
+// ★★★ [v7.2] ช่องพิมพ์ข้อความ + STT Warning ★★★
+// ================================================================
+function translateManualText() {
+  unlockAudio();
+  var input = document.getElementById('manualTextInput');
+  var text = input.value.trim();
+  if (!text) return;
+  var sourceEl = document.getElementById('sourceText');
+  sourceEl.textContent = text;
+  sourceEl.classList.remove('waiting');
+  sourceEl.style.opacity = '1';
+  lastTranslatedText = '';
+  doTranslate(text);
+  input.value = '';
+  setStatus('📤 ส่งข้อความพิมพ์แปลแล้ว!');
+}
+
+function checkSTTSupport() {
+  var src = document.getElementById('sourceLang').value;
+  var warning = document.getElementById('sttWarning');
+  if (!warning) return;
+  if (STT_UNSUPPORTED.indexOf(src) !== -1) {
+    var langName = LANG_NAMES[src] || src;
+    warning.innerHTML = '⚠️ ภาษา' + langName + ' — ไมค์อาจไม่รองรับการรับเสียงบน Browser นี้<br>👉 <strong>แนะนำ: ใช้ช่องพิมพ์ข้อความด้านบนแทน</strong>';
+    warning.style.display = 'block';
+  } else {
+    warning.style.display = 'none';
+  }
 }
 
 // ===== Utilities =====
@@ -1203,3 +1297,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+```
