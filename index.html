@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -688,12 +687,14 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
   var chunks = splitTextForTTS(text, 180);
   var chunkIndex = 0;
 
+  // ★ แก้ใหม่: หลาย URL สำรอง
   function getTTSUrls(chunk) {
-    var encodedText = encodeURIComponent(chunk);
-    var encodedLang = encodeURIComponent(ttsLang);
+    var t = encodeURIComponent(chunk);
+    var l = encodeURIComponent(ttsLang);
     return [
-      'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + encodedLang + '&q=' + encodedText,
-      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + encodedLang + '&q=' + encodedText
+      'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t,
+      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + l + '&q=' + t,
+      'https://translate.google.co.th/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t
     ];
   }
 
@@ -701,11 +702,12 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
     if (chunkIndex >= chunks.length) { if (onEnd) onEnd(); return; }
     var chunk = chunks[chunkIndex];
     var urls = getTTSUrls(chunk);
-    tryTTSUrl(urls, 0, chunk);
+    tryUrl(urls, 0, chunk);
   }
 
-  function tryTTSUrl(urls, urlIndex, chunk) {
-    if (urlIndex >= urls.length) {
+  function tryUrl(urls, idx, chunk) {
+    if (idx >= urls.length) {
+      // ทุก URL ล้มเหลว → fallback browser TTS
       tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
         chunkIndex++; playNext();
       }, function() {
@@ -715,13 +717,13 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
       return;
     }
 
-    var url = urls[urlIndex];
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
-    fetch(url).then(function(response) {
+    fetch(urls[idx]).then(function(response) {
       if (!response.ok) throw new Error('HTTP_' + response.status);
       return response.blob();
     }).then(function(blob) {
+      // ★ เช็ค blob ว่างเปล่า
       if (blob.size < 100) throw new Error('EMPTY_AUDIO');
 
       var blobUrl = URL.createObjectURL(blob);
@@ -736,28 +738,22 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
 
       audio.onended = function() {
         URL.revokeObjectURL(blobUrl);
-        chunkIndex++;
-        playNext();
+        chunkIndex++; playNext();
       };
       audio.onerror = function() {
         URL.revokeObjectURL(blobUrl);
-        tryTTSUrl(urls, urlIndex + 1, chunk);
+        tryUrl(urls, idx + 1, chunk); // ★ ลอง URL ถัดไป
       };
 
       var playPromise = audio.play();
       if (playPromise) {
         playPromise.catch(function() {
           URL.revokeObjectURL(blobUrl);
-          tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
-            chunkIndex++; playNext();
-          }, function() {
-            showTTSFallbackMsg(langCode);
-            chunkIndex++; playNext();
-          });
+          tryUrl(urls, idx + 1, chunk); // ★ ลอง URL ถัดไป
         });
       }
     }).catch(function() {
-      tryTTSUrl(urls, urlIndex + 1, chunk);
+      tryUrl(urls, idx + 1, chunk); // ★ fetch ล้มเหลว ลอง URL ถัดไป
     });
   }
 
