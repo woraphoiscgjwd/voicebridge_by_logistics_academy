@@ -350,10 +350,10 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทமிฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-          <option value="si">🇱🇰 සිංහල (สිงหල)</option>
+          <option value="si">🇱🇰 සිංහල (සිංහල)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -515,20 +515,20 @@
 </div>
 <script>
 /**
- * VoiceBridge v7.3.0 — Safari iOS + Android + Desktop Full Fix
- * ★★★ แก้ปัญหาหลัก: TTS ไม่ทำงานบน Safari iOS ★★★
+ * VoiceBridge v7.3.1 — Fix "Question Mark" Bug
+ * ★★★ แก้ปัญหา: ภาษาพม่า/ลาว/เขมร พูดแต่ "Question Mark" บนมือถือ ★★★
  *
- * สาเหตุ Safari iOS:
- * 1. fetch() ไป Google TTS ถูก block (CORS/ITP)
- * 2. audio.play() หลัง async ถูก block (ไม่ใช่ user gesture)
- * 3. speechSynthesis หยุดหลัง 15 วิ
+ * สาเหตุ v7.3.0:
+ * - บน iOS: speakWithBrowserSafari() ถูกเรียกก่อนเสมอ
+ * - แต่ iOS ไม่มี voice สำหรับ my/lo/km/bn/ne/si/ur
+ * - speechSynthesis เลยใช้ default English voice อ่านตัวอักษรพม่า → อ่านไม่ได้ → อ่านเป็น "Question Mark"
  *
- * วิธีแก้:
- * A. ตรวจจับ Safari iOS → ใช้ speechSynthesis เป็นตัวเลือกแรก (sync กับ tap)
- * B. Google TTS ใช้ <audio src="url"> โดยตรง แทน fetch+blob (Safari friendly)
- * C. หลาย URL สำรอง (googleapis / google.com / google.co.th)
- * D. Safari speechSynthesis pause/resume ทุก 10 วิ ป้องกันหยุด
- * E. ช่องพิมพ์ข้อความสำหรับภาษาที่ไมค์ไม่รองรับ
+ * วิธีแก้ v7.3.1:
+ * A. ถ้าเป็นภาษาใน GOOGLE_TTS_ONLY → ข้ามไป Google TTS Direct ทันที ไม่ลอง Browser TTS
+ * B. speakWithBrowserSafari() เพิ่มเช็ค: ถ้าหา voice ไม่เจอ → onFail() ทันที ไม่ลองพูด
+ * C. เพิ่ม cleanTextForTTS() ลบเครื่องหมาย ?, !, emoji ก่อนส่งให้ TTS
+ * D. Google TTS Direct ใช้ 3 URL สำรอง + ทำงานบนทุก platform (ไม่ผ่าน fetch)
+ * E. บน Android ก็ใช้ Google TTS Direct สำหรับภาษา GOOGLE_TTS_ONLY
  */
 
 // ===== Language Config =====
@@ -566,7 +566,6 @@ var LANG_NAMES = {
   'my':'Burmese','lo':'Lao','km':'Khmer','bn':'Bengali',
   'ne':'Nepali','si':'Sinhala','ur':'Urdu','sw':'Swahili','af':'Afrikaans'
 };
-var STT_UNSUPPORTED = ['my','lo','km','bn','ne','si','ur','sw','af'];
 
 // ===== State =====
 var recognition = null;
@@ -583,12 +582,6 @@ var audioUnlocked = false;
 // ===== Platform Detection =====
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-function isSafariIOS() {
-  var ua = navigator.userAgent;
-  var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  var isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|OPiOS|Chrome/i.test(ua);
-  return isIOS && isSafari;
 }
 function isIOSAnyBrowser() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -614,7 +607,7 @@ function recordRequest(apiId) { if (rateLimiter[apiId]) rateLimiter[apiId].reque
 function setCooldown(apiId, seconds) { if (rateLimiter[apiId]) rateLimiter[apiId].cooldownUntil = Date.now() + (seconds * 1000); }
 
 // ================================================================
-// ★★★ AUDIO UNLOCK SYSTEM (Mobile + Safari) ★★★
+// ★★★ AUDIO UNLOCK SYSTEM ★★★
 // ================================================================
 function unlockAudio() {
   if (audioUnlocked) return;
@@ -662,7 +655,26 @@ function unlockAudio() {
 })();
 
 // ================================================================
-// ★★★ [v7.3] UNIFIED TTS — Safari iOS + Android + Desktop ★★★
+// ★★★ [v7.3.1] Clean Text for TTS — ลบ ?, !, emoji ก่อนพูด ★★★
+// ================================================================
+function cleanTextForTTS(text) {
+  if (!text) return '';
+  // ลบ emoji
+  try {
+    text = text.replace(/[\u{1F300}-\u{1FAD6}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '');
+  } catch(e) {
+    text = text.replace(/[❌⏳✅⚠🔊🔓🎤📤📝🆓🤖🔄💾🗑📜📧🐢🐇🔴💡🔢🎓📢⚙🔑⚡]/g, '');
+  }
+  // ลบเครื่องหมายที่ Browser TTS อ่านออกเสียง เช่น "Question Mark"
+  text = text.replace(/[?!@#$%^&*()_+=\[\]{}<>|\\\/~`"';:]/g, ' ');
+  // เก็บจุด (.) และ คอมม่า (,) ไว้เพราะช่วยจังหวะพูด
+  // ลบช่องว่างซ้ำ
+  text = text.replace(/\s+/g, ' ').trim();
+  return text;
+}
+
+// ================================================================
+// ★★★ [v7.3.1] UNIFIED TTS — แก้ Question Mark Bug ★★★
 // ================================================================
 function needsGoogleTTS(langCode) { return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1; }
 var ttsAttemptCount = 0;
@@ -678,14 +690,21 @@ function speakText(text, langCode, speed, onEnd) {
   }
   var engine = document.getElementById('ttsEngine').value;
 
-  // ★★★ SAFARI iOS FIX: ใช้ speechSynthesis เป็นตัวเลือกแรกเสมอ
-  // เพราะ Safari ต้องการ audio.play() ใน user gesture call stack โดยตรง
-  // fetch() เป็น async → Safari จะ block audio.play() หลัง fetch
+  // ★★★ [v7.3.1] FIX #1: ภาษาใน GOOGLE_TTS_ONLY → ไปใช้ Google TTS Direct ทันที
+  // ไม่ลอง Browser TTS เลย เพราะ iPhone/Android ไม่มี voice ภาษาเหล่านี้
+  // ถ้าลอง Browser TTS → Safari จะใช้ English voice อ่านตัวอักษรพม่า → ได้ "Question Mark"
+  if (needsGoogleTTS(langCode)) {
+    speakWithGoogleTTSDirect(text, langCode, speed, function() {
+      ttsAttemptCount = 0; if (onEnd) onEnd();
+    });
+    return;
+  }
+
+  // ★★★ [v7.3.1] FIX #2: ภาษาที่มี voice ในเครื่อง → ใช้ Browser TTS ตามปกติ
   if (isIOSAnyBrowser()) {
     speakWithBrowserSafari(text, langCode, speed, function() {
       ttsAttemptCount = 0; if (onEnd) onEnd();
     }, function() {
-      // Browser TTS ล้มเหลว → ลอง Google TTS แบบ direct URL (ไม่ fetch)
       speakWithGoogleTTSDirect(text, langCode, speed, function() {
         ttsAttemptCount = 0; if (onEnd) onEnd();
       });
@@ -693,7 +712,7 @@ function speakText(text, langCode, speed, onEnd) {
     return;
   }
 
-  // ===== ปกติ (Chrome/Edge/Android) =====
+  // ===== Desktop / Android ที่ไม่ใช่ GOOGLE_TTS_ONLY =====
   if (engine === 'google') {
     speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
     return;
@@ -702,27 +721,23 @@ function speakText(text, langCode, speed, onEnd) {
     speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
     return;
   }
-  // Auto
-  if (needsGoogleTTS(langCode)) {
-    speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-  } else {
-    speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-  }
+  // Auto — ภาษาทั่วไปที่มี voice ในเครื่อง
+  speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
 }
 
 // ================================================================
-// ★★★ [v7.3] Safari iOS Browser TTS — sync กับ user gesture ★★★
+// ★★★ [v7.3.1] Safari iOS Browser TTS — เฉพาะภาษาที่มี voice ★★★
 // ================================================================
 function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
   if (!('speechSynthesis' in window)) { onFail(); return; }
 
   window.speechSynthesis.cancel();
-  var u = new SpeechSynthesisUtterance(text);
-  var targetLang = SPEECH_LANG_MAP[langCode] || langCode;
-  u.lang = targetLang;
 
-  // หา voice ที่ตรง
   var voices = window.speechSynthesis.getVoices();
+  var targetLang = SPEECH_LANG_MAP[langCode] || langCode;
+
+  // ★★★ [v7.3.1] FIX: ถ้าหา voice ไม่เจอ → onFail() ทันที ไม่ลองพูด
+  // ป้องกัน Safari ใช้ English voice อ่านตัวอักษรพม่า → "Question Mark"
   var bestVoice = null;
   for (var i = 0; i < voices.length; i++) {
     var vl = voices[i].lang.toLowerCase();
@@ -731,7 +746,15 @@ function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
     if (vl === tl) { bestVoice = voices[i]; break; }
     if (vl.indexOf(lc) === 0) { bestVoice = voices[i]; }
   }
-  if (bestVoice) u.voice = bestVoice;
+  if (!bestVoice) {
+    // ไม่มี voice สำหรับภาษานี้ → ไม่ลองพูด → ไป fallback
+    onFail();
+    return;
+  }
+
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = targetLang;
+  u.voice = bestVoice;
 
   var base = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
   u.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
@@ -748,12 +771,11 @@ function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
 
   u.onend = function() {
     if (didEnd) return; didEnd = true; cleanup();
-    // ★ Classroom mode: พูดซ้ำช้า
     if (document.getElementById('classroomMode').checked && speed !== 'slow') {
       setTimeout(function() {
         var s = new SpeechSynthesisUtterance(text);
         s.lang = u.lang; s.rate = base * 0.5; s.volume = u.volume;
-        if (bestVoice) s.voice = bestVoice;
+        s.voice = bestVoice;
         s.onend = function() { onSuccess(); };
         s.onerror = function() { onSuccess(); };
         window.speechSynthesis.speak(s);
@@ -766,8 +788,7 @@ function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
     onFail();
   };
 
-  // ★ Safari iOS bug: speechSynthesis หยุดหลัง ~15 วินาที
-  // แก้โดย pause/resume ทุก 10 วินาที
+  // Safari iOS bug: speechSynthesis หยุดหลัง ~15 วินาที
   resumeInterval = setInterval(function() {
     if (didEnd) { clearInterval(resumeInterval); return; }
     if (window.speechSynthesis.speaking) {
@@ -776,7 +797,6 @@ function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
     }
   }, 10000);
 
-  // Timeout safety (30 วิ)
   setTimeout(function() {
     if (!didEnd) { didEnd = true; cleanup(); onFail(); }
   }, 30000);
@@ -785,12 +805,15 @@ function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
 }
 
 // ================================================================
-// ★★★ [v7.3] Google TTS Direct URL — สำหรับ Safari iOS fallback ★★★
-// ★ ใช้ <audio src="url"> โดยตรง ไม่ผ่าน fetch (Safari friendly)
+// ★★★ [v7.3.1] Google TTS Direct URL — ทุก platform ★★★
+// ใช้ <audio src="url"> โดยตรง ไม่ผ่าน fetch
+// สำหรับภาษาพม่า/ลาว/เขมร ที่ไม่มี voice ในเครื่อง
 // ================================================================
 function speakWithGoogleTTSDirect(text, langCode, speed, onEnd) {
   var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
-  var chunks = splitTextForTTS(text, 180);
+  var cleanText = cleanTextForTTS(text);
+  if (!cleanText) { if (onEnd) onEnd(); return; }
+  var chunks = splitTextForTTS(cleanText, 180);
   var chunkIndex = 0;
 
   function getUrls(chunk) {
@@ -817,10 +840,10 @@ function speakWithGoogleTTSDirect(text, langCode, speed, onEnd) {
 
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
-    // ★ Safari: ใช้ <audio> src โดยตรง ไม่ผ่าน fetch
     var audio = new Audio();
     audio.src = urls[idx];
     audio.preload = 'auto';
+    audio.crossOrigin = 'anonymous';
 
     var baseSpeed = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
     if (speed === 'slow') audio.playbackRate = baseSpeed * 0.6;
@@ -847,7 +870,6 @@ function speakWithGoogleTTSDirect(text, langCode, speed, onEnd) {
       if (!settled) { settled = true; tryDirectUrl(urls, idx + 1); }
     };
 
-    // Timeout 8 วินาที
     setTimeout(function() {
       if (!settled) { settled = true; audio.pause(); tryDirectUrl(urls, idx + 1); }
     }, 8000);
@@ -859,11 +881,13 @@ function speakWithGoogleTTSDirect(text, langCode, speed, onEnd) {
 }
 
 // ================================================================
-// ★★★ Google TTS Fetch+Blob — สำหรับ Chrome/Android/Desktop ★★★
+// ★★★ Google TTS Fetch+Blob — Chrome/Desktop (ภาษาที่ต้องใช้ Google TTS) ★★★
 // ================================================================
 function speakWithGoogleTTS(text, langCode, speed, onEnd) {
   var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
-  var chunks = splitTextForTTS(text, 180);
+  var cleanText = cleanTextForTTS(text);
+  if (!cleanText) { if (onEnd) onEnd(); return; }
+  var chunks = splitTextForTTS(cleanText, 180);
   var chunkIndex = 0;
 
   function getUrls(chunk) {
@@ -884,7 +908,6 @@ function speakWithGoogleTTS(text, langCode, speed, onEnd) {
 
   function tryFetchUrl(urls, idx, chunk) {
     if (idx >= urls.length) {
-      // ทุก URL ล้มเหลว → fallback browser TTS
       tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
         chunkIndex++; playNext();
       }, function() {
@@ -970,7 +993,8 @@ function showTTSFallbackMsg(langCode) {
 function splitTextForTTS(text, maxLen) {
   if (text.length <= maxLen) return [text];
   var chunks = [];
-  var sentences = text.split(/([.!?。!?\n]+)/);
+  // ★★★ [v7.3.1] FIX: ใช้ . เป็นตัวแบ่ง ไม่ใช้ ? ! (เพราะถูก clean ออกแล้ว)
+  var sentences = text.split(/([.。\n]+)/);
   var current = '';
   for (var i = 0; i < sentences.length; i++) {
     if ((current + sentences[i]).length > maxLen && current.length > 0) {
@@ -991,11 +1015,13 @@ function splitTextForTTS(text, maxLen) {
 function speakWithBrowser(text, langCode, speed, onEnd) {
   window.speechSynthesis.cancel();
   var spoken = false;
+  var cleanText = cleanTextForTTS(text);
+  if (!cleanText) { if (onEnd) onEnd(); return; }
 
   function doSpeak() {
     if (spoken) return;
     spoken = true;
-    var u = new SpeechSynthesisUtterance(text);
+    var u = new SpeechSynthesisUtterance(cleanText);
     var voices = window.speechSynthesis.getVoices();
     var targetLang = SPEECH_LANG_MAP[langCode] || langCode;
     for (var i = 0; i < voices.length; i++) {
@@ -1012,7 +1038,7 @@ function speakWithBrowser(text, langCode, speed, onEnd) {
     u.onend = function() {
       if (document.getElementById('classroomMode').checked && speed !== 'slow') {
         setTimeout(function() {
-          var s = new SpeechSynthesisUtterance(text);
+          var s = new SpeechSynthesisUtterance(cleanText);
           s.lang = u.lang; s.rate = base * 0.5; s.volume = u.volume;
           if (u.voice) s.voice = u.voice;
           s.onend = function() { if (onEnd) onEnd(); };
@@ -1022,7 +1048,7 @@ function speakWithBrowser(text, langCode, speed, onEnd) {
       } else { if (onEnd) onEnd(); }
     };
     u.onerror = function() {
-      speakWithGoogleTTS(text, langCode, speed, onEnd);
+      speakWithGoogleTTS(cleanText, langCode, speed, onEnd);
     };
     window.speechSynthesis.speak(u);
   }
@@ -1265,7 +1291,7 @@ function doSpeakTarget(targetNum, text, speed, onEnd) {
 function speakResult(targetNum, speed) {
   unlockAudio();
   var text = document.getElementById('targetText' + targetNum).textContent;
-  if (!text || text.charAt(0) === '⏳' || text.charAt(0) === '❌' || text === 'Waiting...') return;
+  if (!text || text.charAt(0) === '⏳' || text.charAt(0) === '❌' || text === 'Waiting...' || text === 'รอรับเสียง...') return;
   var langKey = targetNum === 2 ? 'targetLang2' : 'targetLang3';
   var langCode = document.getElementById(langKey).value;
   ttsAttemptCount = 0;
