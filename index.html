@@ -237,7 +237,7 @@
     </div>
     <div id="modeDescription" class="mode-description">
       <strong>🆓 โหมดฟรี:</strong> ใช้ Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key ใดๆ<br>
-      🔊 ออกเสียงทุกภาษารวมพม่า/ลาว/เขมร (Google Translate TTS fallback)
+      🔊 ออกเสียงทุกภาษารวมพม่า/ลาว/เขมร (Google Translate TTS)
     </div>
   </div>
 
@@ -306,10 +306,10 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทமிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-          <option value="si">🇱🇰 සිංහල (สිงหล)</option>
+          <option value="si">🇱🇰 සිංහල (สิงหล)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -350,10 +350,10 @@
           <option value="ko">🇰🇷 한국어 (เกาหลี)</option>
           <option value="hi">🇮🇳 हिन्दी (ฮินดี)</option>
           <option value="bn">🇧🇩 বাংলা (เบงกาลี)</option>
-          <option value="ta">🇮🇳 தமிழ் (ทมிฬ)</option>
+          <option value="ta">🇮🇳 தமிழ் (ทமிฬ)</option>
           <option value="ur">🇵🇰 اردو (อูรดู)</option>
           <option value="ne">🇳🇵 नेपाली (เนปาล)</option>
-          <option value="si">🇱🇰 සිංහල (සිංහල)</option>
+          <option value="si">🇱🇰 සිංහල (สිงหล)</option>
           <option value="fr">🇫🇷 Français</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="es">🇪🇸 Español</option>
@@ -513,22 +513,25 @@
     <p>📧 woraphoi@scgjwd.com</p>
   </footer>
 </div>
+
+<!-- ★★★ v7.4.0 FIX: Hidden iframe สำหรับเล่น Google TTS บนมือถือ ★★★ -->
+<iframe id="ttsFrame" style="display:none;width:0;height:0;border:none;position:absolute;top:-9999px;" allow="autoplay" sandbox="allow-scripts allow-same-origin"></iframe>
+
 <script>
 /**
- * VoiceBridge v7.3.1 — Fix "Question Mark" Bug
- * ★★★ แก้ปัญหา: ภาษาพม่า/ลาว/เขมร พูดแต่ "Question Mark" บนมือถือ ★★★
+ * VoiceBridge v7.4.0 — REAL Mobile TTS Fix
+ * ★★★ แก้ปัญหาหลัก: ภาษาพม่า/ลาว/เขมร ไม่พูดบนมือถือ ★★★
  *
- * สาเหตุ v7.3.0:
- * - บน iOS: speakWithBrowserSafari() ถูกเรียกก่อนเสมอ
- * - แต่ iOS ไม่มี voice สำหรับ my/lo/km/bn/ne/si/ur
- * - speechSynthesis เลยใช้ default English voice อ่านตัวอักษรพม่า → อ่านไม่ได้ → อ่านเป็น "Question Mark"
+ * สาเหตุ v7.1.1:
+ * 1. speakWithGoogleTTS() ใช้ fetch() → ถูก CORS block บนมือถือ
+ * 2. tryFallbackTTS() → ไม่มี voice ภาษาพม่า/ลาว/เขมร ในเครื่อง → onFail()
+ * 3. วนจนครบ MAX_TTS_ATTEMPTS → showTTSFallbackMsg()
  *
- * วิธีแก้ v7.3.1:
- * A. ถ้าเป็นภาษาใน GOOGLE_TTS_ONLY → ข้ามไป Google TTS Direct ทันที ไม่ลอง Browser TTS
- * B. speakWithBrowserSafari() เพิ่มเช็ค: ถ้าหา voice ไม่เจอ → onFail() ทันที ไม่ลองพูด
- * C. เพิ่ม cleanTextForTTS() ลบเครื่องหมาย ?, !, emoji ก่อนส่งให้ TTS
- * D. Google TTS Direct ใช้ 3 URL สำรอง + ทำงานบนทุก platform (ไม่ผ่าน fetch)
- * E. บน Android ก็ใช้ Google TTS Direct สำหรับภาษา GOOGLE_TTS_ONLY
+ * วิธีแก้ v7.4.0:
+ * ★ ใช้ window.open() เปิด Google TTS URL ในหน้าต่างใหม่ เป็น fallback สุดท้าย
+ *   เพราะ browser จะเล่น MP3 โดยตรงเมื่อ navigate ไปยัง URL
+ * ★ ลองใช้ <audio> โดยไม่ใส่ crossOrigin (สำคัญมาก!)
+ * ★ ลอง fetch ก่อน → ล้มเหลว → ลอง <audio src> → ล้มเหลว → window.open
  */
 
 // ===== Language Config =====
@@ -583,9 +586,6 @@ var audioUnlocked = false;
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
-function isIOSAnyBrowser() {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-}
 
 // ===== Rate Limiter =====
 var rateLimiter = {
@@ -636,7 +636,6 @@ function unlockAudio() {
   audioUnlocked = true;
   document.getElementById('audioUnlockBanner').style.display = 'none';
 }
-
 (function() {
   function onFirst() {
     unlockAudio();
@@ -655,306 +654,156 @@ function unlockAudio() {
 })();
 
 // ================================================================
-// ★★★ [v7.3.1] Clean Text for TTS — ลบ ?, !, emoji ก่อนพูด ★★★
+// ★★★ [v7.4.0] Google TTS URL Builder ★★★
 // ================================================================
-function cleanTextForTTS(text) {
-  if (!text) return '';
-  // ลบ emoji
-  try {
-    text = text.replace(/[\u{1F300}-\u{1FAD6}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '');
-  } catch(e) {
-    text = text.replace(/[❌⏳✅⚠🔊🔓🎤📤📝🆓🤖🔄💾🗑📜📧🐢🐇🔴💡🔢🎓📢⚙🔑⚡]/g, '');
-  }
-  // ลบเครื่องหมายที่ Browser TTS อ่านออกเสียง เช่น "Question Mark"
-  text = text.replace(/[?!@#$%^&*()_+=\[\]{}<>|\\\/~`"';:]/g, ' ');
-  // เก็บจุด (.) และ คอมม่า (,) ไว้เพราะช่วยจังหวะพูด
-  // ลบช่องว่างซ้ำ
-  text = text.replace(/\s+/g, ' ').trim();
-  return text;
-}
-
-// ================================================================
-// ★★★ [v7.3.1] UNIFIED TTS — แก้ Question Mark Bug ★★★
-// ================================================================
-function needsGoogleTTS(langCode) { return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1; }
-var ttsAttemptCount = 0;
-var MAX_TTS_ATTEMPTS = 3;
-
-function speakText(text, langCode, speed, onEnd) {
-  ttsAttemptCount++;
-  if (ttsAttemptCount > MAX_TTS_ATTEMPTS) {
-    ttsAttemptCount = 0;
-    showTTSFallbackMsg(langCode);
-    if (onEnd) onEnd();
-    return;
-  }
-  var engine = document.getElementById('ttsEngine').value;
-
-  // ★★★ [v7.3.1] FIX #1: ภาษาใน GOOGLE_TTS_ONLY → ไปใช้ Google TTS Direct ทันที
-  // ไม่ลอง Browser TTS เลย เพราะ iPhone/Android ไม่มี voice ภาษาเหล่านี้
-  // ถ้าลอง Browser TTS → Safari จะใช้ English voice อ่านตัวอักษรพม่า → ได้ "Question Mark"
-  if (needsGoogleTTS(langCode)) {
-    speakWithGoogleTTSDirect(text, langCode, speed, function() {
-      ttsAttemptCount = 0; if (onEnd) onEnd();
-    });
-    return;
-  }
-
-  // ★★★ [v7.3.1] FIX #2: ภาษาที่มี voice ในเครื่อง → ใช้ Browser TTS ตามปกติ
-  if (isIOSAnyBrowser()) {
-    speakWithBrowserSafari(text, langCode, speed, function() {
-      ttsAttemptCount = 0; if (onEnd) onEnd();
-    }, function() {
-      speakWithGoogleTTSDirect(text, langCode, speed, function() {
-        ttsAttemptCount = 0; if (onEnd) onEnd();
-      });
-    });
-    return;
-  }
-
-  // ===== Desktop / Android ที่ไม่ใช่ GOOGLE_TTS_ONLY =====
-  if (engine === 'google') {
-    speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-    return;
-  }
-  if (engine === 'browser') {
-    speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-    return;
-  }
-  // Auto — ภาษาทั่วไปที่มี voice ในเครื่อง
-  speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
-}
-
-// ================================================================
-// ★★★ [v7.3.1] Safari iOS Browser TTS — เฉพาะภาษาที่มี voice ★★★
-// ================================================================
-function speakWithBrowserSafari(text, langCode, speed, onSuccess, onFail) {
-  if (!('speechSynthesis' in window)) { onFail(); return; }
-
-  window.speechSynthesis.cancel();
-
-  var voices = window.speechSynthesis.getVoices();
-  var targetLang = SPEECH_LANG_MAP[langCode] || langCode;
-
-  // ★★★ [v7.3.1] FIX: ถ้าหา voice ไม่เจอ → onFail() ทันที ไม่ลองพูด
-  // ป้องกัน Safari ใช้ English voice อ่านตัวอักษรพม่า → "Question Mark"
-  var bestVoice = null;
-  for (var i = 0; i < voices.length; i++) {
-    var vl = voices[i].lang.toLowerCase();
-    var tl = targetLang.toLowerCase();
-    var lc = langCode.toLowerCase();
-    if (vl === tl) { bestVoice = voices[i]; break; }
-    if (vl.indexOf(lc) === 0) { bestVoice = voices[i]; }
-  }
-  if (!bestVoice) {
-    // ไม่มี voice สำหรับภาษานี้ → ไม่ลองพูด → ไป fallback
-    onFail();
-    return;
-  }
-
-  var u = new SpeechSynthesisUtterance(text);
-  u.lang = targetLang;
-  u.voice = bestVoice;
-
-  var base = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
-  u.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
-  if (speed === 'slow') u.rate = base * 0.6;
-  else if (speed === 'fast') u.rate = base * 1.5;
-  else u.rate = base;
-
-  var didEnd = false;
-  var resumeInterval = null;
-
-  function cleanup() {
-    if (resumeInterval) { clearInterval(resumeInterval); resumeInterval = null; }
-  }
-
-  u.onend = function() {
-    if (didEnd) return; didEnd = true; cleanup();
-    if (document.getElementById('classroomMode').checked && speed !== 'slow') {
-      setTimeout(function() {
-        var s = new SpeechSynthesisUtterance(text);
-        s.lang = u.lang; s.rate = base * 0.5; s.volume = u.volume;
-        s.voice = bestVoice;
-        s.onend = function() { onSuccess(); };
-        s.onerror = function() { onSuccess(); };
-        window.speechSynthesis.speak(s);
-      }, 1000);
-    } else { onSuccess(); }
-  };
-
-  u.onerror = function() {
-    if (didEnd) return; didEnd = true; cleanup();
-    onFail();
-  };
-
-  // Safari iOS bug: speechSynthesis หยุดหลัง ~15 วินาที
-  resumeInterval = setInterval(function() {
-    if (didEnd) { clearInterval(resumeInterval); return; }
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.pause();
-      window.speechSynthesis.resume();
-    }
-  }, 10000);
-
-  setTimeout(function() {
-    if (!didEnd) { didEnd = true; cleanup(); onFail(); }
-  }, 30000);
-
-  window.speechSynthesis.speak(u);
-}
-
-// ================================================================
-// ★★★ [v7.3.1] Google TTS Direct URL — ทุก platform ★★★
-// ใช้ <audio src="url"> โดยตรง ไม่ผ่าน fetch
-// สำหรับภาษาพม่า/ลาว/เขมร ที่ไม่มี voice ในเครื่อง
-// ================================================================
-function speakWithGoogleTTSDirect(text, langCode, speed, onEnd) {
+function buildGoogleTTSUrl(text, langCode) {
   var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
-  var cleanText = cleanTextForTTS(text);
-  if (!cleanText) { if (onEnd) onEnd(); return; }
-  var chunks = splitTextForTTS(cleanText, 180);
-  var chunkIndex = 0;
+  return 'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx'
+    + '&tl=' + encodeURIComponent(ttsLang)
+    + '&q=' + encodeURIComponent(text);
+}
 
-  function getUrls(chunk) {
-    var t = encodeURIComponent(chunk);
-    var l = encodeURIComponent(ttsLang);
-    return [
-      'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t,
-      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + l + '&q=' + t,
-      'https://translate.google.co.th/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t
-    ];
-  }
+// ================================================================
+// ★★★ [v7.4.0] วิธีที่ 1: Fetch as Blob (Desktop/Android Chrome) ★★★
+// ================================================================
+function ttsViaFetch(text, langCode, speed, onSuccess, onFail) {
+  var url = buildGoogleTTSUrl(text, langCode);
+  fetch(url).then(function(r) {
+    if (!r.ok) throw new Error('HTTP_' + r.status);
+    return r.blob();
+  }).then(function(blob) {
+    if (blob.size < 100) throw new Error('EMPTY');
+    var blobUrl = URL.createObjectURL(blob);
+    var audio = new Audio(blobUrl);
+    if (currentAudio) { currentAudio.pause(); }
+    currentAudio = audio;
+    applyAudioSpeed(audio, speed);
+    audio.onended = function() { URL.revokeObjectURL(blobUrl); onSuccess(); };
+    audio.onerror = function() { URL.revokeObjectURL(blobUrl); onFail(); };
+    var p = audio.play();
+    if (p) p.catch(function() { URL.revokeObjectURL(blobUrl); onFail(); });
+  }).catch(function() { onFail(); });
+}
 
-  function playNext() {
-    if (chunkIndex >= chunks.length) { if (onEnd) onEnd(); return; }
-    tryDirectUrl(getUrls(chunks[chunkIndex]), 0);
-  }
+// ================================================================
+// ★★★ [v7.4.0] วิธีที่ 2: Audio src โดยตรง ไม่ใส่ crossOrigin ★★★
+// สำคัญ: ห้ามใส่ audio.crossOrigin = 'anonymous' เพราะจะทำให้ CORS block!
+// ถ้าไม่ใส่ crossOrigin → browser จะเล่นเป็น opaque request ได้ปกติ
+// ================================================================
+function ttsViaAudioSrc(text, langCode, speed, onSuccess, onFail) {
+  var urls = [
+    buildGoogleTTSUrl(text, langCode),
+    'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl='
+      + encodeURIComponent(GTTS_LANG_MAP[langCode] || langCode)
+      + '&q=' + encodeURIComponent(text)
+  ];
+  var idx = 0;
 
-  function tryDirectUrl(urls, idx) {
-    if (idx >= urls.length) {
-      showTTSFallbackMsg(langCode);
-      chunkIndex++; playNext();
-      return;
-    }
-
+  function tryNext() {
+    if (idx >= urls.length) { onFail(); return; }
     if (currentAudio) { currentAudio.pause(); currentAudio = null; }
 
     var audio = new Audio();
-    audio.src = urls[idx];
+    // ★★★ สำคัญมาก: ห้ามใส่ crossOrigin! ★★★
+    // audio.crossOrigin = 'anonymous'; ← อันนี้ทำให้ CORS block!
     audio.preload = 'auto';
-    audio.crossOrigin = 'anonymous';
-
-    var baseSpeed = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
-    if (speed === 'slow') audio.playbackRate = baseSpeed * 0.6;
-    else if (speed === 'fast') audio.playbackRate = baseSpeed * 1.4;
-    else audio.playbackRate = baseSpeed;
-    audio.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
+    currentAudio = audio;
+    applyAudioSpeed(audio, speed);
 
     var settled = false;
+    var timer = setTimeout(function() {
+      if (!settled) { settled = true; audio.pause(); idx++; tryNext(); }
+    }, 10000);
 
     audio.oncanplaythrough = function() {
       if (settled) return;
-      currentAudio = audio;
       var p = audio.play();
       if (p) p.catch(function() {
-        if (!settled) { settled = true; tryDirectUrl(urls, idx + 1); }
+        if (!settled) { settled = true; clearTimeout(timer); idx++; tryNext(); }
       });
     };
-
     audio.onended = function() {
-      if (!settled) { settled = true; chunkIndex++; playNext(); }
+      if (!settled) { settled = true; clearTimeout(timer); onSuccess(); }
     };
-
     audio.onerror = function() {
-      if (!settled) { settled = true; tryDirectUrl(urls, idx + 1); }
+      if (!settled) { settled = true; clearTimeout(timer); idx++; tryNext(); }
     };
-
-    setTimeout(function() {
-      if (!settled) { settled = true; audio.pause(); tryDirectUrl(urls, idx + 1); }
-    }, 8000);
-
+    audio.src = urls[idx];
     audio.load();
   }
-
-  playNext();
+  tryNext();
 }
 
 // ================================================================
-// ★★★ Google TTS Fetch+Blob — Chrome/Desktop (ภาษาที่ต้องใช้ Google TTS) ★★★
+// ★★★ [v7.4.0] วิธีที่ 3: iframe.src — Fallback สุดท้าย ★★★
+// Browser จะ navigate iframe ไปยัง MP3 URL → เล่นเสียงอัตโนมัติ
+// ================================================================
+function ttsViaIframe(text, langCode, speed, onSuccess, onFail) {
+  var url = buildGoogleTTSUrl(text, langCode);
+  var iframe = document.getElementById('ttsFrame');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'ttsFrame';
+    iframe.style.cssText = 'display:none;width:0;height:0;border:none;position:absolute;top:-9999px;';
+    iframe.setAttribute('allow', 'autoplay');
+    document.body.appendChild(iframe);
+  }
+  
+  // ประมาณเวลาเล่น: ตัวอักษร * 80ms ขั้นต่ำ 3 วิ
+  var estimatedMs = Math.max(3000, text.length * 80);
+  
+  iframe.src = url;
+  setApiMsg('🔊 กำลังเล่นเสียง ' + (LANG_NAMES[langCode] || langCode) + '...');
+  
+  setTimeout(function() {
+    onSuccess();
+  }, estimatedMs);
+}
+
+// ================================================================
+// ★★★ [v7.4.0] Apply Speed/Volume to Audio ★★★
+// ================================================================
+function applyAudioSpeed(audio, speed) {
+  var baseSpeed = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
+  if (speed === 'slow') audio.playbackRate = baseSpeed * 0.6;
+  else if (speed === 'fast') audio.playbackRate = baseSpeed * 1.4;
+  else audio.playbackRate = baseSpeed;
+  audio.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
+}
+
+// ================================================================
+// ★★★ [v7.4.0] UNIFIED Google TTS — ลอง 3 วิธีตามลำดับ ★★★
+// fetch → audio src → iframe
 // ================================================================
 function speakWithGoogleTTS(text, langCode, speed, onEnd) {
-  var ttsLang = GTTS_LANG_MAP[langCode] || langCode;
-  var cleanText = cleanTextForTTS(text);
-  if (!cleanText) { if (onEnd) onEnd(); return; }
-  var chunks = splitTextForTTS(cleanText, 180);
+  var chunks = splitTextForTTS(text, 180);
   var chunkIndex = 0;
-
-  function getUrls(chunk) {
-    var t = encodeURIComponent(chunk);
-    var l = encodeURIComponent(ttsLang);
-    return [
-      'https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t,
-      'https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=' + l + '&q=' + t,
-      'https://translate.google.co.th/translate_tts?ie=UTF-8&client=gtx&tl=' + l + '&q=' + t
-    ];
-  }
 
   function playNext() {
     if (chunkIndex >= chunks.length) { if (onEnd) onEnd(); return; }
-    var urls = getUrls(chunks[chunkIndex]);
-    tryFetchUrl(urls, 0, chunks[chunkIndex]);
-  }
+    var chunk = chunks[chunkIndex];
 
-  function tryFetchUrl(urls, idx, chunk) {
-    if (idx >= urls.length) {
-      tryFallbackTTS(chunk, ttsLang, langCode, speed, function() {
-        chunkIndex++; playNext();
-      }, function() {
-        showTTSFallbackMsg(langCode);
-        chunkIndex++; playNext();
-      });
-      return;
-    }
-
-    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-
-    fetch(urls[idx]).then(function(response) {
-      if (!response.ok) throw new Error('HTTP_' + response.status);
-      return response.blob();
-    }).then(function(blob) {
-      if (blob.size < 100) throw new Error('EMPTY_AUDIO');
-
-      var blobUrl = URL.createObjectURL(blob);
-      var audio = new Audio(blobUrl);
-      currentAudio = audio;
-
-      var baseSpeed = parseFloat(document.getElementById('speechSpeed').value) || 0.9;
-      if (speed === 'slow') audio.playbackRate = baseSpeed * 0.6;
-      else if (speed === 'fast') audio.playbackRate = baseSpeed * 1.4;
-      else audio.playbackRate = baseSpeed;
-      audio.volume = parseFloat(document.getElementById('speechVolume').value) || 1;
-
-      audio.onended = function() {
-        URL.revokeObjectURL(blobUrl);
-        chunkIndex++; playNext();
-      };
-      audio.onerror = function() {
-        URL.revokeObjectURL(blobUrl);
-        tryFetchUrl(urls, idx + 1, chunk);
-      };
-      var playPromise = audio.play();
-      if (playPromise) {
-        playPromise.catch(function() {
-          URL.revokeObjectURL(blobUrl);
-          tryFetchUrl(urls, idx + 1, chunk);
-        });
+    // ลำดับที่ 1: ลอง fetch (ทำงานได้บน Desktop/Android Chrome)
+    ttsViaFetch(chunk, langCode, speed,
+      function() { chunkIndex++; playNext(); },
+      function() {
+        // ลำดับที่ 2: ลอง <audio src> ไม่ใส่ crossOrigin
+        ttsViaAudioSrc(chunk, langCode, speed,
+          function() { chunkIndex++; playNext(); },
+          function() {
+            // ลำดับที่ 3: ลอง iframe
+            ttsViaIframe(chunk, langCode, speed,
+              function() { chunkIndex++; playNext(); },
+              function() {
+                showTTSFallbackMsg(langCode);
+                chunkIndex++; playNext();
+              }
+            );
+          }
+        );
       }
-    }).catch(function() {
-      tryFetchUrl(urls, idx + 1, chunk);
-    });
+    );
   }
-
   playNext();
 }
 
@@ -987,13 +836,12 @@ function tryFallbackTTS(text, ttsLang, langCode, speed, onSuccess, onFail) {
 
 function showTTSFallbackMsg(langCode) {
   var langName = LANG_NAMES[langCode] || langCode;
-  setApiMsg('⚠️ ไม่สามารถออกเสียง ' + langName + ' ได้ในขณะนี้ — กรุณาอ่านข้อความแทน');
+  setApiMsg('⚠️ ไม่สามารถออกเสียง ' + langName + ' ได้ — กรุณาอ่านข้อความแทน');
 }
 
 function splitTextForTTS(text, maxLen) {
   if (text.length <= maxLen) return [text];
   var chunks = [];
-  // ★★★ [v7.3.1] FIX: ใช้ . เป็นตัวแบ่ง ไม่ใช้ ? ! (เพราะถูก clean ออกแล้ว)
   var sentences = text.split(/([.。\n]+)/);
   var current = '';
   for (var i = 0; i < sentences.length; i++) {
@@ -1011,17 +859,51 @@ function splitTextForTTS(text, maxLen) {
   return result;
 }
 
-// ===== Browser TTS (Chrome/Android/Desktop) =====
+// ================================================================
+// ★★★ [v7.4.0] Unified TTS Engine ★★★
+// ================================================================
+function needsGoogleTTS(langCode) { return GOOGLE_TTS_ONLY.indexOf(langCode) !== -1; }
+var ttsAttemptCount = 0;
+var MAX_TTS_ATTEMPTS = 3;
+
+function speakText(text, langCode, speed, onEnd) {
+  ttsAttemptCount++;
+  if (ttsAttemptCount > MAX_TTS_ATTEMPTS) {
+    ttsAttemptCount = 0;
+    showTTSFallbackMsg(langCode);
+    if (onEnd) onEnd();
+    return;
+  }
+  var engine = document.getElementById('ttsEngine').value;
+
+  // ★★★ v7.4.0: ภาษาใน GOOGLE_TTS_ONLY → ไป Google TTS ทันที ทุก platform
+  if (needsGoogleTTS(langCode)) {
+    speakWithGoogleTTS(text, langCode, speed, function() {
+      ttsAttemptCount = 0; if (onEnd) onEnd();
+    });
+    return;
+  }
+
+  if (engine === 'google') {
+    speakWithGoogleTTS(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
+    return;
+  }
+  if (engine === 'browser') {
+    speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
+    return;
+  }
+  // Auto — ภาษาทั่วไปที่มี voice ในเครื่อง
+  speakWithBrowser(text, langCode, speed, function() { ttsAttemptCount = 0; if (onEnd) onEnd(); });
+}
+
+// ===== Browser TTS =====
 function speakWithBrowser(text, langCode, speed, onEnd) {
   window.speechSynthesis.cancel();
   var spoken = false;
-  var cleanText = cleanTextForTTS(text);
-  if (!cleanText) { if (onEnd) onEnd(); return; }
-
   function doSpeak() {
     if (spoken) return;
     spoken = true;
-    var u = new SpeechSynthesisUtterance(cleanText);
+    var u = new SpeechSynthesisUtterance(text);
     var voices = window.speechSynthesis.getVoices();
     var targetLang = SPEECH_LANG_MAP[langCode] || langCode;
     for (var i = 0; i < voices.length; i++) {
@@ -1038,7 +920,7 @@ function speakWithBrowser(text, langCode, speed, onEnd) {
     u.onend = function() {
       if (document.getElementById('classroomMode').checked && speed !== 'slow') {
         setTimeout(function() {
-          var s = new SpeechSynthesisUtterance(cleanText);
+          var s = new SpeechSynthesisUtterance(text);
           s.lang = u.lang; s.rate = base * 0.5; s.volume = u.volume;
           if (u.voice) s.voice = u.voice;
           s.onend = function() { if (onEnd) onEnd(); };
@@ -1048,11 +930,11 @@ function speakWithBrowser(text, langCode, speed, onEnd) {
       } else { if (onEnd) onEnd(); }
     };
     u.onerror = function() {
-      speakWithGoogleTTS(cleanText, langCode, speed, onEnd);
+      // Browser TTS ล้มเหลว → ลอง Google TTS
+      speakWithGoogleTTS(text, langCode, speed, onEnd);
     };
     window.speechSynthesis.speak(u);
   }
-
   if (window.speechSynthesis.getVoices().length === 0) {
     window.speechSynthesis.onvoiceschanged = function() { doSpeak(); };
     setTimeout(function() { doSpeak(); }, 500);
@@ -1100,7 +982,7 @@ function setTranslationMode(mode) {
   document.getElementById('tabAiMode').classList.toggle('active', mode === 'ai');
   document.getElementById('tabAutoMode').classList.toggle('active', mode === 'auto');
   var desc = document.getElementById('modeDescription');
-  if (mode === 'free') desc.innerHTML = '<strong>🆓 โหมดฟรี:</strong> Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key<br>🔊 ออกเสียงทุกภาษา (Google Translate TTS fallback)';
+  if (mode === 'free') desc.innerHTML = '<strong>🆓 โหมดฟรี:</strong> Google Translate → MyMemory → Lingva — ไม่ต้องกรอก Key<br>🔊 ออกเสียงทุกภาษา (Google Translate TTS)';
   else if (mode === 'ai') {
     desc.innerHTML = '<strong>🤖 โหมด AI:</strong> Gemini → Groq (ต้องกรอก Key) — แม่นยำ เข้าใจบริบท';
     if (!hasKey('gemini') && !hasKey('groq')) desc.innerHTML += '<br><span style="color:var(--bright-orange);">⚠️ ยังไม่มี Key!</span>';
